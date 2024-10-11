@@ -22,7 +22,6 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
           <PrivyProvider appId={process.env.PRIVY_APP_ID} appSecret={process.env.PRIVY_APP_SECRET}> 
           <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
