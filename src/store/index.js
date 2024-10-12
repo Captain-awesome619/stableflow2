@@ -10,7 +10,9 @@ import { createSlice } from '@reduxjs/toolkit';
 // Create a slice for the state
 const initialState = {
   myString: 'nothing',
-  myNumber: 20,
+  myNumber: 0,
+  businessname: '',
+  value: 0,
 };
 
 const mySlice = createSlice({
@@ -23,11 +25,17 @@ const mySlice = createSlice({
     setMyNumber(state, action) {
       state.myNumber = action.payload;
     },
+    setMybuisnessname(state, action) {
+      state.businessname = action.payload;
+    },
+    setvalue(state, action) {
+      state.businessname = action.payload;
+    },
   },
 });
 
 // Extract actions and reducer
-export const { setMyString, setMyNumber } = mySlice.actions;
+export const { setMyString, setMyNumber,setMybuisnessname,setvalue } = mySlice.actions;
 const rootReducer = mySlice.reducer;
 
 // Persist configuration

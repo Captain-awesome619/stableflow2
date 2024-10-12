@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import logo from "../app/assests/logo.png"
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { setMyNumber,setMyString } from "@/store";
+import { setMyNumber,setMyString,setvalue } from "@/store";
 import { usePrivy } from "@privy-io/react-auth";
 import {  Contract,formatUnits,JsonRpcProvider } from 'ethers';
 
@@ -19,24 +19,34 @@ export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [step,Setstep] = useState(1)
-
+  const [hasFetchedBalance, setHasFetchedBalance] = useState(false); 
   const [trackadd, settrackadd] = useState(null);
+  const [shouldnav, setshouldnav] = useState(false); 
+  const myNum = useSelector((state) => state.myNumber)
  const { login, verify, isLoggedIn,  user, privy,ready, authenticated,updateUser } = usePrivy();
     const Navigate  = useRouter()
     const Dispatch = useDispatch()
 
   useEffect(() => {
-  if (ready && authenticated && user ) {
-     
+  if (ready && authenticated && user && !hasFetchedBalance)  {
     fetchUSDCBalance();
-    console.log('User is logged in:', user);
-    console.log(user.wallet?.address)
-    if (trackadd !== null && usdcBalance !== null) {
-      Navigate.push('/Authenticated')
+  
+   { console.log('User is logged in:', user);
+    console.log(user.wallet?.address)}
     }
-  }
-}, [ready, authenticated,user,trackadd,usdcBalance]);
+}, [ready,authenticated,]);
 
+
+useEffect(() => {
+    if (trackadd !== null && usdcBalance !== null ) {
+    move()
+  }
+}, [trackadd,usdcBalance]);
+
+
+function move() {
+  Navigate.push('/Authenticated');
+}
     const handleAuthClick = async (email) => {
       if (!isLoggedIn) {
         try {
@@ -51,8 +61,7 @@ export default function Home() {
                 console.log('User already has a wallet:', existingWallet);
               } else {
                
-                console.log('New wallet created for user.');
-                Dispatch(setStringValue(user.wallet?.address)); 
+                console.log('New wallet created for user.'); 
             
               }
             } else {
@@ -84,8 +93,9 @@ export default function Home() {
         const balance = await contract.balanceOf(walletAddress);
       
         const formattedBalance = formatUnits(balance, 6); 
-        setUsdcBalance(formattedBalance);
-        Dispatch(setMyNumber(usdcBalance));
+        setUsdcBalance(formattedBalance); 
+        Dispatch(setMyNumber(formattedBalance));
+        Dispatch(setvalue(usdcBalance+.0)); 
       } catch (error) {
         console.error('Error fetching USDC balance:', error);
       } finally {
@@ -97,7 +107,8 @@ export default function Home() {
 
   return (
     <div className="" >
-      {console.log(usdcBalance)}
+    {console.log(usdcBalance)}
+   
        <div className="flex items-center justify-center mt-[2rem]" >
        <Image
     src = {logo}
