@@ -3,34 +3,29 @@ import react,{useState,useEffect} from "react";
 import { useRouter } from "next/navigation";
 import logo from "../app/assests/logo.png"
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
-import { setMyNumber,setMyString,setvalue } from "@/store";
+import { useDispatch } from "react-redux";
+import { setMyNumber,setMyString } from "@/store";
 import { usePrivy } from "@privy-io/react-auth";
-import {  Contract,formatUnits,JsonRpcProvider } from 'ethers';
-
-const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'; 
-const USDC_ABI = [
-  "function balanceOf(address owner) view returns (uint256)",
-  "function decimals() view returns (uint8)",
-  "function transfer(address to, uint256 amount) returns (bool)"
-];
+import { initializeMoralis } from "@/utils/moralisss";
+import { getBalance } from "@/utils/getbalance";
 
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [step,Setstep] = useState(1)
   const [hasFetchedBalance, setHasFetchedBalance] = useState(false); 
   const [trackadd, settrackadd] = useState(null);
-  const [shouldnav, setshouldnav] = useState(false); 
-  const myNum = useSelector((state) => state.myNumber)
- const { login, verify, isLoggedIn,  user, privy,ready, authenticated,updateUser } = usePrivy();
+  const [bal, setbal] = useState(0); 
+  const [usdcAmount, setUsdcAmount] = useState(0); 
+  const [conversionRate, setConversionRate] = useState(0);
+
+ const { login,  isLoggedIn,  user, privy,ready, authenticated } = usePrivy();
     const Navigate  = useRouter()
     const Dispatch = useDispatch()
 
   useEffect(() => {
   if (ready && authenticated && user && !hasFetchedBalance)  {
-    fetchUSDCBalance();
-  
+    fetchEthToUsdcPrice()
+    settrackadd(user.wallet.address)
    { console.log('User is logged in:', user);
     console.log(user.wallet?.address)}
     }
@@ -53,16 +48,13 @@ function move() {
            await login({ email });
           if (user) {
             if (privy) {
-             
               const existingWallet = user.wallet; 
               console.log('Existing Wallet:', existingWallet);
               if (existingWallet) {
              
                 console.log('User already has a wallet:', existingWallet);
               } else {
-               
                 console.log('New wallet created for user.'); 
-            
               }
             } else {
               console.error('error')
@@ -77,38 +69,41 @@ function move() {
         console.log('User is already logged in.');
       }
     };
-    
 
-  const fetchUSDCBalance = async () => {
-    if (user && user.wallet && user.wallet.address) {
-      const walletAddress = user.wallet.address; 
-      Dispatch(setMyString(walletAddress)); 
-      settrackadd(walletAddress)
+    const fetchEthToUsdcPrice = async () => {
       try {
-       
-        const provider = new JsonRpcProvider("https://mainnet.infura.io/v3/3de3ca6613154c39ae2e5537c63301ae"); 
-       
-        const contract = new Contract(USDC_ADDRESS, USDC_ABI, provider);
-       
-        const balance = await contract.balanceOf(walletAddress);
-      
-        const formattedBalance = formatUnits(balance, 6); 
-        setUsdcBalance(formattedBalance); 
-        Dispatch(setMyNumber(formattedBalance));
-        Dispatch(setvalue(usdcBalance+.0)); 
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=ethereum,usd-coin&vs_currencies=usd"
+        );
+        const data = await response.json();
+        const ethPrice = data.ethereum.usd; 
+        const usdcPrice = data["usd-coin"].usd; 
+        console.log(ethPrice)
+        console.log(usdcPrice)
+        const ethToUsdcConversionRate = ethPrice / usdcPrice;
+        setConversionRate(ethToUsdcConversionRate);
+        console.log(ethToUsdcConversionRate)
+        await initializeMoralis();
+        const weiBalance = await getBalance(user.wallet.address);
+        const figg = weiBalance.ether
+        const num = parseFloat(figg)
+        console.log(num)
+        const equivalentUsdc = num * ethToUsdcConversionRate;
+        const fina = equivalentUsdc.toFixed(6)
+const final = parseFloat(fina)
+        setbal(final)
+        setUsdcBalance(final)
+        Dispatch(setMyNumber(final))
+        Dispatch(setMyString(user.wallet.address))
+        console.log(bal)
       } catch (error) {
-        console.error('Error fetching USDC balance:', error);
-      } finally {
-        setLoading(false);
-       
+        console.error("Error fetching ETH to USDC price:", error);
       }
-    }
-  };
-
+    };
   return (
     <div className="" >
-    {console.log(usdcBalance)}
-   
+   {console.log(usdcAmount)}
+   {console.log(bal)}
        <div className="flex items-center justify-center mt-[2rem]" >
        <Image
     src = {logo}

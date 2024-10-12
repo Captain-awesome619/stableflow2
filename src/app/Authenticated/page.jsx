@@ -7,19 +7,32 @@ import { useRouter } from 'next/navigation'
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux'
 import { setMybuisnessname } from '@/store'
+import ClipLoader from "react-spinners/ClipLoader"
+import * as yup from 'yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 const page = () => {
     const Navigate = useRouter()
     const [loading, setLoading] = useState(1);
     const [name, setname] = useState('');
+    const [redirect, setredirect] = useState(false);
     const Dispatch = useDispatch()
 
     const myString = useSelector((state) => state.myString);
 
     function move() {
       Navigate.push('/Dashboard');
+      setredirect(true)
     }
+    const initialValues = {
+      myField: '',
+    };
+  
+    const validationSchema = yup.object().shape({
+      myField: yup.string()
+        .required('This field is required')
+    });
 
-
+    
     function Forward() {
       setLoading(prevview => prevview + 1)
       }
@@ -30,13 +43,13 @@ const page = () => {
       const handleInputChange = (event) => {
         setname(event.target.value);
       };
-      const handleSubmit = async (event) => {
+      const Customhandle = async (event) => {
         event.preventDefault(); // Prevent default form submission behavior
           Dispatch(setMybuisnessname(name)); 
-          Forward()
-          
+          Forward()  
       };
 
+      
   return (
     <div className=' grid items-center justify-center'>
           <div className="flex items-center justify-center mt-[2rem]" >
@@ -53,34 +66,60 @@ const page = () => {
   <h3 className="text-[20px] font-[700] text-primary1">
        Let's get started!
        </h3>
-       <form className='grid gap-[2rem]' onSubmit={handleSubmit}>
+       <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+     validateOnBlur={false}
+    >
+      {({  isValid  }) => (
+       <Form className='grid gap-[2rem]'>
     <div className="flex flex-col gap-[1rem]">
     <label className="text-primary1 font-[500] text-[20px]">
-    Buisness Name
+    Business Name
     </label>
-    <input 
+    <div>
+    <Field
      type="text"
-     value={name} // Bind the state to the input's value
+     name="myField"
+     value={name} 
      onChange={handleInputChange} 
     placeholder='Business Name' className='pl-[0.5rem] h-[60px] lg:w-[100%] w-[85%] border-[2px] rounded-xl border-primary3' />
     </div>
-   
+    { !isValid && (
+    <ErrorMessage name="myField" component="div" className="text-red-500" />)}
+    </div>
     <button
-        className='bg-primary5 lg:w-[120%] w-[95%]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-white'
-        type='submit'>
+        className={ name ?'bg-primary5 duration-300 lg:w-[120%] w-[95%]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-white':' duration-300  bg-primary5 lg:w-[120%] w-[95%]  opacity-[0.2] flex items-center justify-center h-[50px] cursor-not-allowed  py-2 rounded-xl text-white'}
+        type='submit'
+        disabled={!name}
+        onClick={Customhandle}
+        >
 Continue
         </button>
-        </form>
+        </Form>
+        )}
+        </Formik>
      </div> 
+
 : ''}
 { loading === 2 ?
-       <div  className="flex flex-col gap-[2rem] mt-[4rem] items-center justify-center">
+       <div >
+       { redirect === true ?
+        <ClipLoader
+        color="blue"
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className='absolute top-[35%] left-[45%] '
+      />
+     : ''  }
+     <div  className={ redirect === true ? 'opacity-[0.2] flex flex-col gap-[2rem] mt-[4rem] items-center justify-center' :"flex flex-col gap-[2rem] mt-[4rem] items-center justify-center"}>
     <Image
     src = {whistle}
     width = {150}
     height = {150}
     alt = "model"
-    className=""
+    className=" "
     />
     <div className="flex flex-col text-center">
     <h3 className="text-primary1 font-[500] text-[20px]">
@@ -97,6 +136,7 @@ Continue
         >
 Go to Dashboard
         </button>
+        </div>
      </div> 
 : ""}
     </div>

@@ -13,8 +13,11 @@ import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress } from '
 import { FaNairaSign } from "react-icons/fa6";
 import rate from "../assests/rate.png"
 import DataTable from "@/components/table";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { useRouter } from 'next/navigation';
 
 const WalletInfo = () => {
+ 
   const bizname = useSelector((state) => state.businessname)
   const myString = useSelector((state) => state.myString);
   const myNum = useSelector((state) => state.myNumber)
@@ -22,29 +25,26 @@ const WalletInfo = () => {
   const [selectedOption, setSelectedOption] = useState('dashboard'); // Default selection
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar visibility state
   const [baseName, setBaseName] = useState(null);
-  const [loading, setLoading] = useState(true);
+  
   const [conversionRate, setConversionRate] = useState(null);
   const [nairaAmount, setNairaAmount] = useState(0);
 
-
-
+const {logout} = usePrivy()
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
     setIsSidebarOpen(false); // Close the sidebar after selection
   };
-
-
- 
-
+  const Navigate = useRouter()
+  const handleLogout = async () => {
+    await logout();
+Navigate.push('/')
+  };
 const provider = new JsonRpcProvider("https://mainnet.infura.io/v3/3de3ca6613154c39ae2e5537c63301ae"); // You can use any Ethereum node provider
-
 async function getBaseName(walletAddress) {
   try {
-  
     if (!isAddress(walletAddress)) {
         throw new Error('Invalid Ethereum address');
     }
-   
     const ensName = await provider.lookupAddress(walletAddress);
     
     if (!ensName) {
@@ -69,6 +69,7 @@ async function getBaseName(walletAddress) {
   }, []);
 
   const fetchConversionRate = async () => {
+
     try {
       const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=usd-coin&vs_currencies=ngn');
       const data = await response.json();
@@ -78,20 +79,24 @@ async function getBaseName(walletAddress) {
       console.error('Error fetching conversion rate:', error);
     }
   };
-
+  const info = useWallets()
   useEffect(() => {
+    
+    console.log(info)
     fetchConversionRate();
     const intervalId = setInterval(fetchConversionRate, 60000); // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
-
-  
+  useEffect(() => {
+    if (conversionRate) {
+      setNairaAmount((myNum * conversionRate).toFixed(2));
+    }
+  }, [myNum, conversionRate]);
 
   return (
     <div className="flex overflow-x-hidden">
       {/* Button to toggle sidebar on small screens */}
-      
       <button 
         className="md:hidden p-2 text-white bg-gray-800 absolute top-4 left-1 z-10"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -198,7 +203,7 @@ async function getBaseName(walletAddress) {
               <h2 className="text-white text-[14px]">Total Balance</h2>
               <div className="flex flex-row items-center justify-center gap-[0.2rem]">
               <FaNairaSign size={20} color="white" />
-              <h2 className="text-white font-[600] text-[25px]">{myNum}</h2>
+              <h2 className="text-white font-[600] text-[25px]">{nairaAmount}</h2>
               </div>
               </div>
               </div>
@@ -276,8 +281,23 @@ Withdraw
           )}
           {selectedOption === 'settings' && (
             <div>
-              <h2 className="text-xl">Settings Content</h2>
-              <p>This is the settings section.</p>
+               <div className=" grid gap-[2rem]">
+              <h2 className="text-[25px] text-primary1 font-[700]"> Business-name :  <span className="text-primary2">{bizname}</span> </h2>
+              <button
+        onClick={handleLogout}
+        className='bg-primary4 border-[2px] border-primary3 lg:w-[20%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        >
+LOG-OUT
+        </button>
+        <div className="gap-[1rem] flex flex-col mt-[1rem]">
+        <button
+        className='bg-red-600 border-[2px] border-primary3 lg:w-[20%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        >
+DELETE-ACCOUNT
+        </button>
+        <h2 className="text-[17px] text-red-600 font-[700]">THIS ACTION CANNOT BE UNDONE</h2>
+        </div>
+            </div>
             </div>
           )}
         </div>
