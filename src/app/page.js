@@ -8,6 +8,8 @@ import { setMyNumber,setMyString } from "@/store";
 import { usePrivy } from "@privy-io/react-auth";
 import { initializeMoralis } from "@/utils/moralisss";
 import { getBalance } from "@/utils/getbalance";
+import { JsonRpcProvider, Web3Provider, BrowserProvider, isAddress } from "ethers";
+import { number } from "yup";
 
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
@@ -15,21 +17,26 @@ export default function Home() {
   const [hasFetchedBalance, setHasFetchedBalance] = useState(false); 
   const [trackadd, settrackadd] = useState(null);
   const [bal, setbal] = useState(0); 
+  const [accept, setaccept] = useState(''); 
   const [usdcAmount, setUsdcAmount] = useState(0); 
   const [conversionRate, setConversionRate] = useState(0);
 
- const { login,  isLoggedIn,  user, privy,ready, authenticated } = usePrivy();
+ const { login,  isLoggedIn,  user, privy,ready, authenticated,logout, connectWallet } = usePrivy();
     const Navigate  = useRouter()
     const Dispatch = useDispatch()
 
   useEffect(() => {
   if (ready && authenticated && user && !hasFetchedBalance)  {
-    fetchEthToUsdcPrice()
+    getWalletNetworkAndChainId(user.wallet.address)
+    setaccept(user.wallet.chainId)
+    console.log(user.wallet.chainId)
     settrackadd(user.wallet.address)
-   { console.log('User is logged in:', user);
-    console.log(user.wallet?.address)}
+   { console.log('User is logged in:', user.wallet);
+    console.log(user.wallet?.chainType)
+  }
     }
-}, [ready,authenticated,]);
+  
+}, [ready,authenticated]);
 
 
 useEffect(() => {
@@ -71,6 +78,7 @@ function move() {
     };
 
     const fetchEthToUsdcPrice = async () => {
+      
       try {
         const response = await fetch(
           "https://api.coingecko.com/api/v3/simple/price?ids=ethereum,usd-coin&vs_currencies=usd"
@@ -100,6 +108,24 @@ const final = parseFloat(fina)
         console.error("Error fetching ETH to USDC price:", error);
       }
     };
+const getWalletNetworkAndChainId = async (walletAddress) => {
+    try {
+        if (!isAddress(walletAddress)) {
+            throw new Error("Invalid wallet address");
+        }
+        if ( accept !== 'eip155:8453') {
+             alert('This wallet is not connected to the Base network. Please switch to it.');
+             await logout()
+         } else {
+            fetchEthToUsdcPrice()
+         }
+    } catch (error) {
+        console.error("Error getting network and chain ID:", error);
+        return null;
+    }
+};
+
+
   return (
     <div className="" >
    {console.log(usdcAmount)}
