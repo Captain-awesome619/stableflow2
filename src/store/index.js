@@ -12,7 +12,7 @@ const initialState = {
   myString: 'nothing',
   myNumber: 0,
   businessname: '',
-  value: 0,
+  value: '',
 };
 
 const mySlice = createSlice({
@@ -29,7 +29,7 @@ const mySlice = createSlice({
       state.businessname = action.payload;
     },
     setvalue(state, action) {
-      state.businessname = action.payload;
+      state.value = action.payload;
     },
   },
 });

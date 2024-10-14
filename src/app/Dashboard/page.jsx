@@ -9,26 +9,41 @@ import third from '../assests/receipt-item.png'
 import fourth from '../assests/element-1.png'
 import logo from '../assests/logo.png'
 import { IoMdClose } from "react-icons/io";
-import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress } from 'ethers';
+import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress,parseUnits } from 'ethers';
 import { FaNairaSign } from "react-icons/fa6";
 import rate from "../assests/rate.png"
 import DataTable from "@/components/table";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 import { useRouter } from 'next/navigation';
+import * as Yup from "yup";
+import { Formik,Field,Form,ErrorMessage } from "formik"
+import { useSendTransaction } from "@privy-io/react-auth";
+const WalletInfo = () => { 
 
-const WalletInfo = () => {
- 
+  const validationSchema = Yup.object().shape({
+    recipient: Yup.string().required("Recipient address is required"),
+    amount: Yup.number()
+      .required("Amount is required")
+      .positive("Amount must be greater than zero"),
+  });
+  
+  
+
+
+
   const bizname = useSelector((state) => state.businessname)
   const myString = useSelector((state) => state.myString);
   const myNum = useSelector((state) => state.myNumber)
-  const usdc = useSelector((state) => state.value)
+  const client = useSelector((state) => state.value)
   const [selectedOption, setSelectedOption] = useState('dashboard'); // Default selection
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar visibility state
   const [baseName, setBaseName] = useState(null);
-  
+  const [recipient, setRecipient] = useState("");
+  const [amount, setAmount] = useState('');
   const [conversionRate, setConversionRate] = useState(null);
   const [nairaAmount, setNairaAmount] = useState(0);
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 const {logout} = usePrivy()
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -69,7 +84,6 @@ async function getBaseName(walletAddress) {
   }, []);
 
   const fetchConversionRate = async () => {
-
     try {
       const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=usd-coin&vs_currencies=ngn');
       const data = await response.json();
@@ -84,7 +98,8 @@ async function getBaseName(walletAddress) {
     
     console.log(info)
     fetchConversionRate();
-    const intervalId = setInterval(fetchConversionRate, 60000); // Fetch rate every minute
+    const intervalId = setInterval(fetchConversionRate, 100000);
+   // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
@@ -94,9 +109,53 @@ async function getBaseName(walletAddress) {
     }
   }, [myNum, conversionRate]);
 
+  const handleSubmit = async () => {
+    setSelectedOption('confirm')
+  };
+
+  const { wallets} = useWallets()
+
+  const { user } = usePrivy();
+  const { sendTransaction } = useSendTransaction({
+    callbacks: {
+      onError: (error) => {
+        console.error('Transaction failed:', error);
+      },
+      onSuccess: (response) => {
+        console.log('Transaction successful:', response);
+      },
+    },
+  });
+
+  
+    const handleSendUSDC = async () => {
+      const decimals = 6;
+    // Convert USDC to smallest unit (in this case, wei)
+      const parsedAmount = parseUnits(amount, decimals) 
+      console.log((parsedAmount))
+      const final = parsedAmount.toString()
+     
+      const transactionData = {
+        to: recipient , // Replace with the recipient's address
+        value: parsedAmount, // Amount in smallest unit (USDC)
+        gasLimit: 21000, // Adjust according to the expected gas limit
+      };
+      console.log(transactionData.value)
+      try {
+        const receipt = await sendTransaction(transactionData);
+        console.log('Transaction receipt:', receipt);
+      } catch (error) {
+        console.error('Error sending USDC:', error);
+      }
+    }
+
+
   return (
     <div className="flex overflow-x-hidden">
       {/* Button to toggle sidebar on small screens */}
+      {console.log(user)}
+      {console.log(amount)}
+      {console.log(recipient)}
       <button 
         className="md:hidden p-2 text-white bg-gray-800 absolute top-4 left-1 z-10"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -225,7 +284,8 @@ Generate Invoice
               </div>
               <button
         className='bg-white border-[2px] border-primary3 lg:w-[90%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
-        >
+        onClick={() => handleOptionSelect('withdraw')} 
+       >
 Withdraw
         </button>
               </div>
@@ -300,7 +360,128 @@ DELETE-ACCOUNT
             </div>
             </div>
           )}
+          {
+            selectedOption === 'withdraw' && (
+              <div>
+ <Formik
+      initialValues={{}}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ isSubmitting }) => (
+        <Form className="space-y-4">
+          <div>
+            <label>Sender Address</label>
+            <Field
+              type="text"
+              name="sender"
+              value={myString}
+              readOnly
+              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+          <div>
+            <label>Network</label>
+            <Field
+              type="text"
+              name="network"
+              value="Base"
+              readOnly
+              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+          <div>
+            <label>Currency</label>
+            <Field
+              type="text"
+              name="currency"
+              value="USDC"
+              readOnly
+              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+          <div>
+            <label>Recipient Address</label>
+            <input
+              type="text"
+              name="recipient"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+              placeholder="Enter recipient address"
+              className="block w-[40%] p-3 border-[2px] border-primary3 rounded-lg"
+            />
+             <ErrorMessage name="recipient" component="div" className="text-red-600" />
+          </div>
+          <div>
+            <label>Amount (USDC)</label>
+            <input
+              type="number"
+              name="amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Enter amount"
+             className="block w-[40%] p-3 border-[2px] border-primary3 rounded-lg"
+            />
+             <ErrorMessage name="amount" component="div" className="text-red-600" />
+          </div>
+          <button
+            type="submit"
+            disabled={!amount||  amount == 0 || !recipient}
+            className={!amount||  amount == 0 || !recipient ? "cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]" :"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]"}
+          onClick={handleSubmit}
+          >
+          
+            Confirm Details
+          </button>
+          {console.log(wallets)}
+         
+        </Form>
+      )}
+    </Formik>
+              </div>
+            )
+          }
         </div>
+        {
+            selectedOption === 'confirm' && (
+              <div className="grid gap-4">
+                <div className="grid">
+            <label className="font-[700] text-primary1">From</label>
+            <input
+              type="text"
+              name="recipient"
+              value={myString}
+            readOnly
+              className="block w-[40%] p-3 border-[1px] text-primary3 border-primary3 rounded-lg"
+            />
+          </div>
+                <div className="grid">
+            <label className="font-[700] text-primary1">To</label>
+            <input
+              type="text"
+              name="recipient"
+              value={recipient}
+              readOnly
+               className="block lg:w-[40%] w-[80%] text-primary3 p-3 border-[1px] border-primary3 rounded-lg"
+            />
+          </div>
+          <h4 className="text-primary2">(please ensure details are correct)</h4>
+          <div className="grid">
+          <label>Amount</label>
+          <h2 className="font-[700] text-[36px] text-primary1">{amount}USDC</h2>
+             </div>
+          
+             <button
+            type="submit"
+            className={"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]"}
+          onClick={handleSendUSDC}
+          >
+            Send
+            </button>
+                 </div> 
+            )
+            
+            }
       </div>
     </div>
   );
