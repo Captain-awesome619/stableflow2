@@ -48,6 +48,9 @@ useEffect(() => {
 function move() {
   Navigate.push('/Authenticated');
 }
+function back() {
+  Navigate.push('/');
+}
     const handleAuthClick = async (email) => {
       if (!isLoggedIn) {
         try {
@@ -117,6 +120,7 @@ const getWalletNetworkAndChainId = async (walletAddress) => {
       } else {
           alert('This wallet is not connected to the Base network. Please switch to it.');
           await logout();
+          back()
           return
       }
     } catch (error) {

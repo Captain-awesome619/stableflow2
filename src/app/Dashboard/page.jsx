@@ -174,8 +174,8 @@ chainId: '8453',
         value: "0x0", // No native token being sent, only the ERC-20 transfer
         gasLimit: 100000,
       });
-  
       console.log("Transaction receipt:", tx);
+      Navigate.refresh()
     } catch (error) {
       console.error("Error sending USDC:", error);
     }
