@@ -1,6 +1,7 @@
 import Moralis from "moralis";
-
+import { initializeMoralis } from "./moralisss";
 export const getBalance = async (address) => {
+  await initializeMoralis(); 
   try {
     const balance = await Moralis.EvmApi.balance.getNativeBalance({
       address,

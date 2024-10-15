@@ -89,7 +89,7 @@ function move() {
         const ethToUsdcConversionRate = ethPrice / usdcPrice;
         setConversionRate(ethToUsdcConversionRate);
         console.log(ethToUsdcConversionRate)
-        await initializeMoralis();
+      
         const weiBalance = await getBalance(user.wallet.address);
         const figg = weiBalance.ether
         const num = parseFloat(figg)

@@ -9,7 +9,7 @@ import third from '../assests/receipt-item.png'
 import fourth from '../assests/element-1.png'
 import logo from '../assests/logo.png'
 import { IoMdClose } from "react-icons/io";
-import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress,parseUnits } from 'ethers';
+import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress,parseUnits,Interface } from 'ethers';
 import { FaNairaSign } from "react-icons/fa6";
 import rate from "../assests/rate.png"
 import DataTable from "@/components/table";
@@ -18,19 +18,45 @@ import { useRouter } from 'next/navigation';
 import * as Yup from "yup";
 import { Formik,Field,Form,ErrorMessage } from "formik"
 import { useSendTransaction } from "@privy-io/react-auth";
-const WalletInfo = () => { 
+import { initializeMoralis } from "@/utils/moralisss";
+import { getBalance } from "@/utils/getbalance";
+import { useDispatch } from "react-redux";
+import { setMyNumber } from "@/store";
 
+const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
     amount: Yup.number()
       .required("Amount is required")
       .positive("Amount must be greater than zero"),
   });
-  
-  
+  const Dispatch = useDispatch()
 
-
-
+  const fetchEthToUsdcPrice = async () => {   
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum,usd-coin&vs_currencies=usd"
+      );
+      const data = await response.json();
+      const ethPrice = data.ethereum.usd; 
+      const usdcPrice = data["usd-coin"].usd; 
+      console.log(ethPrice)
+      console.log(usdcPrice)
+      const ethToUsdcConversionRate = ethPrice / usdcPrice;
+      console.log(ethToUsdcConversionRate)
+      const weiBalance = await getBalance(myString);
+      const figg = weiBalance.ether
+      const num = parseFloat(figg)
+      console.log(num)
+      const equivalentUsdc = num * ethToUsdcConversionRate;
+      const fina = equivalentUsdc.toFixed(6)
+const final = parseFloat(fina)
+      Dispatch(setMyNumber(final))
+      console.log(final)
+    } catch (error) {
+      console.error("Error fetching ETH to USDC price:", error);
+    }
+  };
   const bizname = useSelector((state) => state.businessname)
   const myString = useSelector((state) => state.myString);
   const myNum = useSelector((state) => state.myNumber)
@@ -81,7 +107,7 @@ async function getBaseName(walletAddress) {
 
   useEffect(() => {
   getBaseName(myString)
-  }, []);
+  }, [myString]);
 
   const fetchConversionRate = async () => {
     try {
@@ -93,15 +119,15 @@ async function getBaseName(walletAddress) {
       console.error('Error fetching conversion rate:', error);
     }
   };
-  const info = useWallets()
+
+
   useEffect(() => {
-    
-    console.log(info)
+    fetchEthToUsdcPrice()
     fetchConversionRate();
     const intervalId = setInterval(fetchConversionRate, 100000);
    // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
+  }, [myNum]);
 
   useEffect(() => {
     if (conversionRate) {
@@ -114,7 +140,6 @@ async function getBaseName(walletAddress) {
   };
 
   const { wallets} = useWallets()
-
   const { user } = usePrivy();
   const { sendTransaction } = useSendTransaction({
     callbacks: {
@@ -127,28 +152,34 @@ async function getBaseName(walletAddress) {
     },
   });
 
+  const erc20ABI = [
+    "function transfer(address to, uint256 amount) external returns (bool)"
+  ];
+ 
+  const sendUSDC = async ( ) => {
+   
+    const usdcContractAddress = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"; // Replace with your USDC contract address
+    const decimals = 6; // USDC uses 6 decimal places
+    const parsedAmount = parseUnits(amount.toString(), decimals);
+  console.log(parsedAmount)
+    // Encoding the function call with ethers.js
+    const iface = new Interface(erc20ABI);
+    const data = iface.encodeFunctionData("transfer", [recipient, parsedAmount]);
   
-    const handleSendUSDC = async () => {
-      const decimals = 6;
-    // Convert USDC to smallest unit (in this case, wei)
-      const parsedAmount = parseUnits(amount, decimals) 
-      console.log((parsedAmount))
-      const final = parsedAmount.toString()
-     
-      const transactionData = {
-        to: recipient , // Replace with the recipient's address
-        value: parsedAmount, // Amount in smallest unit (USDC)
-        gasLimit: 21000, // Adjust according to the expected gas limit
-      };
-      console.log(transactionData.value)
-      try {
-        const receipt = await sendTransaction(transactionData);
-        console.log('Transaction receipt:', receipt);
-      } catch (error) {
-        console.error('Error sending USDC:', error);
-      }
+    try {
+      const tx = await sendTransaction({
+chainId: '8453',
+        to: usdcContractAddress,
+        data: data,
+        value: "0x0", // No native token being sent, only the ERC-20 transfer
+        gasLimit: 100000,
+      });
+  
+      console.log("Transaction receipt:", tx);
+    } catch (error) {
+      console.error("Error sending USDC:", error);
     }
-
+  };
 
   return (
     <div className="flex overflow-x-hidden">
@@ -474,7 +505,7 @@ DELETE-ACCOUNT
              <button
             type="submit"
             className={"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]"}
-          onClick={handleSendUSDC}
+          onClick={sendUSDC}
           >
             Send
             </button>
