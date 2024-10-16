@@ -28,9 +28,7 @@ export default function Home() {
   useEffect(() => {
   if (ready && authenticated && user && !hasFetchedBalance)  {
     getWalletNetworkAndChainId(user.wallet.address)
-    fetchprofile()
     console.log(user.wallet.chainId)
-  
    { console.log('User is logged in:', user.wallet);
     console.log(user.wallet?.chainType)
   }
@@ -143,7 +141,7 @@ const final = parseFloat(fina)
         Dispatch(setMyNumber(final))
         Dispatch(setMyString(user.wallet.address))
         Dispatch(setvalue(user.wallet.walletClientType))
-fetchprofile()
+
         console.log(bal)
       } catch (error) {
         console.error("Error fetching ETH to USDC price:", error);
@@ -156,6 +154,7 @@ const getWalletNetworkAndChainId = async (walletAddress) => {
         }
         if (user.wallet.walletClientType === 'privy' || user.wallet.chainId === 'eip155:8453') {
           fetchEthToUsdcPrice();
+          fetchprofile()
       } else {
           alert('This wallet is not connected to the Base network. Please switch to it.');
           await logout();
@@ -185,7 +184,6 @@ const getWalletNetworkAndChainId = async (walletAddress) => {
        <button type="submit" onClick={handleAuthClick}  className={ "lg:w-[180px] border-[1px] hover:bg-transparent hover:border-primary4 hover:text-primary4 w-[100px] h-[45px] lg:h-[55px] duration-500 rounded-3xl bg-primary5  cursor-pointer text-white text-[13px] lg:text-[17px] font-[500]"}>Get Started</button>
        </div>
        <Waitlist />
-       
        <Steps />
        <Ready />
     </div>

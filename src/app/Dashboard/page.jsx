@@ -373,22 +373,42 @@ Withdraw
           )}
           {selectedOption === 'settings' && (
             <div>
-               <div className=" grid gap-[2rem]">
-              <h2 className="text-[25px] text-primary1 font-[700]"> Business-name :  <span className="text-primary2">{bizname}</span> </h2>
+               <div className=" grid gap-[2rem] lg:gap-[3rem]">
+               <div className="grid gap-[0.5rem]">
+              <h2 className="text-[28px] text-primary1 font-[700]"> User settings</h2>
+              <h2 className="text-[16px] text-primary3 font-[400]">Your personal settings information    </h2>
+              </div>
+              <div className="grid gap-[0.5rem]">
+              <label className="text-[16px] text-primary1 font-[500]"> Business name</label>
+              <input 
+              readOnly
+              value={bizname}
+              className="lg:w-[500px] w-[95%] h-[50px] focus:outline-none lg:h-[55px] rounded-2xl text-primary3 border-[1px] border-primary3 pl-[1rem]"
+              />
+              </div>
+              <div className="grid gap-[0.5rem]">
+              <label className="text-[16px] text-primary1 font-[500]"> Wallet address</label>
+              <input 
+              readOnly
+              value={myString}
+              className=" w-[100%] h-[50px] focus:outline-none lg:w-[500px] lg:h-[55px] rounded-2xl text-primary3 lg:text-[16px] text-[12px] border-[1px] pl-[0.2rem] border-primary3 lg:pl-[1rem]"
+              />
+              </div>
+
               <button
         onClick={handleLogout}
-        className='bg-primary4 border-[2px] border-primary3 lg:w-[20%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        className='bg-primary1 border-[2px] lg:w-[130px] h-[50px] px-[1rem]  flex items-center justify-center lg:h-[55px] cursor-pointer  py-2 rounded-2xl text-white'
         >
-LOG-OUT
+Sign out
         </button>
-        <div className="gap-[1rem] flex flex-col mt-[1rem]">
+      
         <button
-        className='bg-red-600 border-[2px] border-primary3 lg:w-[20%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        onClick={handleLogout}
+        className='bg-transparent text-[16px] font-[700]  lg:w-[130px]  flex items-center justify-center lg:h-[55px] cursor-pointer   text-[#FF0000]'
         >
-DELETE-ACCOUNT
+Delete account
         </button>
-        <h2 className="text-[17px] text-red-600 font-[700]">THIS ACTION CANNOT BE UNDONE</h2>
-        </div>
+        
             </div>
             </div>
           )}
