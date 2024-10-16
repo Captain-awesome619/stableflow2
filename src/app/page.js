@@ -4,19 +4,20 @@ import { useRouter } from "next/navigation";
 import logo from "../app/assests/logo.png"
 import Image from "next/image";
 import { useDispatch } from "react-redux";
-import { setMyNumber,setMyString,setvalue } from "@/store";
+import { setMyNumber,setMyString,setvalue,setMybuisnessname } from "@/store";
 import { usePrivy } from "@privy-io/react-auth";
-import { initializeMoralis } from "@/utils/moralisss";
 import { getBalance } from "@/utils/getbalance";
-import { JsonRpcProvider, Web3Provider, BrowserProvider, isAddress } from "ethers";
-
+import {  isAddress } from "ethers";
+import Waitlist from "@/components/waitlist"; 
+import Steps from "@/components/steps";
+import Ready from "@/components/ready";
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [step,Setstep] = useState(1)
   const [hasFetchedBalance, setHasFetchedBalance] = useState(false); 
   const [trackadd, settrackadd] = useState(null);
   const [bal, setbal] = useState(0); 
-  const [accept, setaccept] = useState(''); 
+  const [accept, setaccept] = useState(false); 
   const [usdcAmount, setUsdcAmount] = useState(0); 
   const [conversionRate, setConversionRate] = useState(0);
 
@@ -27,26 +28,63 @@ export default function Home() {
   useEffect(() => {
   if (ready && authenticated && user && !hasFetchedBalance)  {
     getWalletNetworkAndChainId(user.wallet.address)
-    setaccept(user.wallet.chainId)
-    
+    fetchprofile()
     console.log(user.wallet.chainId)
-    settrackadd(user.wallet.address)
+  
    { console.log('User is logged in:', user.wallet);
     console.log(user.wallet?.chainType)
   }
     }
 }, [ready,authenticated]);
 
-
 useEffect(() => {
-    if (trackadd !== null && usdcBalance !== null ) {
-    move()
-  }
+  if (trackadd !== null && usdcBalance !== null ) {
+  move()
+}
 }, [trackadd,usdcBalance]);
 
+const fetchprofile = async () => {   
+  fetch(` https://stableflow.onrender.com/profile?walletAddress=${user.wallet.address}`, {
+    method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+.then(response => {
+  if (!response) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+})
+.then(data => {
+  if (data) {
+    if (data.statusCode == 200) {
+      console.log('The value exists:', data);
+      const res = data.statusCode
+      console.log(res)
+      const bizname = data.data.businessName
+      Dispatch(setMybuisnessname(bizname))
+      move()
+    }else
+   move2()
+  } else {
+    move2()
+    if (data.statusCode === 404) {
+      move2()
+    }
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+  });
+}
+
+function move2() {
+  Navigate.push('/Authenticated');
+}
 
 function move() {
-  Navigate.push('/Authenticated');
+  Navigate.push('/Dashboard');
 }
 function back() {
   Navigate.push('/');
@@ -92,7 +130,6 @@ function back() {
         const ethToUsdcConversionRate = ethPrice / usdcPrice;
         setConversionRate(ethToUsdcConversionRate);
         console.log(ethToUsdcConversionRate)
-      
         const weiBalance = await getBalance(user.wallet.address);
         const figg = weiBalance.ether
         const num = parseFloat(figg)
@@ -102,9 +139,11 @@ function back() {
 const final = parseFloat(fina)
         setbal(final)
         setUsdcBalance(final)
+        settrackadd(user.wallet.address)
         Dispatch(setMyNumber(final))
         Dispatch(setMyString(user.wallet.address))
         Dispatch(setvalue(user.wallet.walletClientType))
+fetchprofile()
         console.log(bal)
       } catch (error) {
         console.error("Error fetching ETH to USDC price:", error);
@@ -128,28 +167,27 @@ const getWalletNetworkAndChainId = async (walletAddress) => {
         return null;
     }
 };
+
   return (
-    <div className="" >
+    <div className="flex flex-col gap-[3rem] lg:gap-[5rem] overflow-hidden py-[1rem]" >
    {console.log(usdcAmount)}
    {console.log(bal)}
-       <div className="flex items-center justify-center mt-[2rem]" >
+   <div className=" flex flex-row justify-between items-center mt-[1rem] mx-[0.5rem] lg:mx-[3rem]">
+       <div className="flex items-center justify-center  " >
        <Image
     src = {logo}
     width = {200}
     height = {200}
     alt = "model"
-    className=""
+    className="lg:w-[200px] w-[130px]"
     />
     </div>
-    { step === 1 ?
-    <div className=" flex flex-col items-center  gap-[2.7rem] justify-center mx-[1rem] lg:mx-0  mt-[50%] lg:mt-[7rem] ">
-       <h3 className="text-[20px] font-[700] text-primary1">
-       Let's get started!
-       </h3>
-       <button type="submit" onClick={handleAuthClick}  className={ "lg:w-[30%] w-[100%] h-[55px] duration-500 rounded-3xl bg-primary5  cursor-pointer text-white text-[17px] font-[500]"}>Sign in</button>
+       <button type="submit" onClick={handleAuthClick}  className={ "lg:w-[180px] border-[1px] hover:bg-transparent hover:border-primary4 hover:text-primary4 w-[100px] h-[45px] lg:h-[55px] duration-500 rounded-3xl bg-primary5  cursor-pointer text-white text-[13px] lg:text-[17px] font-[500]"}>Get Started</button>
        </div>
-: ""}
-
+       <Waitlist />
+       
+       <Steps />
+       <Ready />
     </div>
   );
 }

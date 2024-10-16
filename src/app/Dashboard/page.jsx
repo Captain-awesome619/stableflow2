@@ -1,7 +1,7 @@
 "use client"
 import { useSelector } from "react-redux";
 import React ,{ useState, useEffect } from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiCoinsPile, GiHamburgerMenu } from "react-icons/gi";
 import Image from "next/image";
 import dash from '../assests/document.png'
 import setting from '../assests/setting-2.png'
@@ -22,6 +22,7 @@ import { initializeMoralis } from "@/utils/moralisss";
 import { getBalance } from "@/utils/getbalance";
 import { useDispatch } from "react-redux";
 import { setMyNumber } from "@/store";
+import { abi } from "@/utils/usdcabi";
 
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
@@ -164,18 +165,18 @@ async function getBaseName(walletAddress) {
   console.log(parsedAmount)
     // Encoding the function call with ethers.js
     const iface = new Interface(erc20ABI);
-    const data = iface.encodeFunctionData("transfer", [recipient, parsedAmount]);
-  
+    const data = iface.encodeFunctionData("transfer", [recipient, parsedAmount],);
+  console.log(recipient)
+  console.log(parsedAmount)
     try {
       const tx = await sendTransaction({
-chainId: '8453',
+      
         to: usdcContractAddress,
         data: data,
         value: "0x0", // No native token being sent, only the ERC-20 transfer
         gasLimit: 100000,
       });
       console.log("Transaction receipt:", tx);
-      Navigate.refresh()
     } catch (error) {
       console.error("Error sending USDC:", error);
     }

@@ -43,10 +43,33 @@ const page = () => {
       const handleInputChange = (event) => {
         setname(event.target.value);
       };
+
       const Customhandle = async (event) => {
-        event.preventDefault(); // Prevent default form submission behavior
+        event.preventDefault();
+        fetch('https://stableflow.onrender.com/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+           walletAddress: myString,
+  businessName: name
+          }),
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Response:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        }); // Prevent default form submission behavior
           Dispatch(setMybuisnessname(name)); 
-          Forward()  
+        Forward()
       };
 
       
