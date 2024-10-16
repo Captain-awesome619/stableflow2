@@ -17,9 +17,9 @@ const Waitlist = ({forward,verify,mail,isLoggedIn}) => {
      </div>
     </div>
     <div className='flex flex-col gap-[1rem] items-center justify-center'>
-    <h1 className='text-center text-primary1 text-[25px] lg:text-[55px] font-[700]'>Simplify Your Business <br></br> Payments with Digital Dollars</h1>
-    <h1 className='lg:flex hidden text-center text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow <br></br> your local business.</h1>
-    <h1 className='flex lg:hidden text-center text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow  your local business.</h1>
+    <h1 className='text-center text-primary1 text-[20px] lg:text-[55px] font-[700]'>Simplify Your Business <br></br> Payments with Digital Dollars</h1>
+    <h1 className='lg:flex hidden text-center text-primary1 text-[15px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow <br></br> your local business.</h1>
+    <h1 className='flex lg:hidden text-center text-primary1 text-[15px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow  your local business.</h1>
     </div>
     <div className='flex flex-row justify-center items-center gap-[1rem] lg:gap-[3rem]'>
     <input 
