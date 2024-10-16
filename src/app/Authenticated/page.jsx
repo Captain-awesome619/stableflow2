@@ -168,4 +168,4 @@ Go to Dashboard
   )
 }
 
-export default page
+export default Page
