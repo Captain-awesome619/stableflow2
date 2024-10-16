@@ -10,7 +10,7 @@ import { setMybuisnessname } from '@/store'
 import ClipLoader from "react-spinners/ClipLoader"
 import * as yup from 'yup';
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-const page = () => {
+const Page = () => {
     const Navigate = useRouter()
     const [loading, setLoading] = useState(1);
     const [name, setname] = useState('');
@@ -23,6 +23,7 @@ const page = () => {
       Navigate.push('/Dashboard');
       setredirect(true)
     }
+
     const initialValues = {
       myField: '',
     };
@@ -36,6 +37,7 @@ const page = () => {
     function Forward() {
       setLoading(prevview => prevview + 1)
       }
+
       function Backward() {
       setLoading(prevview => prevview - 1)
       }

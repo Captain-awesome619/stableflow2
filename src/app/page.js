@@ -11,6 +11,7 @@ import {  isAddress } from "ethers";
 import Waitlist from "@/components/waitlist"; 
 import Steps from "@/components/steps";
 import Ready from "@/components/ready";
+
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [step,Setstep] = useState(1)
