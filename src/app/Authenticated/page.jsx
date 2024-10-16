@@ -19,7 +19,7 @@ const page = () => {
 
     const myString = useSelector((state) => state.myString);
 
-    function move() {
+    function Move() {
       Navigate.push('/Dashboard');
       setredirect(true)
     }
@@ -155,7 +155,7 @@ Continue
     <button
       className='bg-primary5 lg:w-[120%] w-[95%]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-white'
         disabled={!loading}
-        onClick={move}   
+        onClick={Move}   
         >
 Go to Dashboard
         </button>
