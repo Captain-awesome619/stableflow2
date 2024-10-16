@@ -172,7 +172,7 @@ const getWalletNetworkAndChainId = async (walletAddress) => {
     <div className="flex flex-col gap-[5rem] lg:gap-[5rem] overflow-hidden py-[1rem]" >
    {console.log(usdcAmount)}
    {console.log(bal)}
-   <div className=" flex flex-row justify-between items-center mt-[1rem] mx-[0.5rem] lg:mx-[3rem]">
+   <div className=" flex flex-row justify-between items-center mt-[0.3rem] lg:mt-[1rem] mx-[0.5rem] lg:mx-[3rem]">
        <div className="flex items-center justify-center  " >
        <Image
     src = {logo}
