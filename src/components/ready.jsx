@@ -10,7 +10,7 @@ const Ready = () => {
     <h1 className='lg:flex hidden  text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow <br></br> your local business.</h1>
     <h1 className='flex lg:hidden text-center text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow  your local business.</h1>
     </div>
-    <div className='flex flex-row gap-[1rem] lg:gap-[3rem]'>
+    <div className='flex items-center justify-center flex-row gap-[1rem] lg:gap-[3rem]'>
     <input 
     placeholder='Email Address'
     className='w-[180px] h-[20px] lg:w-[250px] pl-[0.5rem] lg:h-[50px] appearance-none outline-none'
