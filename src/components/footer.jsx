@@ -12,7 +12,7 @@ const Footer = () => {
        <Image src={logo} width={150} height={100} alt='logo' />
        <div className='flex items-center justify-center gap-[1.5rem]'>
        <a  href='https://x.com/stableflowng'>  <BsTwitterX size={25} className='text-[#27272A] cursor-pointer' /></a>
-       <a href='https://www.instagram.com/stableflow.ng/profilecard/?igsh=MWN5bG9mcTBwbDYweQ=='> <FaInstagram   size={25} className='text-[#27272A] cursor-pointer' /></a> 
+       <a href='https://www.instagram.com/stableflow.ng?igsh=MWtjeGJoYXhmdjNyMA=='> <FaInstagram   size={25} className='text-[#27272A] cursor-pointer' /></a> 
         <FaGithub  size={25} className='text-[#27272A] cursor-pointer' />
         <a  href='https://www.facebook.com/profile.php?id=61566923144288&mibextid=LQQJ4d'>  <TiSocialFacebook size={25} className='text-[#27272A] cursor-pointer' /> </a>
        </div>
