@@ -27,14 +27,14 @@ export default function Home() {
     const Dispatch = useDispatch()
 
   useEffect(() => {
-  if (ready && authenticated && user && !hasFetchedBalance)  {
-    getWalletNetworkAndChainId(user.wallet.address)
-    console.log(user.wallet.chainId)
+  if (ready && authenticated && user )  {
+    getWalletNetworkAndChainId()
+  
    { console.log('User is logged in:', user.wallet);
     console.log(user.wallet?.chainType)
   }
     }
-}, [ready,authenticated]);
+}, [ready,authenticated,user]);
 
 useEffect(() => {
   if (trackadd !== null && usdcBalance !== null ) {
@@ -148,9 +148,9 @@ const final = parseFloat(fina)
         console.error("Error fetching ETH to USDC price:", error);
       }
     };
-const getWalletNetworkAndChainId = async (walletAddress) => {
+const getWalletNetworkAndChainId = async () => {
     try {
-        if (!isAddress(walletAddress)) {
+        if (!isAddress(user.wallet.address)) {
             throw new Error("Invalid wallet address");
         }
         if (user.wallet.walletClientType === 'privy' || user.wallet.chainId === 'eip155:8453') {
