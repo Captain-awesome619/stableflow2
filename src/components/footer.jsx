@@ -11,10 +11,10 @@ const Footer = () => {
          <div className='flex lg:flex-row flex-col items-center justify-center gap-[3rem] lg:justify-between '>
        <Image src={logo} width={150} height={100} alt='logo' />
        <div className='flex items-center justify-center gap-[1.5rem]'>
-       <BsTwitterX  size={25} className='text-[#27272A] cursor-pointer' />
-       <FaInstagram  size={25} className='text-[#27272A] cursor-pointer' />
+       <BsTwitterX href='https://x.com/stableflowng' size={25} className='text-[#27272A] cursor-pointer' />
+       <FaInstagram href='https://www.instagram.com/stableflow.ng/profilecard/?igsh=MWN5bG9mcTBwbDYweQ=='  size={25} className='text-[#27272A] cursor-pointer' />
        <FaGithub  size={25} className='text-[#27272A] cursor-pointer' />
-       <TiSocialFacebook size={25} className='text-[#27272A] cursor-pointer' />
+       <TiSocialFacebook href='https://www.facebook.com/profile.php?id=61566923144288&mibextid=LQQJ4d' size={25} className='text-[#27272A] cursor-pointer' />
        </div>
        </div>
        <div className='flex lg:flex-row flex-col items-center justify-center gap-[3rem] lg:justify-between'>
