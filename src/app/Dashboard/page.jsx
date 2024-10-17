@@ -23,7 +23,9 @@ import { getBalance } from "@/utils/getbalance";
 import { useDispatch } from "react-redux";
 import { setMyNumber } from "@/store";
 import { abi } from "@/utils/usdcabi";
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
@@ -181,15 +183,24 @@ async function getBaseName(walletAddress) {
       console.error("Error sending USDC:", error);
     }
   };
+  const settings = {
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 7000,
 
+  };
+  
   return (
-    <div className="flex overflow-x-hidden">
+    <div className="lg:flex overflow-x-hidden">
       {/* Button to toggle sidebar on small screens */}
       {console.log(user)}
       {console.log(amount)}
       {console.log(recipient)}
       <button 
-        className="md:hidden p-2 text-white bg-gray-800 absolute top-4 left-1 z-10"
+        className="md:hidden p-2 text-white bg-gray-800 absolute top-3 left-1 z-30"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? <IoMdClose size={15} /> : <GiHamburgerMenu size={15} />}
@@ -197,7 +208,7 @@ async function getBaseName(walletAddress) {
 
       {/* Sidebar */}
       <div 
-        className={`bg-white text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`bg-white z-20 text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
@@ -277,17 +288,18 @@ async function getBaseName(walletAddress) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 ">
+      <div className="lg:flex-1 p-4 ">
         <div className="border-b  border-gray-300 mb-4">
           
           <h1 className="lg:left-[60%] left-[20%] relative text-[12px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3"> {baseName}</h1>
         </div>
-        <div className="p-4 grid">
+        <div className="p-4 lg:grid">
           {selectedOption === 'dashboard' && (
-            <div className="grid  gap-[2rem] lg:gap-[4rem]">
-              <h2 className="text-xl">Hi {bizname} </h2>
-              <div className="flex lg:flex-row flex-col gap-[1rem]">
+            <div className="lg:grid    gap-[2rem] lg:gap-[4rem]">
               
+            <h2 className="text-xl lg:pb-[0rem] pb-[3rem]">Hi {bizname} </h2>
+
+              <div className="lg:flex hidden lg:flex-row flex-col gap-[1rem]">
               <div className="flex flex-col  gap-[1rem] items-center justify-center" >
               <div className="w-full h-[100px] lg:w-[500px] lg:h-[200px] bg-primary1 border-[2px] rounded-lg flex items-center justify-center">
               <div className="flex flex-col items-center justify-center"> 
@@ -321,9 +333,49 @@ Generate Invoice
 Withdraw
         </button>
               </div>
-
               </div>
-              <div className="grid grid-cols-2 gap-[0.5rem] lg:grid-cols-5"> 
+              <div className="lg:hidden pb-[3rem]">
+              <Slider {...settings}>
+              <div className="flex flex-col  gap-[1rem] items-center justify-center" >
+              <div className="w-[85%] h-[100px] lg:w-[500px] lg:h-[200px] bg-primary1 border-[2px] rounded-lg flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center"> 
+              <h2 className="text-white text-[14px]">Total Balance</h2>
+              <div className="flex flex-row items-center justify-center gap-[0.2rem]">
+              <FaNairaSign size={20} color="white" />
+              <h2 className="text-white font-[600] text-[25px]">{nairaAmount}</h2>
+              </div>
+              </div>
+              </div>
+              </div>
+
+              <div className="flex flex-col gap-[1rem] items-center justify-center" >
+              <div className="w-[85%] h-[100px] lg:w-[500px] lg:h-[200px] bg-primary4 border-[2px] rounded-lg flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center"> 
+              <h2 className="text-white text-[14px]">Total Balance</h2>
+              <div className="flex flex-row items-center justify-center gap-[0.2rem]">
+              <h2 className="text-white font-[600] text-[25px]">{myNum}USDC</h2>
+              </div>
+              </div>
+              </div>
+              </div>
+              </Slider>
+              </div>
+              <div className="flex flex-row items-center justify-center gap-[1rem] pb-[3rem] lg:hidden">
+              <button
+        className='bg-white border-[2px] border-primary3 w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        >
+Generate Invoice
+        </button>
+
+        <button
+        className='bg-white border-[2px] border-primary3  w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        onClick={() => handleOptionSelect('withdraw')} 
+       >
+Withdraw
+        </button>
+                 </div>
+
+              <div className="grid grid-cols-2 pb-[3rem] lg:pb-[0rem] gap-[0.5rem] lg:grid-cols-5"> 
               <Image 
               src={rate}
               height={200}

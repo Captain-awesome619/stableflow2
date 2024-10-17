@@ -21,7 +21,11 @@ body {
  
   font-family:'Euclid',Arial, Helvetica, sans-serif ;
 }
+.slick-slide > div{
 
+  margin-right: -25px;
+  margin-left: -20px;
+  }
 
 .wcm-modal {
   @apply bg-gray-900 text-white p-4 rounded-md shadow-lg ;
