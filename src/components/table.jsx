@@ -90,7 +90,7 @@ const DataTable = () => {
   } = useTable({ columns, data });
 
   return (
-    <table {...getTableProps()} className="min-w-full border-collapse border ">
+    <table {...getTableProps()} className="w-screen border-collapse border ">
       <thead className="bg-gray-100">
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
