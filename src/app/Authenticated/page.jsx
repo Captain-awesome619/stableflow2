@@ -87,17 +87,19 @@ const Page = () => {
     />
     </div>
 {loading === 1 ?
-    <div  className="relative top-[50%] lg:top-[20%] grid mt-[3rem] w-[200%] gap-[2rem] ">
-  <h3 className="text-[20px] font-[700] text-primary1">
-       Let's get started!
-       </h3>
+    <div  className="overflow-hidden grid mt-[3rem] items-center w-screen justify-center gap-[2rem] ">
+ 
        <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
      validateOnBlur={false}
+     className=""
     >
       {({  isValid  }) => (
-       <Form className='grid gap-[2rem]'>
+       <Form className='grid gap-[2rem] w-screen items-center justify-center'>
+         <h3 className="text-[20px] font-[700] text-primary1">
+       Let's get started!
+       </h3>
     <div className="flex flex-col gap-[1rem]">
     <label className="text-primary1 font-[500] text-[20px]">
     Business Name
@@ -108,13 +110,13 @@ const Page = () => {
      name="myField"
      value={name} 
      onChange={handleInputChange} 
-    placeholder='Business Name' className='pl-[0.5rem] h-[60px] lg:w-[100%] w-[85%] border-[2px] rounded-xl border-primary3' />
+    placeholder='Business Name' className='pl-[0.5rem] h-[60px] w-[400px] border-[2px] rounded-xl border-primary3' />
     </div>
     { !isValid && (
     <ErrorMessage name="myField" component="div" className="text-red-500" />)}
     </div>
     <button
-        className={ name ?'bg-primary5 duration-300 lg:w-[120%] w-[95%]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-white':' duration-300  bg-primary5 lg:w-[120%] w-[95%]  opacity-[0.2] flex items-center justify-center h-[50px] cursor-not-allowed  py-2 rounded-xl text-white'}
+        className={ name ?'bg-primary5 duration-300  w-[200px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-white':' duration-300  bg-primary5 w-[200px]  opacity-[0.2] flex items-center justify-center h-[50px] cursor-not-allowed  py-2 rounded-xl text-white'}
         type='submit'
         disabled={!name}
         onClick={Customhandle}
@@ -148,7 +150,7 @@ Continue
     />
     <div className="flex flex-col text-center">
     <h3 className="text-primary1 font-[500] text-[20px]">
-    Congratulations, {name}!
+    Congratulations {name}!
     </h3>
     <h3 className="text-primary2 font-[400] text-[16px]">
  You're ready to accept digital dollar payments.

@@ -3,9 +3,9 @@ import Image from 'next/image';
 import step from "../app/assests/Maskgroup.png"
 const Ready = () => {
   return (
-    <div className=' flex flex-col lg:flex-row  lg:gap-[8rem] gap-[1rem] items-center'>
+    <div className=' flex flex-col lg:justify-center lg:flex-row  lg:gap-[8rem] gap-[1rem] items-center'>
        <div className='lg:grid flex flex-col justify-center items-center gap-[1rem]'>
-      <div className='lg:grid  flex  flex-col justify-center pl-[2rem]    gap-[1rem] '>
+      <div className='lg:grid  flex  lg:items-center flex-col justify-center pl-[2rem]    gap-[1rem] '>
     <h1 className=' text-primary1 text-[20px] lg:text-[50px] font-[700]'>Ready to Transform Your <br></br> Business Payments?</h1>
     <h1 className='lg:flex hidden  text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow <br></br> your local business.</h1>
     <h1 className='flex lg:hidden  text-primary1 text-[16px] lg:text-[18px] font-[400]'>Accept USDC payments easily, track sales effortlessly, and grow  your local business.</h1>
