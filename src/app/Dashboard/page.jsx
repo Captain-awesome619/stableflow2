@@ -280,7 +280,7 @@ async function getBaseName(walletAddress) {
       <div className="flex-1 p-4 ">
         <div className="border-b  border-gray-300 mb-4">
           
-          <h1 className="lg:left-[60%] left-[13%] relative text-[12px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3"> {baseName}</h1>
+          <h1 className="lg:left-[60%] left-[18%] relative text-[12px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3"> {baseName}</h1>
         </div>
         <div className="p-4 grid">
           {selectedOption === 'dashboard' && (
