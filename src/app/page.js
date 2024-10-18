@@ -29,7 +29,6 @@ export default function Home() {
   useEffect(() => {
   if (ready && authenticated && user )  {
     getWalletNetworkAndChainId()
-  
    { console.log('User is logged in:', user.wallet);
     console.log(user.wallet?.chainType)
   }
@@ -92,22 +91,6 @@ function back() {
       if (!isLoggedIn) {
         try {
            await login({ email });
-          if (user) {
-            if (privy) {
-              const existingWallet = user.wallet; 
-              console.log('Existing Wallet:', existingWallet);
-              if (existingWallet) {
-             
-                console.log('User already has a wallet:', existingWallet);
-              } else {
-                console.log('New wallet created for user.'); 
-              }
-            } else {
-              console.error('error')
-            }
-          } else {
-            console.error('User object is not defined.');
-          }
         } catch (error) {
           console.error('Error during authentication:', error);
         }
@@ -142,7 +125,6 @@ const final = parseFloat(fina)
         Dispatch(setMyNumber(final))
         Dispatch(setMyString(user.wallet.address))
         Dispatch(setvalue(user.wallet.walletClientType))
-
         console.log(bal)
       } catch (error) {
         console.error("Error fetching ETH to USDC price:", error);

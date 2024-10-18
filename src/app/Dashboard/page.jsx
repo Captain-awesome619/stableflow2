@@ -1,7 +1,7 @@
 "use client"
 import { useSelector } from "react-redux";
 import React ,{ useState, useEffect } from "react";
-import { GiCoinsPile, GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu } from "react-icons/gi";
 import Image from "next/image";
 import dash from '../assests/document.png'
 import setting from '../assests/setting-2.png'
@@ -9,7 +9,7 @@ import third from '../assests/receipt-item.png'
 import fourth from '../assests/element-1.png'
 import logo from '../assests/logo.png'
 import { IoMdClose } from "react-icons/io";
-import {  Contract,formatUnits,JsonRpcProvider,InfuraProvider,isAddress,parseUnits,Interface } from 'ethers';
+import {  parseEther} from 'ethers';
 import { FaNairaSign } from "react-icons/fa6";
 import rate from "../assests/rate.png"
 import DataTable from "@/components/table";
@@ -18,16 +18,14 @@ import { useRouter } from 'next/navigation';
 import * as Yup from "yup";
 import { Formik,Field,Form,ErrorMessage } from "formik"
 import { useSendTransaction } from "@privy-io/react-auth";
-import { initializeMoralis } from "@/utils/moralisss";
 import { getBalance } from "@/utils/getbalance";
 import { useDispatch } from "react-redux";
-import { setMyNumber } from "@/store";
-import { abi } from "@/utils/usdcabi";
+import { setMyNumber } from "@/store";;
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { getBasename } from "../basename/getbasename";
-import { getBasenameAvatar } from "../basename/getbasename";
+import { FaLongArrowAltLeft } from "react-icons/fa";
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
@@ -85,7 +83,7 @@ const {logout} = usePrivy()
     await logout();
 Navigate.push('/')
   };
-const provider = new JsonRpcProvider("https://mainnet.infura.io/v3/3de3ca6613154c39ae2e5537c63301ae"); // You can use any Ethereum node provider
+
 
 const fetchbase = async () => {
   try{
@@ -132,6 +130,9 @@ const fetchbase = async () => {
   const handleSubmit = async () => {
     setSelectedOption('confirm')
   };
+function recheck() {
+  setSelectedOption('withdraw')
+}
 
   const { wallets} = useWallets()
   const { user } = usePrivy();
@@ -146,33 +147,33 @@ const fetchbase = async () => {
     },
   });
 
-  const erc20ABI = [
-    "function transfer(address to, uint256 amount) external returns (bool)"
-  ];
+  
  
   const sendUSDC = async ( ) => {
-   
-    const usdcContractAddress = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"; // Replace with your USDC contract address
-    const decimals = 6; // USDC uses 6 decimal places
-    const parsedAmount = parseUnits(amount.toString(), decimals);
-  console.log(parsedAmount)
-    // Encoding the function call with ethers.js
-    const iface = new Interface(erc20ABI);
-    const data = iface.encodeFunctionData("transfer", [recipient, parsedAmount],);
-  console.log(recipient)
-  console.log(parsedAmount)
+    if (user.wallet.walletClientType !== 'privy') {
+      alert("Sorry This feature is only available on privy embedded wallets")
+    } else {
     try {
-      const tx = await sendTransaction({
-      
-        to: usdcContractAddress,
-        data: data,
-        value: "0x0", // No native token being sent, only the ERC-20 transfer
-        gasLimit: 100000,
-      });
-      console.log("Transaction receipt:", tx);
-    } catch (error) {
-      console.error("Error sending USDC:", error);
+      const amountInWei = parseEther(amount);
+  const val = amountInWei.toString()
+      // Create the transaction object
+      const txObject = {
+        to: recipient,
+        value: amountInWei, 
+      };
+      if (user.wallet.walletClientType !== 'privy') {
+        alert("Sorry This feature is only available on privy embedded wallets")
+      }
+      const txResponse = await sendTransaction(txObject);
+      console.log('Transaction sent:', txResponse);
+      const txReceipt = await txResponse.wait();
+      console.log('Transaction confirmed:', txReceipt);
     }
+   catch (error) {
+    alert("Sorry This feature is only available on privy embedded wallets")
+      console.error('Transaction failed:', error);
+    }
+  } 
   };
   const settings = {
     speed: 1000,
@@ -189,7 +190,7 @@ const fetchbase = async () => {
       {/* Button to toggle sidebar on small screens */}
       {console.log(user)}
       {console.log(amount)}
-      {console.log(recipient)}
+      {console.log(client)}
       <button 
         className="md:hidden p-2 text-white bg-gray-800 absolute top-3 left-1 z-30"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -287,9 +288,7 @@ const fetchbase = async () => {
         <div className="p-4 lg:grid">
           {selectedOption === 'dashboard' && (
             <div className="lg:grid    gap-[2rem] lg:gap-[4rem]">
-              
             <h2 className="text-xl lg:pb-[0rem] pb-[3rem]">Hi {bizname} </h2>
-
               <div className="lg:flex hidden lg:flex-row flex-col gap-[1rem]">
               <div className="flex flex-col  gap-[1rem] items-center justify-center" >
               <div className="w-full h-[100px] lg:w-[500px] lg:h-[200px] bg-primary1 border-[2px] rounded-lg flex items-center justify-center">
@@ -470,32 +469,32 @@ Delete account
             <Field
               type="text"
               name="sender"
-              value={myString}
+              value={baseName? baseName : myString}
               readOnly
-              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+              className="block lg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed"
             />
           </div>
-          <div>
+          <div className="grid">
             <label>Network</label>
             <Field
               type="text"
               name="network"
               value="Base"
               readOnly
-              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+              className="blocklg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed"
             />
           </div>
-          <div>
+          <div className="grid">
             <label>Currency</label>
             <Field
               type="text"
               name="currency"
-              value="USDC"
+              value="ETH for now(USDC Soon)"
               readOnly
-              className="block w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
+              className="block lg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed"
             />
           </div>
-          <div>
+          <div className="grid">
             <label>Recipient Address</label>
             <input
               type="text"
@@ -503,26 +502,26 @@ Delete account
               value={recipient}
               onChange={(e) => setRecipient(e.target.value)}
               placeholder="Enter recipient address"
-              className="block w-[40%] p-3 border-[2px] border-primary3 rounded-lg"
+              className="block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg"
             />
              <ErrorMessage name="recipient" component="div" className="text-red-600" />
           </div>
-          <div>
-            <label>Amount (USDC)</label>
+          <div className="grid">
+            <label>Amount (ETHER)</label>
             <input
               type="number"
               name="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
-             className="block w-[40%] p-3 border-[2px] border-primary3 rounded-lg"
+             className="block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg"
             />
              <ErrorMessage name="amount" component="div" className="text-red-600" />
           </div>
           <button
             type="submit"
             disabled={!amount||  amount == 0 || !recipient}
-            className={!amount||  amount == 0 || !recipient ? "cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]" :"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]"}
+            className={!amount||  amount == 0 || !recipient ? "cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]" :"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]"}
           onClick={handleSubmit}
           >
           
@@ -540,6 +539,7 @@ Delete account
         {
             selectedOption === 'confirm' && (
               <div className="grid gap-4">
+                <FaLongArrowAltLeft size={30} onClick={recheck} className="cursor-pointer" />
                 <div className="grid">
             <label className="font-[700] text-primary1">From</label>
             <input
@@ -547,7 +547,7 @@ Delete account
               name="recipient"
               value={myString}
             readOnly
-              className="block w-[40%] p-3 border-[1px] text-primary3 border-primary3 rounded-lg"
+              className="block lg:w-[500px] w-[350px] p-3 border-[1px] text-primary3 border-primary3 rounded-lg"
             />
           </div>
                 <div className="grid">
@@ -557,18 +557,17 @@ Delete account
               name="recipient"
               value={recipient}
               readOnly
-               className="block lg:w-[40%] w-[80%] text-primary3 p-3 border-[1px] border-primary3 rounded-lg"
+               className="block  lg:w-[500px] w-[350px] text-primary3 p-3 border-[1px] border-primary3 rounded-lg"
             />
           </div>
           <h4 className="text-primary2">(please ensure details are correct)</h4>
           <div className="grid">
           <label>Amount</label>
-          <h2 className="font-[700] text-[36px] text-primary1">{amount}USDC</h2>
+          <h2 className="font-[700] text-[36px] text-primary1">{amount}ETH</h2>
              </div>
-          
              <button
             type="submit"
-            className={"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl w-[20%]"}
+            className={"cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]"}
           onClick={sendUSDC}
           >
             Send
