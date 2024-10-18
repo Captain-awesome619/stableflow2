@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store,persistor } from '../store/index';
 import {base} from "viem/chains"
+import { http, createConfig, WagmiProvider } from 'wagmi';
+import  { base as base2 }  from 'wagmi/chains';
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -18,11 +20,12 @@ const geistMono = localFont({
 });
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
 export default function RootLayout({ children }) {
-  const baseRpcUrl = 'https://mainnet.base.org'; 
-  const privyConfig = {
-    appId: process.env.PRIVY_APP_ID, // Your Privy App ID
- 
-  };  
+   const config = createConfig({
+    autoConnect: true,
+    publicClient: http(),
+    chains: [base2],
+    ssr: true,
+  });
   return (
     <html lang="en">
       <body
@@ -36,9 +39,11 @@ export default function RootLayout({ children }) {
           > 
           <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
+          <WagmiProvider config={config}>
           <main>
         {children} 
         </main>
+        </WagmiProvider>
         </PersistGate>
         </Provider>
         </PrivyProvider>

@@ -26,6 +26,8 @@ import { abi } from "@/utils/usdcabi";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { getBasename } from "../basename/getbasename";
+import { getBasenameAvatar } from "../basename/getbasename";
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
@@ -66,7 +68,7 @@ const final = parseFloat(fina)
   const client = useSelector((state) => state.value)
   const [selectedOption, setSelectedOption] = useState('dashboard'); // Default selection
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar visibility state
-  const [baseName, setBaseName] = useState(null);
+  const [baseName, setBaseName] = useState('');
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState('');
   const [conversionRate, setConversionRate] = useState(null);
@@ -84,33 +86,22 @@ const {logout} = usePrivy()
 Navigate.push('/')
   };
 const provider = new JsonRpcProvider("https://mainnet.infura.io/v3/3de3ca6613154c39ae2e5537c63301ae"); // You can use any Ethereum node provider
-async function getBaseName(walletAddress) {
-  try {
-    if (!isAddress(walletAddress)) {
-        throw new Error('Invalid Ethereum address');
-    }
-    const ensName = await provider.lookupAddress(walletAddress);
-    
-    if (!ensName) {
-        console.log(`No ENS name found for ${walletAddress}. Returning the address as basename.`);
-        setBaseName(myString)
-        return walletAddress; 
-    } else {
-        const basename = ensName.split('.')[0]; 
-        console.log(`Found ENS name: ${ensName}. Basename is: ${basename}`);
-        setBaseName(basename)
-        return basename;
-    }
-} catch (error) {
-    console.error('Error fetching ENS name:', error);
-    return null; // Return null in case of error
-}
 
+const fetchbase = async () => {
+  try{
+    const address = myString 
+    const basename2 = await getBasename(address)
+   const val = basename2.name
+   setBaseName(val)
+    console.log(val)
+    console.log(basename2)
+  }catch (error) {
+    console.error(error); // Handle any errors
 }
-
+}
   useEffect(() => {
-  getBaseName(myString)
-  }, [myString]);
+    fetchbase()
+  }, []);
 
   const fetchConversionRate = async () => {
     try {
@@ -290,8 +281,8 @@ async function getBaseName(walletAddress) {
       {/* Main Content */}
       <div className="lg:flex-1 p-4 ">
         <div className="border-b  border-gray-300 mb-4">
-          
-          <h1 className="lg:left-[60%] left-[20%] relative text-[12px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3"> {baseName}</h1>
+          <h1 className="lg:left-[60%] left-[20%] relative text-[14px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3"> 
+            {baseName == '' ? myString : baseName  }</h1>
         </div>
         <div className="p-4 lg:grid">
           {selectedOption === 'dashboard' && (
