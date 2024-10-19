@@ -26,6 +26,10 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { getBasename } from "../basename/getbasename";
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import Modal from 'react-modal'
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { Input } from "postcss";
+
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
@@ -34,6 +38,13 @@ const WalletInfo = () => {
       .positive("Amount must be greater than zero"),
   });
   const Dispatch = useDispatch()
+
+
+ 
+    const [modalIsOpen, setModalIsOpen] = useState(false);  
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => setModalIsOpen(false);
+  
 
   const fetchEthToUsdcPrice = async () => {   
     try {
@@ -71,8 +82,11 @@ const final = parseFloat(fina)
   const [amount, setAmount] = useState('');
   const [conversionRate, setConversionRate] = useState(null);
   const [nairaAmount, setNairaAmount] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const [name, setname] = useState('');
+  const [depoamt, setdeopamt] = useState(0.00);
+  const [descript, setdescript] = useState('');
+const [equi, setequi ] = useState(0.00)
 const {logout} = usePrivy()
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -98,6 +112,10 @@ const fetchbase = async () => {
 }
 }
   useEffect(() => {
+    const appElement = document.getElementById('__next');
+  if (appElement) {
+    Modal.setAppElement(appElement);
+  }
     fetchbase()
   }, []);
 
@@ -124,8 +142,11 @@ const fetchbase = async () => {
   useEffect(() => {
     if (conversionRate) {
       setNairaAmount((myNum * conversionRate).toFixed(2));
+      let eq = 0.00
+      eq = (depoamt * conversionRate).toFixed(2)
+      setequi(eq)
     }
-  }, [myNum, conversionRate]);
+  }, [myNum, conversionRate,depoamt]);
 
   const handleSubmit = async () => {
     setSelectedOption('confirm')
@@ -148,7 +169,6 @@ function recheck() {
   });
 
   
- 
   const sendUSDC = async ( ) => {
     if (user.wallet.walletClientType !== 'privy') {
       alert("Sorry This feature is only available on privy embedded wallets")
@@ -302,11 +322,10 @@ function recheck() {
               </div>
               <button
         className='bg-white border-[2px] border-primary3 lg:w-[80%] px-[0.5rem] lg:px-[0] flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
-        >
+        onClick={() => handleOptionSelect('invoice')}>
 Generate Invoice
         </button>
               </div>
-
               <div className="flex flex-col gap-[1rem] items-center justify-center" >
               <div className="w-full h-[100px] lg:w-[500px] lg:h-[200px] bg-primary4 border-[2px] rounded-lg flex items-center justify-center">
               <div className="flex flex-col items-center justify-center"> 
@@ -353,13 +372,14 @@ Withdraw
               <div className="flex flex-row items-center justify-center gap-[1rem] pb-[3rem] lg:hidden">
               <button
         className='bg-white border-[2px] border-primary3 w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+        onClick={() => handleOptionSelect('invoice')} 
         >
 Generate Invoice
         </button>
 
         <button
         className='bg-white border-[2px] border-primary3  w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
-        onClick={() => handleOptionSelect('withdraw')} 
+      onClick={() => handleOptionSelect('withdraw')} 
        >
 Withdraw
         </button>
@@ -398,7 +418,9 @@ Withdraw
               alt="rates"
               />
               </div>
+              <div className="flex items-center justify-center">
               <DataTable/>
+              </div>
             </div>
           )}
           {selectedOption === 'invoices' && (
@@ -573,9 +595,160 @@ Delete account
             Send
             </button>
                  </div> 
-            )
-            
+            )      
             }
+
+
+
+
+
+{/* damilare this is the beginning of the invoice section */}
+            {
+               selectedOption === 'invoice' && (
+                <div className="grid lg:gap-[4rem] gap-[3rem]"> 
+                   <div className="grid gap-[0.5rem]">
+                   <h2 className="lg:text-[28px] text-[18px] font-[700] text-primary1">
+#Invoice
+                   </h2>
+                   <h3 className="lg:text-[18px] text-[15px] font-[400] text-primary3">
+Fill the information below
+                   </h3>
+                     </div>
+                     <div className="grid lg:gap-[2rem] gap-[1.5rem]">
+                     <div className="grid">
+            <label>Your customers name</label>
+            <input
+              type="text"
+              name="name"
+              value={name}
+              onChange={(e) => setname(e.target.value)}
+              placeholder="Name here"
+             className="block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg"
+            />
+          </div>
+
+          <div className="grid">
+            <label>Choose your payment network</label>
+            <input
+              type="text"
+              name="Base"
+              value="Base"
+              readOnly
+              className="block text-primary3 lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed"
+            />
+          </div>     
+           <div className="grid">
+            <label>Invoice Currency</label>
+            <input
+              type="text"
+              name="USDC"
+              value="USDC"
+              readOnly
+               className="text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed"
+            />
+          </div>        
+          <div className="grid">
+            <label>Amount(IN USDC)</label>
+            <input
+              type="number"
+              name="name"
+              value={depoamt}
+              onChange={(e) => setdeopamt(parseFloat(e.target.value))}
+              placeholder='0.00'
+             className="block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg"
+            />
+            {console.log(depoamt)}
+             <h3>N{equi}</h3>
+          </div>
+          <div className="grid">
+            <label>Description</label>
+            <input
+              type="text"
+              name="name"
+              value={descript}
+              onChange={(e) => setdescript(e.target.value)}
+              placeholder="What is the payment for"
+             className="block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={ depoamt <= 0 || !descript || !name || !depoamt  }
+            className={depoamt  <= 0 || !descript || !name  || !depoamt ? "opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]" : "duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]"}
+          onClick={openModal}
+          >
+            Generate Invoice
+            </button>
+                     </div>
+                     <Modal 
+        isOpen={modalIsOpen} 
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+        style={{
+          content: {
+            top: '49%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+          },
+        }}>
+        <div className="grid lg:gap-[2rem] gap-[2rem]">
+        <div className="flex items-center gap-[5rem] justify-between">
+        <h2 className="lg:text-[24px] text-[16px] font-[700] text-primary1 ">Payment Link Details</h2>
+        <button 
+          onClick={closeModal} 
+        >
+        <IoCloseCircleOutline size={20} />
+        </button>
+        </div>
+        <div className="grid">
+            <label className="text-[#808080] text-[14px]">Amount</label>
+            <input
+              name=""
+              value={depoamt+'USDC'}
+              readOnly
+              className="block lg:w-[500px] w-[350px] lg:text-[36px] text-[18px] font-[700] p-2 border rounded bg-gray-100 cursor-not-allowed"
+            />
+          </div>
+          <div className="grid">
+            <label className="text-[#808080] text-[14px]">Deposit Link</label>
+            <input
+              name=""
+              value= "so damilare the deposit link goes here"
+              readOnly
+              className="block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 "
+            />
+          </div>
+          <div className="grid">
+            <label className="text-[#808080] text-[14px]">Customers Nmae</label>
+            <input
+              name=""
+              value= {name}
+              readOnly
+              className="block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 "
+            />
+          </div>
+          <div className="grid">
+            <label className="text-[#808080] text-[14px]">Description</label>
+            <input
+              name=""
+              value= {descript}
+              readOnly
+              className="block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 "
+            />
+          </div>
+          </div>
+      </Modal>
+                   </div>
+          )}
+  {/* The end of the invoice section */}
+
+
+
+
+
       </div>
     </div>
   );

@@ -38,9 +38,7 @@ const Page = () => {
       setLoading(prevview => prevview + 1)
       }
 
-      function Backward() {
-      setLoading(prevview => prevview - 1)
-      }
+      
 
       const handleInputChange = (event) => {
         setname(event.target.value);
@@ -69,7 +67,7 @@ const Page = () => {
         })
         .catch(error => {
           console.error('Error:', error);
-        }); // Prevent default form submission behavior
+        }); 
           Dispatch(setMybuisnessname(name)); 
         Forward()
       };
