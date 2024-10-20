@@ -725,7 +725,7 @@ const WalletInfo = () => {
                     ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]'
                     : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
                 }
-                onClick={handleCompleteInvoice}
+                onClick={openModal}
               >
                 Generate Invoice
               </button>
@@ -769,7 +769,7 @@ const WalletInfo = () => {
                   </label>
                   <input
                     name=''
-                    value={`https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`}
+                    value={''}
                     readOnly
                     className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
                   />
