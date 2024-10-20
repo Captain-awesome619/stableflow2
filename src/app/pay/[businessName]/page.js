@@ -60,6 +60,7 @@ export default  function PayPage() {
     height={200} alt="Three Steps Image" className=" " />
 </div>
       <div className="grid gap-[2rem] ">
+      <h3 className="text-[18px] font-[700] text-primary1">{data.data.profile.businessName} sent you the invoice below</h3>
       <div className="flex items-center gap-[1rem] justify-center">
       <h3 className="text-[18px] font-[700] text-primary1">
 Customer name :
