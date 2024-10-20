@@ -28,8 +28,7 @@ import { getBasename } from "../basename/getbasename";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import Modal from 'react-modal'
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { Input } from "postcss";
-
+import CryptoPage from "@/components/rate";
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required("Recipient address is required"),
@@ -385,38 +384,8 @@ Withdraw
         </button>
                  </div>
 
-              <div className="grid grid-cols-2 pb-[3rem] lg:pb-[0rem] gap-[0.5rem] lg:grid-cols-5"> 
-              <Image 
-              src={rate}
-              height={200}
-              width={200}
-              alt="rates"
-              />
-              <Image 
-              src={rate}
-              height={200}
-              width={200}
-              alt="rates"
-              />
-              <Image 
-              src={rate}
-              height={200}
-              width={200}
-              alt="rates"
-              />
-
-              <Image 
-              src={rate}
-              height={200}
-              width={200}
-              alt="rates"
-              />
-              <Image 
-              src={rate}
-              height={200}
-              width={200}
-              alt="rates"
-              />
+              <div className=""> 
+              <CryptoPage />
               </div>
               <div className="flex items-center justify-center">
               <DataTable/>
