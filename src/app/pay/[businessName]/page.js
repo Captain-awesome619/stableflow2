@@ -12,6 +12,9 @@ export default  function PayPage() {
   const [amount, setAmount] = useState('');
   const [address, setddress] = useState('');
   const [currency, setcurrency] = useState('');
+  const [customername, setcustomer] = useState('');
+  const [amount2, setamount2] = useState('');
+  const [descript, setdescript] = useState('');
   const router = useRouter();
   const {} = router; 
   // Fetch data from an external API using the businessName as a query parameter
@@ -27,6 +30,9 @@ export default  function PayPage() {
     setddress(data.data.profile.walletAddress)
     setcurrency(data.data.currency)
     setAmount(data.data.amountInUsdc)
+    setamount2(data.data.amountInNGN)
+    setcustomer(data.data.customerName)
+    setdescript(data.data.description)
   }
 
   useEffect(() => {
@@ -47,11 +53,47 @@ export default  function PayPage() {
   }
 
   return (
-    <div className="flex items-center justify-center flex-col  ">
+    <div className="flex items-center justify-center flex-col lg:gap-[3rem] gap-[2rem] mt-[2rem] ">
+<div>
     <Image src={logo} 
-    width={300} 
-    height={300} alt="Three Steps Image" className="lg:w-[300px] lg:h-[250px] w-[200px] h-[200px] " />
-      <p>Fetched Data:</p>
+    width={200} 
+    height={200} alt="Three Steps Image" className=" " />
+</div>
+      <div className="grid gap-[2rem] ">
+      <div className="flex items-center gap-[1rem] justify-center">
+      <h3 className="text-[18px] font-[700] text-primary1">
+Customer name :
+      </h3>
+      <h3 className=" text-[16px] text-primary2 font-[700]">
+{customername}
+      </h3>
+      </div>
+      <div className="flex items-center gap-[1rem] justify-center">
+      <h3 className="text-[18px] font-[700] text-primary1">
+Description :
+      </h3>
+      <h3 className=" text-[16px] text-primary2 font-[700]">
+{descript}
+      </h3>
+      </div>
+      <div className="flex items-center gap-[1rem] justify-center">
+      <h3 className="text-[18px] font-[700] text-primary1">
+Amount in USDC :
+      </h3>
+      <h3 className=" text-[16px] text-primary2 font-[700]">
+{amount}USDC
+      </h3>
+      </div>
+      <div className="flex items-center gap-[1rem] justify-center">
+      <h3 className="text-[18px] font-[700] text-primary1">
+Amount in Naira :
+      </h3>
+      <h3 className=" text-[16px] text-primary2 font-[700]">
+N{amount2}
+      </h3>
+      </div>
+        </div>
+
       <button
               type='submit'
               className={

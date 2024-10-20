@@ -29,6 +29,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 import Modal from 'react-modal'
 import { IoCloseCircleOutline } from "react-icons/io5";
 import CryptoPage from "@/components/rate";
+import CopyButton from '@/components/copy';
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -236,7 +237,7 @@ const WalletInfo = () => {
     autoplay: true,
     autoplaySpeed: 7000,
   };
-
+const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`
   return (
     <div className='lg:flex overflow-x-hidden'>
       {/* Button to toggle sidebar on small screens */}
@@ -725,7 +726,7 @@ const WalletInfo = () => {
                     ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]'
                     : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
                 }
-                onClick={openModal}
+                onClick={handleCompleteInvoice}
               >
                 Generate Invoice
               </button>
@@ -767,12 +768,15 @@ const WalletInfo = () => {
                   <label className='text-[#808080] text-[14px]'>
                     Deposit Link
                   </label>
+                  <div className='flex items-center justify-center'>
                   <input
                     name=''
-                    value={''}
+                    value={`https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`}
                     readOnly
                     className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
                   />
+                   <CopyButton text={texttocopy} />
+                   </div>
                 </div>
                 <div className='grid'>
                   <label className='text-[#808080] text-[14px]'>
