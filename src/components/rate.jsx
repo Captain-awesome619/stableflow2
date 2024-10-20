@@ -1,7 +1,7 @@
 // app/crypto/page.js
-
+'use client'
 import { useEffect, useState } from 'react';
-
+import ClipLoader from "react-spinners/ClipLoader"
 export default function CryptoPage() {
   const [cryptoData, setCryptoData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,13 @@ export default function CryptoPage() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div> <ClipLoader
+    color="blue"
+    size={150}
+    aria-label="Loading Spinner"
+    data-testid="loader"
+    className='absolute top-[35%] left-[45%] '
+  /></div>;
   }
 
   return (
