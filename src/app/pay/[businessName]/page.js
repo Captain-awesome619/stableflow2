@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import {useFundWallet} from '@privy-io/react-auth';
 import { base } from "viem/chains";
 import { useState } from "react";
+import logo from "../../assests/logo.png"
+import Image from "next/image";
 export default  function PayPage() {
   // Destructure the dynamic route parameter from the params object
   const [amount, setAmount] = useState('');
@@ -46,10 +48,9 @@ export default  function PayPage() {
 
   return (
     <div className="flex items-center justify-center flex-col  ">
-    
-      {console.log(id)}
-      {console.log(id)}
-   
+    <Image src={logo} 
+    width={300} 
+    height={300} alt="Three Steps Image" className="lg:w-[300px] lg:h-[250px] w-[200px] h-[200px] " />
       <p>Fetched Data:</p>
       <button
               type='submit'

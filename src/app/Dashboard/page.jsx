@@ -439,20 +439,6 @@ const WalletInfo = () => {
                   Withdraw
                 </button>
               </div>
-
-              <div className='grid grid-cols-2 pb-[3rem] lg:pb-[0rem] gap-[0.5rem] lg:grid-cols-5'>
-                <Image src={rate} height={200} width={200} alt='rates' />
-                <Image src={rate} height={200} width={200} alt='rates' />
-                <Image src={rate} height={200} width={200} alt='rates' />
-
-        <button
-        className='bg-white border-[2px] border-primary3  w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
-      onClick={() => handleOptionSelect('withdraw')} 
-       >
-Withdraw
-        </button>
-                 </div>
-
               <div className=""> 
               <CryptoPage />
               </div>
