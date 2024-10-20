@@ -13,7 +13,7 @@ const initialState = {
   myNumber: 0,
   businessname: '',
   value: '',
-  profileId: null,
+  profileId: '',
 };
 
 const mySlice = createSlice({

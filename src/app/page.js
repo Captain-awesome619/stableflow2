@@ -81,6 +81,7 @@ export default function Home() {
             console.log(res);
             const bizname = data.data.businessName;
             Dispatch(setProfileId(data.data._id));
+            console.log(data.data)
             Dispatch(setMybuisnessname(bizname));
             move();
           } else move2();

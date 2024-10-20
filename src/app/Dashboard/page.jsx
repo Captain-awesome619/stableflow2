@@ -80,7 +80,7 @@ const WalletInfo = () => {
   const [amount, setAmount] = useState('');
   const [conversionRate, setConversionRate] = useState(null);
   const [nairaAmount, setNairaAmount] = useState(0);
-
+  const [paymentid, setpaymentid] = useState('');
   const [name, setname] = useState('');
   const [depoamt, setdeopamt] = useState(0.0);
   const [descript, setdescript] = useState('');
@@ -121,7 +121,12 @@ const WalletInfo = () => {
 
       const data = await response.json();
       console.log(data);
-      openModal();
+      if (data.statusCode === 200) {
+        setpaymentid(data.data._id)
+        openModal();
+      }else{
+        alert("There was an error")
+      }
     } catch (error) {
       console.log(error);
     }
@@ -239,6 +244,7 @@ const WalletInfo = () => {
       {console.log(user)}
       {console.log(amount)}
       {console.log(client)}
+      {console.log(profileId)}
       <button
         className='md:hidden p-2 text-white bg-gray-800 absolute top-3 left-1 z-30'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -770,14 +776,14 @@ const WalletInfo = () => {
                   </label>
                   <input
                     name=''
-                    value='so damilare the deposit link goes here'
+                    value={`https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`}
                     readOnly
                     className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
                   />
                 </div>
                 <div className='grid'>
                   <label className='text-[#808080] text-[14px]'>
-                    Customers Nmae
+                    Customers Name
                   </label>
                   <input
                     name=''
