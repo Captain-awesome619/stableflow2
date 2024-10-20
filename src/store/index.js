@@ -1,4 +1,4 @@
-'use client'
+'use client';
 // store.js
 // redux/store.js
 // store.js
@@ -13,6 +13,7 @@ const initialState = {
   myNumber: 0,
   businessname: '',
   value: '',
+  profileId: '',
 };
 
 const mySlice = createSlice({
@@ -31,11 +32,20 @@ const mySlice = createSlice({
     setvalue(state, action) {
       state.value = action.payload;
     },
+    setProfileId(state, action) {
+      state.profileId = action.payload;
+    },
   },
 });
 
 // Extract actions and reducer
-export const { setMyString, setMyNumber,setMybuisnessname,setvalue } = mySlice.actions;
+export const {
+  setMyString,
+  setMyNumber,
+  setMybuisnessname,
+  setvalue,
+  setProfileId,
+} = mySlice.actions;
 const rootReducer = mySlice.reducer;
 
 // Persist configuration
