@@ -101,20 +101,22 @@ const WalletInfo = () => {
   const handleCompleteInvoice = async (event) => {
     event.preventDefault();
     try {
+      const body = {
+        profileId,
+        customerName: name,
+        paymentNetwork: depositPaymentNetwork,
+        currency: depositCurrency,
+        amountInUsdc: depoamt,
+        amountInNGN: parseFloat(equi),
+        description: descript,
+      };
+      console.log(body);
       const response = await fetch('https://stableflow.onrender.com/payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          profileId,
-          customerName: name,
-          paymentNetwork: depositPaymentNetwork,
-          currency: depositCurrency,
-          amountInUsdc: depoamt,
-          amountInNGN: equi,
-          description: descript,
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();
