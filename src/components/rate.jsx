@@ -42,10 +42,10 @@ export default function CryptoPage() {
         >
           <div className="flex items-center mb-4">
             <img src={coin.image} alt={`${coin.name} logo`} className="w-10 h-10 mr-3" />
-            <h2 className="text-lg font-semibold">{coin.name}</h2>
+            <h2 className="lg:text-lg text-[16px] font-semibold">{coin.name}</h2>
           </div>
           <p className="text-gray-500 mb-2">{coin.symbol.toUpperCase()}</p>
-          <p className="text-xl font-bold mb-2">${coin.current_price.toFixed(2)}</p>
+          <p className="lg:text-xl text-[18px] font-bold mb-2">${coin.current_price.toFixed(2)}</p>
           <p
             className={`text-sm font-medium ${
               coin.price_change_percentage_24h > 0
