@@ -15,21 +15,21 @@ import rate from '../assests/rate.png';
 import DataTable from '@/components/table';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
-import * as Yup from "yup";
-import { Formik,Field,Form,ErrorMessage } from "formik"
-import { useSendTransaction } from "@privy-io/react-auth";
-import { getBalance } from "@/utils/getbalance";
-import { useDispatch } from "react-redux";
-import { setMyNumber } from "@/store";;
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import { getBasename } from "../basename/getbasename";
-import { FaLongArrowAltLeft } from "react-icons/fa";
-import Modal from 'react-modal'
-import { IoCloseCircleOutline } from "react-icons/io5";
-import CryptoPage from "@/components/rate";
-const WalletInfo = () => { 
+import * as Yup from 'yup';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { useSendTransaction } from '@privy-io/react-auth';
+import { getBalance } from '@/utils/getbalance';
+import { useDispatch } from 'react-redux';
+import { setMyNumber } from '@/store';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+import { getBasename } from '../basename/getbasename';
+import { FaLongArrowAltLeft } from 'react-icons/fa';
+import Modal from 'react-modal';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import CryptoPage from '@/components/rate';
+const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
     amount: Yup.number()
@@ -121,10 +121,10 @@ const WalletInfo = () => {
       const data = await response.json();
       console.log(data);
       if (data.statusCode === 200) {
-        setpaymentid(data.data._id)
+        setpaymentid(data.data._id);
         openModal();
-      }else{
-        alert("There was an error")
+      } else {
+        alert('There was an error');
       }
     } catch (error) {
       console.log(error);
@@ -439,8 +439,8 @@ const WalletInfo = () => {
                   Withdraw
                 </button>
               </div>
-              <div className=""> 
-              <CryptoPage />
+              <div className=''>
+                <CryptoPage />
               </div>
               <div className='flex items-center justify-center'>
                 <DataTable />
@@ -725,7 +725,7 @@ const WalletInfo = () => {
                     ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]'
                     : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
                 }
-                onClick={openModal}
+                onClick={handleCompleteInvoice}
               >
                 Generate Invoice
               </button>
@@ -769,7 +769,8 @@ const WalletInfo = () => {
                   </label>
                   <input
                     name=''
-                    value={''}
+                    // value={`https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`}
+                    value={`http://localhost:3000/pay/${bizname}?paymentid=${paymentid}`}
                     readOnly
                     className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
                   />
