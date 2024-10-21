@@ -203,9 +203,13 @@ const WalletInfo = () => {
   });
 
   const sendUSDC = async () => {
-    if (user.wallet.walletClientType !== 'privy') {
-      alert('Sorry This feature is only available on privy embedded wallets');
-    } else {
+   
+    if (client !== 'privy') {
+      alert(
+        'Sorry This feature is only available on privy embedded wallets'
+      );
+    }
+    
       try {
         const amountInWei = parseEther(amount);
         const val = amountInWei.toString();
@@ -214,11 +218,7 @@ const WalletInfo = () => {
           to: recipient,
           value: amountInWei,
         };
-        if (user.wallet.walletClientType !== 'privy') {
-          alert(
-            'Sorry This feature is only available on privy embedded wallets'
-          );
-        }
+       
         const txResponse = await sendTransaction(txObject);
         console.log('Transaction sent:', txResponse);
         const txReceipt = await txResponse.wait();
@@ -227,7 +227,7 @@ const WalletInfo = () => {
         alert('Sorry This feature is only available on privy embedded wallets');
         console.error('Transaction failed:', error);
       }
-    }
+    
   };
   const settings = {
     speed: 1000,
