@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import {useFundWallet} from '@privy-io/react-auth';
 import { base } from "viem/chains";
 import { useState } from "react";
-import logo from "../../assests/logo.png"
+import logo from "../../../assests/logo.png"
 import Image from "next/image";
 export default  function PayPage() {
   // Destructure the dynamic route parameter from the params object
