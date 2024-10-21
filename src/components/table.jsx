@@ -1,8 +1,8 @@
 "use client"
 import React from 'react';
 import { useTable } from 'react-table';
-import send from '../app/assests/send2.png'
-import Image from 'next/image';
+
+import { CiWallet } from "react-icons/ci";
 const DataTable = () => {
   const data = React.useMemo(
     () => [
@@ -92,8 +92,8 @@ const DataTable = () => {
 
   return (
     <>
-    <table {...getTableProps()} className="lg:min-w-full hidden lg:block  border-collapse border ">
-      <thead className="bg-gray-100">
+    <table {...getTableProps()} className="w-full hidden lg:table  border-collapse border  ">
+      <thead className="bg-gray-100 ">
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
             {headerGroup.headers.map((column) => (
@@ -128,20 +128,16 @@ const DataTable = () => {
       </tbody>
     </table>
 
-    <div className='grid gap-[0.5rem] '>
+    <div className='grid gap-[0.5rem] lg:hidden '>
     <div className='flex items-center justify-between'>
     <h3 className='text-primary1 font-[600] text-[17px] '>Transaction</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '>View all</h3>
     </div>
     <div className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
-    <Image
-    height={40}
-    width={40}
-    alt='wallet'
-    src={send}
-    className='w-[40px] h-[40px] '
-    />
+    <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
+    <CiWallet size={25} className=' ' />
+    </div>
     <div className='grid gap-[0.5rem]'>
     <h3 className='text-[#2B2B2B] font-[400] text-[16px] '>Layi Wasabi</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '>OCT 3,2024</h3>
@@ -151,13 +147,9 @@ const DataTable = () => {
     </div>
     <div className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
-    <Image
-    height={40}
-    width={40}
-    alt='wallet'
-    src={send}
-    className='w-[40px] h-[40px] '
-    />
+    <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
+    <CiWallet size={25} className=' ' />
+    </div>
     <div className='grid gap-[0.5rem]'>
     <h3 className='text-[#2B2B2B] font-[400] text-[16px] '>Layi Wasabi</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '>OCT 3,2024</h3>
@@ -167,13 +159,9 @@ const DataTable = () => {
     </div>
     <div className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
-    <Image
-    height={40}
-    width={40}
-    alt='wallet'
-    src={send}
-    className='w-[40px] h-[40px] '
-    />
+    <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
+    <CiWallet size={25} className=' ' />
+    </div>
     <div className='grid gap-[0.5rem]'>
     <h3 className='text-[#2B2B2B] font-[400] text-[16px] '>Layi Wasabi</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '>OCT 3,2024</h3>
@@ -183,13 +171,9 @@ const DataTable = () => {
     </div>
     <div className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
-    <Image
-    height={40}
-    width={40}
-    alt='wallet'
-    src={send}
-    className='w-[40px] h-[40px] '
-    />
+    <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
+    <CiWallet size={25} className=' ' />
+    </div> 
     <div className='grid gap-[0.5rem]'>
     <h3 className='text-[#2B2B2B] font-[400] text-[16px] '>Layi Wasabi</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '>OCT 3,2024</h3>

@@ -41,7 +41,7 @@ export default function CryptoPage() {
 
   return (
     <div className="lg:p-6 grid grid-cols-1 lg:items-center lg:justify-center sm:grid-cols-2 lg:grid-cols-3 gap-4">
-       <h2 className='primary font-[700] text-[17px] '>Market Rates</h2>
+       <h2 className='primary lg:hidden block font-[700] text-[17px] '>Market Rates</h2>
       {cryptoData.map((coin) => (
          <>
         <div
@@ -70,7 +70,7 @@ export default function CryptoPage() {
         <div className=' bg-[#252525] w-[170px]   h-[50px] rounded-2xl flex gap-[0.5rem] jus items-center '>
         <img src={coin.image} alt={`${coin.name} logo`} className="w-[50px] h-[45px] pl-[0.5rem]  " />
         <h2 className='text-[14px] text-white font-[700] ' > {coin.symbol.toUpperCase()}</h2>
-        <p className="flex items-center justify-center text-[14px] font-bold text-white ">${coin.current_price.toFixed(2)}</p>
+        <p className="flex items-center justify-center text-[14px] font-bold text-white ">${coin.current_price.toFixed(1)}</p>
         </div>
         <p
             className={`text-sm font-medium ${

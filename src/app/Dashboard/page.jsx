@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Image from 'next/image';
-import dash from '../assests/document.png';
-import setting from '../assests/setting-2.png';
-import third from '../assests/receipt-item.png';
-import fourth from '../assests/element-1.png';
-import logo from '../assests/logo.png';
+import dash from '../../assests/document.png';
+import setting from '../../assests/setting-2.png';
+import third from '../../assests/receipt-item.png';
+import fourth from '../../assests/element-1.png';
+import logo from '../../assests/logo.png'
 import { IoMdClose } from 'react-icons/io';
 import { parseEther } from 'ethers';
 import { FaNairaSign } from 'react-icons/fa6';
-import rate from '../assests/rate.png';
+
 import DataTable from '@/components/table';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
@@ -240,8 +240,10 @@ const WalletInfo = () => {
     autoplaySpeed: 7000,
   };
 const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`
+const lloc = '/usdcbg.png'
+const lloc2 = '/nariabg.png'
   return (
-    <div className={isSidebarOpen ? "overflow-hidden h-screen" : 'lg:flex overflow-x-hidden '}>
+    <div className={isSidebarOpen ? "overflow-hidden h-screen" : 'lg:flex overflow-x-hidden  '}>
       {/* Button to toggle sidebar on small screens */}
       {console.log(user)}
       {console.log(amount)}
@@ -260,11 +262,11 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
 
       {/* Sidebar */}
       <div
-        className={`bg-white z-20 text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`bg-white    z-20 text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? 'translate-x-0 ' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
-        <ul className='flex flex-col mt-[3rem] gap-[2rem]  lg:gap-[3rem] lg:mt-[1rem]'>
+        <ul className='flex flex-col mt-[3rem] gap-[2rem]   lg:gap-[6rem] lg:mt-[1rem]'>
           <Image
             src={logo}
             width={200}
@@ -356,7 +358,15 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
               <h2 className='text-xl lg:pb-[0rem] pb-[3rem]'>Hi {bizname} </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
                 <div className='flex flex-col  gap-[1rem] items-center justify-center'>
-                  <div className='w-full h-[100px] lg:w-[500px] lg:h-[200px] bg-primary1 border-[2px] rounded-lg flex items-center justify-center'>
+                  <div className=' h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
+                  style={{
+                    backgroundImage: `url(${lloc2})`, // Use the path directly
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                   // Fallback color for testing
+                  }}
+                  >
+                    
                     <div className='flex flex-col items-center justify-center'>
                       <h2 className='text-white text-[14px]'>Total Balance</h2>
                       <div className='flex flex-row items-center justify-center gap-[0.2rem]'>
@@ -368,14 +378,24 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
                     </div>
                   </div>
                   <button
-                    className='bg-white border-[2px] border-primary3 lg:w-[80%] px-[0.5rem] lg:px-[0] flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+                    className='bg-primary4 border-[2px] border-primary4 gap-[0.5rem] lg:w-[80%] px-[0.5rem] lg:px-[0] flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
                     onClick={() => handleOptionSelect('invoice')}
+                  
+                  
                   >
-                    Generate Invoice
+                    <IoReceiptOutline  size={20} className='text-white' />
+                    <h4 className=' text-white font-[500] text-[17px]'> Generate Invoice </h4>
                   </button>
                 </div>
                 <div className='flex flex-col gap-[1rem] items-center justify-center'>
-                  <div className='w-full h-[100px] lg:w-[500px] lg:h-[200px] bg-primary4 border-[2px] rounded-lg flex items-center justify-center'>
+                  <div className='w-full h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
+                  style={{
+                    backgroundImage: `url(${lloc})`, // Use the path directly
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                   // Fallback color for testing
+                  }}
+                  >
                     <div className='flex flex-col items-center justify-center'>
                       <h2 className='text-white text-[14px]'>Total Balance</h2>
                       <div className='flex flex-row items-center justify-center gap-[0.2rem]'>
@@ -386,17 +406,26 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
                     </div>
                   </div>
                   <button
-                    className='bg-white border-[2px] border-primary3 lg:w-[90%] px-[1rem]  flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+                    className='  bg-primary4 border-[2px] border-primary4 lg:w-[90%] px-[1rem]  flex items-center gap-[0.5rem] justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
                     onClick={() => handleOptionSelect('withdraw')}
-                  >
-                    Withdraw
+                    
+                 >
+                     <PiHandWithdraw  size={20} className='text-white' />
+                     <h4 className=' text-white font-[500] text-[17px]'>  Withdraw </h4> 
                   </button>
                 </div>
               </div>
               <div className='lg:hidden pb-[3rem]'>
                 <Slider {...settings}>
                   <div className='flex flex-col  gap-[1rem] items-center justify-center'>
-                    <div className='w-[85%] h-[100px] lg:w-[500px] lg:h-[200px] bg-primary1 border-[2px] rounded-lg flex items-center justify-center'>
+                    <div className='w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center'
+                    style={{
+                      backgroundImage: `url(${lloc2})`, // Use the path directly
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                     // Fallback color for testing
+                    }}
+                    >
                       <div className='flex flex-col items-center justify-center'>
                         <h2 className='text-white text-[14px]'>
                           Total Balance
@@ -412,7 +441,14 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
                   </div>
 
                   <div className='flex flex-col gap-[1rem] items-center justify-center'>
-                    <div className='w-[85%] h-[100px] lg:w-[500px] lg:h-[200px] bg-primary4 border-[2px] rounded-lg flex items-center justify-center'>
+                    <div className="  w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center"
+                      style={{
+                        backgroundImage: `url(${lloc})`, // Use the path directly
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                       // Fallback color for testing
+                      }}
+                    >
                       <div className='flex flex-col items-center justify-center'>
                         <h2 className='text-white text-[14px]'>
                           Total Balance
@@ -447,7 +483,7 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
               
               <CryptoPage />
              
-              <div className='lg:flex lg:items-center lg:justify-center pt-[2rem] lg:pt-[0rem] '>
+              <div className='  pt-[2rem]  lg:pt-[0rem] '>
                 <DataTable />
               </div>
             </div>
