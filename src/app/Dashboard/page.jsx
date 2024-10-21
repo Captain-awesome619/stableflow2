@@ -811,7 +811,7 @@ const lloc2 = '/nariabg.png'
                   <div className='flex items-center justify-center'>
                   <input
                     name=''
-                    value={`https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`}
+                    value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
                     readOnly
                     className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
                   />
