@@ -15,6 +15,8 @@ export default  function PayPage() {
   const [customername, setcustomer] = useState('');
   const [amount2, setamount2] = useState('');
   const [descript, setdescript] = useState('');
+  const [sender, setsender] = useState('');
+
   const router = useRouter();
   const {} = router; 
   // Fetch data from an external API using the businessName as a query parameter
@@ -33,6 +35,7 @@ export default  function PayPage() {
     setamount2(data.data.amountInNGN)
     setcustomer(data.data.customerName)
     setdescript(data.data.description)
+    setsender(data.data.profile.businessName)
   }
 
   useEffect(() => {
@@ -61,7 +64,8 @@ export default  function PayPage() {
 </div>
       <div className="grid gap-[2rem] ">
       <h3 className="text-[18px] font-[700] text-primary1">
-{data.data.profile.businessName} sent you an invoice
+{sender} sent you an invoice
+{console.log(data.data.profile.businessName)}
       </h3>
       <div className="flex items-center gap-[1rem] justify-center">
       <h3 className="text-[18px] font-[700] text-primary1">
