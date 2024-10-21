@@ -269,8 +269,8 @@ const lloc2 = '/nariabg.png'
         <ul className='flex flex-col mt-[3rem] gap-[2rem]   lg:gap-[6rem] lg:mt-[1rem]'>
           <Image
             src={logo}
-            width={200}
-            height={200}
+            width={120}
+            height={100}
             alt='model'
             className=' lg:mb-[1rem]'
           />
