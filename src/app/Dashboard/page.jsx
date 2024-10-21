@@ -490,14 +490,14 @@ const lloc2 = '/nariabg.png'
           )}
           {selectedOption === 'invoices' && (
             <div>
-              <h2 className='text-xl'>Invoices Content</h2>
-              <p>This is the invoices section.</p>
+              <h2 className='text-xl'>Invoices </h2>
+              <p>This page is being worked on</p>
             </div>
           )}
           {selectedOption === 'transactions' && (
             <div>
-              <h2 className='text-xl'>Transaction History Content</h2>
-              <p>This is the transaction history section.</p>
+              <h2 className='text-xl'>Transaction History </h2>
+              <p>This page is being worked on</p>
             </div>
           )}
           {selectedOption === 'settings' && (
