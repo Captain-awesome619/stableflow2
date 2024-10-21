@@ -561,7 +561,7 @@ const lloc2 = '/nariabg.png'
                 {({ isSubmitting }) => (
                   <Form className='space-y-4'>
                    <div className='grid'>
-                <label>Sender Addressy</label>
+                <label>Sender's Address</label>
                 <input
                   type='text'
                   name='sender'
