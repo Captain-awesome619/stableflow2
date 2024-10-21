@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
-import step from "../app/assests/Maskgroup.png"
+import step from "../assests/Maskgroup.png"
 const Ready = () => {
   return (
     <div className=' flex flex-col lg:justify-center lg:flex-row  lg:gap-[8rem] gap-[1rem] items-center'>

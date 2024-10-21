@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from 'next/image';
-import step from "../app/assests/guide.png"
-import phone1 from "../app/assests/phone1.png"
-import phone2 from "../app/assests/phone2.png"
-import phone3 from "../app/assests/phone3.png"
+import step from "../assests/guide.png"
+import phone1 from "../assests/phone1.png"
+import phone2 from "../assests/phone2.png"
+import phone3 from "../assests/phone3.png"
 const Steps = () => {
   return (
     <div className="overflow-hidden flex flex-col items-center mb-[1rem]">

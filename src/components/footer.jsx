@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from "next/image";
-import logo from "../app/assests/logo.png"
+import logo from "../assests/logo.png"
 import { FaGithub } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { FaInstagram } from "react-icons/fa";
