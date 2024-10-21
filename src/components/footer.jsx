@@ -18,7 +18,7 @@ const Footer = () => {
        </div>
        </div>
        <div className='flex lg:flex-row flex-col items-center justify-center gap-[3rem] lg:justify-between'>
-       <h3 className='text-[14px] font-[400] text-[#535353]'> © Copyright 2022, All Rights Reserved</h3>
+       <h3 className='text-[14px] font-[400] text-[#535353]'> © Copyright 2024, All Rights Reserved</h3>
        <div className='flex flex-row items-center justify-center gap-[1rem]'>
        <h3 className='text-[14px] font-[400] text-[#535353]'> Privacy Policy </h3>
        <h3 className='text-[14px] font-[400] text-[#535353]'> Terms & Conditions </h3>
