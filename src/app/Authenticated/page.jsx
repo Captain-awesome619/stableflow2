@@ -1,8 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import whistle from '../assests/whistle.png';
-import logo from '../assests/logo.png';
+import whistle from '../../assests/whistle.png';
+import logo from '../../assests/logo.png';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';

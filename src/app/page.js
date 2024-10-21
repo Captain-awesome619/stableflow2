@@ -1,7 +1,7 @@
 'use client';
 import react, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import logo from '../app/assests/logo.png';
+import logo from '../assests/logo.png';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import {
