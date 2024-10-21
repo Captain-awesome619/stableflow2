@@ -254,9 +254,9 @@ const lloc2 = '/nariabg.png'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? (
-          <IoMdClose size={15} />
+          <IoMdClose size={10} />
         ) : (
-          <GiHamburgerMenu size={15} />
+          <GiHamburgerMenu size={10} />
         )}
       </button>
 
@@ -355,7 +355,7 @@ const lloc2 = '/nariabg.png'
         <div className='p-4 lg:grid'>
           {selectedOption === 'dashboard' && (
             <div className='lg:grid    gap-[2rem] lg:gap-[4rem]'>
-              <h2 className='text-xl lg:pb-[0rem] pb-[3rem]'>Hi {bizname} </h2>
+              <h2 className='text-xl lg:pb-[0rem] pb-[1.5rem] '>Hi {bizname} </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
                 <div className='flex flex-col  gap-[1rem] items-center justify-center'>
                   <div className=' h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
@@ -503,12 +503,12 @@ const lloc2 = '/nariabg.png'
           {selectedOption === 'settings' && (
             <div>
               <div className=' grid gap-[2rem] lg:gap-[3rem]'>
-                <div className='grid gap-[0.5rem]'>
-                  <h2 className='text-[28px] text-primary1 font-[700]'>
+                <div className='grid gap-[0.3rem]'>
+                  <h2 className='lg:text-[28px] text-[20px] font-[500] text-primary1 lg:font-[700]'>
                     {' '}
                     User settings
                   </h2>
-                  <h2 className='text-[16px] text-primary3 font-[400]'>
+                  <h2 className='lg:text-[16px] text-[14px] text-primary3 font-[400]'>
                     Your personal settings information{' '}
                   </h2>
                 </div>
@@ -560,36 +560,36 @@ const lloc2 = '/nariabg.png'
               >
                 {({ isSubmitting }) => (
                   <Form className='space-y-4'>
-                    <div>
-                      <label>Sender Address</label>
-                      <Field
-                        type='text'
-                        name='sender'
-                        value={baseName ? baseName : myString}
-                        readOnly
-                        className='block lg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed'
-                      />
-                    </div>
-                    <div className='grid'>
-                      <label>Network</label>
-                      <Field
-                        type='text'
-                        name='network'
-                        value='Base'
-                        readOnly
-                        className='blocklg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed'
-                      />
-                    </div>
-                    <div className='grid'>
-                      <label>Currency</label>
-                      <Field
-                        type='text'
-                        name='currency'
-                        value='ETH for now(USDC Soon)'
-                        readOnly
-                        className='block lg:w-[500px] w-[350px] p-2 border rounded bg-gray-100 cursor-not-allowed'
-                      />
-                    </div>
+                   <div className='grid'>
+                <label>Sender Addressy</label>
+                <input
+                  type='text'
+                  name='sender'
+                  value={baseName ? baseName : myString}
+                  readOnly
+                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                />
+              </div>
+              <div className='grid'>
+                <label>Network</label>
+                <input
+                  type='text'
+                  name='network'
+                  value='Base'
+                  readOnly
+                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                />
+              </div>
+              <div className='grid'>
+                <label>Currency</label>
+                <input
+                  type='text'
+                  name='currency'
+                  value='ETH for now (USDC Soon)'
+                  readOnly
+                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                />
+              </div>
                     <div className='grid'>
                       <label>Recipient Address</label>
                       <input
@@ -598,7 +598,7 @@ const lloc2 = '/nariabg.png'
                         value={recipient}
                         onChange={(e) => setRecipient(e.target.value)}
                         placeholder='Enter recipient address'
-                        className='block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                        className='block lg:w-[500px] w-[350px] placeholder:text-primary1 text-primary1 p-3 border-[2px] border-primary3 rounded-lg'
                       />
                       <ErrorMessage
                         name='recipient'
@@ -608,13 +608,13 @@ const lloc2 = '/nariabg.png'
                     </div>
                     <div className='grid'>
                       <label>Amount (ETHER)</label>
-                      <input
+                      <Field
                         type='number'
                         name='amount'
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder='Enter amount'
-                        className='block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                        className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                       />
                       <ErrorMessage
                         name='amount'
@@ -710,7 +710,7 @@ const lloc2 = '/nariabg.png'
                   value={name}
                   onChange={(e) => setname(e.target.value)}
                   placeholder='Name here'
-                  className='block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                 />
               </div>
 
@@ -742,7 +742,7 @@ const lloc2 = '/nariabg.png'
                   value={depoamt}
                   onChange={(e) => setdeopamt(parseFloat(e.target.value))}
                   placeholder='0.00'
-                  className='block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                 />
                 {console.log(depoamt)}
                 <h3>N{equi}</h3>
@@ -755,7 +755,7 @@ const lloc2 = '/nariabg.png'
                   value={descript}
                   onChange={(e) => setdescript(e.target.value)}
                   placeholder='What is the payment for'
-                  className='block lg:w-[500px] w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                 />
               </div>
               <button
