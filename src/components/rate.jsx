@@ -40,11 +40,13 @@ export default function CryptoPage() {
   }
 
   return (
-    <div className="p-6 grid grid-cols-2 items-center justify-center sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="lg:p-6 grid grid-cols-1 lg:items-center lg:justify-center sm:grid-cols-2 lg:grid-cols-3 gap-4">
+       <h2 className='primary font-[700] text-[17px] '>Market Rates</h2>
       {cryptoData.map((coin) => (
+         <>
         <div
           key={coin.id}
-          className="bg-white border border-gray-200 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
+          className="bg-white border hidden lg:block   border-gray-200 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
         >
           <div className="flex items-center mb-4">
             <img src={coin.image} alt={`${coin.name} logo`} className="w-10 h-10 mr-3" />
@@ -62,6 +64,27 @@ export default function CryptoPage() {
             {coin.price_change_percentage_24h.toFixed(2)}%
           </p>
         </div>
+        <div className='lg:hidden grid gap-[1rem]'>
+       
+        <div className='flex items-center justify-between gap-[3rem] '>
+        <div className=' bg-[#252525] w-[170px]   h-[50px] rounded-2xl flex gap-[0.5rem] jus items-center '>
+        <img src={coin.image} alt={`${coin.name} logo`} className="w-[50px] h-[45px] pl-[0.5rem]  " />
+        <h2 className='text-[14px] text-white font-[700] ' > {coin.symbol.toUpperCase()}</h2>
+        <p className="flex items-center justify-center text-[14px] font-bold text-white ">${coin.current_price.toFixed(2)}</p>
+        </div>
+        <p
+            className={`text-sm font-medium ${
+              coin.price_change_percentage_24h > 0
+                ? 'text-green-500'
+                : 'text-red-500'
+            }`}
+          >
+            {coin.price_change_percentage_24h.toFixed(2)}%
+          </p>
+        </div>
+        </div>
+        </>
+      
       ))}
     </div>
   );

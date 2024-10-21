@@ -30,6 +30,8 @@ import Modal from 'react-modal'
 import { IoCloseCircleOutline } from "react-icons/io5";
 import CryptoPage from "@/components/rate";
 import CopyButton from '@/components/copy';
+import { PiHandWithdraw } from "react-icons/pi";
+import { IoReceiptOutline } from "react-icons/io5";
 const WalletInfo = () => { 
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -239,7 +241,7 @@ const WalletInfo = () => {
   };
 const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`
   return (
-    <div className='lg:flex overflow-x-hidden'>
+    <div className={isSidebarOpen ? "overflow-hidden h-screen" : 'lg:flex overflow-x-hidden '}>
       {/* Button to toggle sidebar on small screens */}
       {console.log(user)}
       {console.log(amount)}
@@ -259,7 +261,7 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
       {/* Sidebar */}
       <div
         className={`bg-white z-20 text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          isSidebarOpen ? 'translate-x-0 ' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
         <ul className='flex flex-col mt-[3rem] gap-[2rem]  lg:gap-[3rem] lg:mt-[1rem]'>
@@ -427,23 +429,25 @@ const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${pa
               </div>
               <div className='flex flex-row items-center justify-center gap-[1rem] pb-[3rem] lg:hidden'>
                 <button
-                  className='bg-white border-[2px] border-primary3 w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
                   onClick={() => handleOptionSelect('invoice')}
                 >
-                  Generate Invoice
+<IoReceiptOutline  size={20} className='text-white' />
+                  <h4 className=' text-white font-[500] text-[17px]'> Invoice</h4> 
                 </button>
 
                 <button
-                  className='bg-white border-[2px] border-primary3  w-[150px]  flex items-center justify-center h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
+                 className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
                   onClick={() => handleOptionSelect('withdraw')}
                 >
-                  Withdraw
+                  <PiHandWithdraw  size={20} className='text-white' />
+                    <h4 className=' text-white font-[500] text-[17px]'>  Withdraw </h4> 
                 </button>
               </div>
-              <div className=""> 
+              
               <CryptoPage />
-              </div>
-              <div className='flex items-center justify-center'>
+             
+              <div className='lg:flex lg:items-center lg:justify-center pt-[2rem] lg:pt-[0rem] '>
                 <DataTable />
               </div>
             </div>
