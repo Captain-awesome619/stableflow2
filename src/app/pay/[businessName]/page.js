@@ -65,7 +65,6 @@ export default  function PayPage() {
       <div className="grid gap-[2rem] ">
       <h3 className="text-[18px] font-[700] text-primary1">
 {sender} sent you an invoice
-{console.log(data.data.profile.businessName)}
       </h3>
       <div className="flex items-center gap-[1rem] justify-center">
       <h3 className="text-[18px] font-[700] text-primary1">
