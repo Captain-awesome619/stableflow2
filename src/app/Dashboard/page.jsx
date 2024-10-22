@@ -7,7 +7,7 @@ import dash from '../../assests/document.png';
 import setting from '../../assests/setting-2.png';
 import third from '../../assests/receipt-item.png';
 import fourth from '../../assests/element-1.png';
-import logo from '../../assests/logo.png'
+import logo from '../../assests/logo.png';
 import { IoMdClose } from 'react-icons/io';
 import { parseEther } from 'ethers';
 import { FaNairaSign } from 'react-icons/fa6';
@@ -15,24 +15,24 @@ import { FaNairaSign } from 'react-icons/fa6';
 import DataTable from '@/components/table';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
-import * as Yup from "yup";
-import { Formik,Field,Form,ErrorMessage } from "formik"
-import { useSendTransaction } from "@privy-io/react-auth";
-import { getBalance } from "@/utils/getbalance";
-import { useDispatch } from "react-redux";
-import { setMyNumber } from "@/store";;
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import { getBasename } from "../basename/getbasename";
-import { FaLongArrowAltLeft } from "react-icons/fa";
-import Modal from 'react-modal'
-import { IoCloseCircleOutline } from "react-icons/io5";
-import CryptoPage from "@/components/rate";
+import * as Yup from 'yup';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { useSendTransaction } from '@privy-io/react-auth';
+import { getBalance } from '@/utils/getbalance';
+import { useDispatch } from 'react-redux';
+import { setMyNumber } from '@/store';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+import { getBasename } from '../basename/getbasename';
+import { FaLongArrowAltLeft } from 'react-icons/fa';
+import Modal from 'react-modal';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import CryptoPage from '@/components/rate';
 import CopyButton from '@/components/copy';
-import { PiHandWithdraw } from "react-icons/pi";
-import { IoReceiptOutline } from "react-icons/io5";
-const WalletInfo = () => { 
+import { PiHandWithdraw } from 'react-icons/pi';
+import { IoReceiptOutline } from 'react-icons/io5';
+const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
     amount: Yup.number()
@@ -124,10 +124,10 @@ const WalletInfo = () => {
       const data = await response.json();
       console.log(data);
       if (data.statusCode === 200) {
-        setpaymentid(data.data._id)
+        setpaymentid(data.data._id);
         openModal();
-      }else{
-        alert("There was an error")
+      } else {
+        alert('There was an error');
       }
     } catch (error) {
       console.log(error);
@@ -205,31 +205,27 @@ const WalletInfo = () => {
   });
 
   const sendUSDC = async () => {
-   
     if (client !== 'privy') {
-      alert(
-        'Sorry This feature is only available on privy embedded wallets'
-      );
+      alert('Sorry This feature is only available on privy embedded wallets');
     }
-    
-      try {
-        const amountInWei = parseEther(amount);
-        const val = amountInWei.toString();
-        // Create the transaction object
-        const txObject = {
-          to: recipient,
-          value: amountInWei,
-        };
-       
-        const txResponse = await sendTransaction(txObject);
-        console.log('Transaction sent:', txResponse);
-        const txReceipt = await txResponse.wait();
-        console.log('Transaction confirmed:', txReceipt);
-      } catch (error) {
-        alert('Sorry This feature is only available on privy embedded wallets');
-        console.error('Transaction failed:', error);
-      }
-    
+
+    try {
+      const amountInWei = parseEther(amount);
+      const val = amountInWei.toString();
+      // Create the transaction object
+      const txObject = {
+        to: recipient,
+        value: amountInWei,
+      };
+
+      const txResponse = await sendTransaction(txObject);
+      console.log('Transaction sent:', txResponse);
+      const txReceipt = await txResponse.wait();
+      console.log('Transaction confirmed:', txReceipt);
+    } catch (error) {
+      alert('Sorry This feature is only available on privy embedded wallets');
+      console.error('Transaction failed:', error);
+    }
   };
   const settings = {
     speed: 1000,
@@ -239,11 +235,17 @@ const WalletInfo = () => {
     autoplay: true,
     autoplaySpeed: 7000,
   };
-const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`
-const lloc = '/usdcbg.png'
-const lloc2 = '/nariabg.png'
+  const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`;
+  const lloc = '/usdcbg.png';
+  const lloc2 = '/nariabg.png';
   return (
-    <div className={isSidebarOpen ? "overflow-hidden h-screen" : 'lg:flex overflow-x-hidden  '}>
+    <div
+      className={
+        isSidebarOpen
+          ? 'overflow-hidden h-screen'
+          : 'lg:flex overflow-x-hidden  '
+      }
+    >
       {/* Button to toggle sidebar on small screens */}
       {console.log(user)}
       {console.log(amount)}
@@ -355,18 +357,20 @@ const lloc2 = '/nariabg.png'
         <div className='p-4 lg:grid'>
           {selectedOption === 'dashboard' && (
             <div className='lg:grid    gap-[2rem] lg:gap-[4rem]'>
-              <h2 className='text-xl lg:pb-[0rem] pb-[1.5rem] '>Hi {bizname} </h2>
+              <h2 className='text-xl lg:pb-[0rem] pb-[1.5rem] '>
+                Hi {bizname}{' '}
+              </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
                 <div className='flex flex-col  gap-[1rem] items-center justify-center'>
-                  <div className=' h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
-                  style={{
-                    backgroundImage: `url(${lloc2})`, // Use the path directly
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                   // Fallback color for testing
-                  }}
+                  <div
+                    className=' h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
+                    style={{
+                      backgroundImage: `url(${lloc2})`, // Use the path directly
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      // Fallback color for testing
+                    }}
                   >
-                    
                     <div className='flex flex-col items-center justify-center'>
                       <h2 className='text-white text-[14px]'>Total Balance</h2>
                       <div className='flex flex-row items-center justify-center gap-[0.2rem]'>
@@ -380,21 +384,23 @@ const lloc2 = '/nariabg.png'
                   <button
                     className='bg-primary4 border-[2px] border-primary4 gap-[0.5rem] lg:w-[80%] px-[0.5rem] lg:px-[0] flex items-center justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
                     onClick={() => handleOptionSelect('invoice')}
-                  
-                  
                   >
-                    <IoReceiptOutline  size={20} className='text-white' />
-                    <h4 className=' text-white font-[500] text-[17px]'> Generate Invoice </h4>
+                    <IoReceiptOutline size={20} className='text-white' />
+                    <h4 className=' text-white font-[500] text-[17px]'>
+                      {' '}
+                      Generate Invoice{' '}
+                    </h4>
                   </button>
                 </div>
                 <div className='flex flex-col gap-[1rem] items-center justify-center'>
-                  <div className='w-full h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
-                  style={{
-                    backgroundImage: `url(${lloc})`, // Use the path directly
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                   // Fallback color for testing
-                  }}
+                  <div
+                    className='w-full h-[100px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-lg flex items-center justify-center'
+                    style={{
+                      backgroundImage: `url(${lloc})`, // Use the path directly
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      // Fallback color for testing
+                    }}
                   >
                     <div className='flex flex-col items-center justify-center'>
                       <h2 className='text-white text-[14px]'>Total Balance</h2>
@@ -408,23 +414,26 @@ const lloc2 = '/nariabg.png'
                   <button
                     className='  bg-primary4 border-[2px] border-primary4 lg:w-[90%] px-[1rem]  flex items-center gap-[0.5rem] justify-center lg:h-[50px] cursor-pointer  py-2 rounded-xl text-primary1'
                     onClick={() => handleOptionSelect('withdraw')}
-                    
-                 >
-                     <PiHandWithdraw  size={20} className='text-white' />
-                     <h4 className=' text-white font-[500] text-[17px]'>  Withdraw </h4> 
+                  >
+                    <PiHandWithdraw size={20} className='text-white' />
+                    <h4 className=' text-white font-[500] text-[17px]'>
+                      {' '}
+                      Withdraw{' '}
+                    </h4>
                   </button>
                 </div>
               </div>
               <div className='lg:hidden pb-[3rem]'>
                 <Slider {...settings}>
                   <div className='flex flex-col  gap-[1rem] items-center justify-center'>
-                    <div className='w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center'
-                    style={{
-                      backgroundImage: `url(${lloc2})`, // Use the path directly
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                     // Fallback color for testing
-                    }}
+                    <div
+                      className='w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center'
+                      style={{
+                        backgroundImage: `url(${lloc2})`, // Use the path directly
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        // Fallback color for testing
+                      }}
                     >
                       <div className='flex flex-col items-center justify-center'>
                         <h2 className='text-white text-[14px]'>
@@ -441,12 +450,13 @@ const lloc2 = '/nariabg.png'
                   </div>
 
                   <div className='flex flex-col gap-[1rem] items-center justify-center'>
-                    <div className="  w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center"
+                    <div
+                      className='  w-[85%] h-[130px] lg:w-[500px] lg:h-[200px]  border-[2px] rounded-2xl flex items-center justify-center'
                       style={{
                         backgroundImage: `url(${lloc})`, // Use the path directly
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                       // Fallback color for testing
+                        // Fallback color for testing
                       }}
                     >
                       <div className='flex flex-col items-center justify-center'>
@@ -468,21 +478,27 @@ const lloc2 = '/nariabg.png'
                   className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
                   onClick={() => handleOptionSelect('invoice')}
                 >
-<IoReceiptOutline  size={20} className='text-white' />
-                  <h4 className=' text-white font-[500] text-[17px]'> Invoice</h4> 
+                  <IoReceiptOutline size={20} className='text-white' />
+                  <h4 className=' text-white font-[500] text-[17px]'>
+                    {' '}
+                    Invoice
+                  </h4>
                 </button>
 
                 <button
-                 className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
                   onClick={() => handleOptionSelect('withdraw')}
                 >
-                  <PiHandWithdraw  size={20} className='text-white' />
-                    <h4 className=' text-white font-[500] text-[17px]'>  Withdraw </h4> 
+                  <PiHandWithdraw size={20} className='text-white' />
+                  <h4 className=' text-white font-[500] text-[17px]'>
+                    {' '}
+                    Withdraw{' '}
+                  </h4>
                 </button>
               </div>
-              
+
               <CryptoPage />
-             
+
               <div className='  pt-[2rem]  lg:pt-[0rem] '>
                 <DataTable />
               </div>
@@ -560,36 +576,36 @@ const lloc2 = '/nariabg.png'
               >
                 {({ isSubmitting }) => (
                   <Form className='space-y-4'>
-                   <div className='grid'>
-                <label>Sender's Address</label>
-                <input
-                  type='text'
-                  name='sender'
-                  value={baseName ? baseName : myString}
-                  readOnly
-                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                />
-              </div>
-              <div className='grid'>
-                <label>Network</label>
-                <input
-                  type='text'
-                  name='network'
-                  value='Base'
-                  readOnly
-                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                />
-              </div>
-              <div className='grid'>
-                <label>Currency</label>
-                <input
-                  type='text'
-                  name='currency'
-                  value='ETH for now (USDC Soon)'
-                  readOnly
-                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                />
-              </div>
+                    <div className='grid'>
+                      <label>Sender's Address</label>
+                      <input
+                        type='text'
+                        name='sender'
+                        value={baseName ? baseName : myString}
+                        readOnly
+                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      />
+                    </div>
+                    <div className='grid'>
+                      <label>Network</label>
+                      <input
+                        type='text'
+                        name='network'
+                        value='Base'
+                        readOnly
+                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      />
+                    </div>
+                    <div className='grid'>
+                      <label>Currency</label>
+                      <input
+                        type='text'
+                        name='currency'
+                        value='ETH for now (USDC Soon)'
+                        readOnly
+                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      />
+                    </div>
                     <div className='grid'>
                       <label>Recipient Address</label>
                       <input
@@ -809,14 +825,14 @@ const lloc2 = '/nariabg.png'
                     Deposit Link
                   </label>
                   <div className='flex items-center justify-center'>
-                  <input
-                    name=''
-                    value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
-                    readOnly
-                    className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
-                  />
-                   <CopyButton text={texttocopy} />
-                   </div>
+                    <input
+                      name=''
+                      value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    />
+                    <CopyButton text={texttocopy} />
+                  </div>
                 </div>
                 <div className='grid'>
                   <label className='text-[#808080] text-[14px]'>

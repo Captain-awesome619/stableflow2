@@ -81,7 +81,7 @@ export default function Home() {
             console.log(res);
             const bizname = data.data.businessName;
             Dispatch(setProfileId(data.data._id));
-            console.log(data.data)
+            console.log(data.data);
             Dispatch(setMybuisnessname(bizname));
             move();
           } else move2();
@@ -201,7 +201,7 @@ export default function Home() {
       </div>
       <Waitlist />
       <Steps />
-      <Ready />
+      {/* <Ready /> */}
       <Footer />
     </div>
   );
