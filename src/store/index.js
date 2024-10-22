@@ -9,7 +9,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // Create a slice for the state
 const initialState = {
-  myString: 'nothing',
+  myString: '',
   myNumber: 0,
   businessname: '',
   value: '',

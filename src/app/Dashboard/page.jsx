@@ -57,6 +57,7 @@ const WalletInfo = () => {
       console.log(usdcPrice);
       const ethToUsdcConversionRate = ethPrice / usdcPrice;
       console.log(ethToUsdcConversionRate);
+      setusdcconversion(ethToUsdcConversionRate)
       const weiBalance = await getBalance(myString);
       const figg = weiBalance.ether;
       const num = parseFloat(figg);
@@ -87,6 +88,8 @@ const WalletInfo = () => {
   const [depoamt, setdeopamt] = useState(0.0);
   const [descript, setdescript] = useState('');
   const [equi, setequi] = useState(0.0);
+  const [equi2, setequi2] = useState(0.0);
+  const [usdcconversion, setusdcconversion] = useState(0.0);
   const [depositPaymentNetwork, setDepositPaymentNetwork] = useState('Base');
   const [depositCurrency, setDepositCurrency] = useState('USDC');
   const { logout } = usePrivy();
@@ -153,7 +156,10 @@ const WalletInfo = () => {
     }
     fetchbase();
   }, []);
-
+  useEffect(() => {
+   const withdrawconvert = amount * usdcconversion
+   setequi2(withdrawconvert)
+  }, [amount]);
   const fetchConversionRate = async () => {
     try {
       const response = await fetch(
@@ -225,8 +231,8 @@ const WalletInfo = () => {
         console.log('Transaction sent:', txResponse);
         const txReceipt = await txResponse.wait();
         console.log('Transaction confirmed:', txReceipt);
+        Navigate.refresh()
       } catch (error) {
-        alert('Sorry This feature is only available on privy embedded wallets');
         console.error('Transaction failed:', error);
       }
     
@@ -616,11 +622,7 @@ const lloc2 = '/nariabg.png'
                         placeholder='Enter amount'
                         className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                       />
-                      <ErrorMessage
-                        name='amount'
-                        component='div'
-                        className='text-red-600'
-                      />
+                      <h3>{equi2}USDC</h3>
                     </div>
                     <button
                       type='submit'

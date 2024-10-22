@@ -18,13 +18,18 @@ import Waitlist from '@/components/waitlist';
 import Steps from '@/components/steps';
 import Ready from '@/components/ready';
 import Footer from '@/components/footer';
+import { getBasename } from './basename/getbasename';
+import Modal from 'react-modal'
+import baselogo from "../assests/baselogo.png"
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io"
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
-  const [step, Setstep] = useState(1);
-  const [hasFetchedBalance, setHasFetchedBalance] = useState(false);
+  const [step, Setstep] = useState('');
+ 
   const [trackadd, settrackadd] = useState(null);
   const [bal, setbal] = useState(0);
-  const [accept, setaccept] = useState(false);
+  const [basename, setbasename] = useState('');
   const [usdcAmount, setUsdcAmount] = useState(0);
   const [conversionRate, setConversionRate] = useState(0);
 
@@ -42,6 +47,10 @@ export default function Home() {
   const Dispatch = useDispatch();
 
   useEffect(() => {
+    const appElement = document.getElementById('__next');
+    if (appElement) {
+      Modal.setAppElement(appElement);
+    }
     if (ready && authenticated && user) {
       getWalletNetworkAndChainId();
       {
@@ -49,7 +58,7 @@ export default function Home() {
         console.log(user.wallet?.chainType);
       }
     }
-  }, [ready, authenticated, user]);
+  }, [ready, authenticated, user,step]);
 
   useEffect(() => {
     if (trackadd !== null && usdcBalance !== null) {
@@ -152,15 +161,17 @@ export default function Home() {
   };
   const getWalletNetworkAndChainId = async () => {
     try {
-      if (!isAddress(user.wallet.address)) {
-        throw new Error('Invalid wallet address');
-      }
       if (
         user.wallet.walletClientType === 'privy' ||
         user.wallet.chainId === 'eip155:8453'
       ) {
-        fetchEthToUsdcPrice();
-        fetchprofile();
+       fetchbase()
+if (step === 'yes') {
+  fetchEthToUsdcPrice();
+  fetchprofile();
+}else if(step==='no')  {
+  openm()
+}
       } else {
         alert(
           'This wallet is not connected to the Base network. Please switch to it.'
@@ -174,11 +185,96 @@ export default function Home() {
       return null;
     }
   };
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+  function handlecontinue() {
+    fetchEthToUsdcPrice();
+    fetchprofile();
+  }
+  const fetchbase = async () => {
+    try {
+      const basename5 = await getBasename(user.wallet.address);
+        const val = basename5.name;
+        if (val.length) {
+          setbasename(val);
+          console.log(val);
+          console.log(basename5);
+          console.log(basename)
+          Setstep('yes')
+          console.log(step)
+        } else {
+          setbasename('')
+          Setstep('no')
+          console.log(step)
+        }
+       
+      }
+     catch (error) {
+      Setstep('no')
+      console.error(error); // Handle any errors
+    }
+  };
+  function openm() {
+      setModalIsOpen(true)
+   }
+   function redirectt() {
+  
+    fetchEthToUsdcPrice();
+    fetchprofile();
+ }
   return (
     <div className='flex flex-col gap-[6.5rem] lg:gap-[5rem] overflow-hidden py-[1rem] px-[0.2rem]'>
       {console.log(usdcAmount)}
       {console.log(bal)}
+      {console.log(step)}
+      <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={''}
+              contentLabel='Example Modal'
+              shouldCloseOnOverlayClick={false} 
+              style={{
+                content: {
+                  top: '49%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)',
+                },
+              }}
+            >
+               <div className='grid  lg:gap-[3rem] gap-[2rem] '>
+               <div className='flex flex-row items-center justify-between'>
+               <div>
+
+               </div>
+               <div className='rounded-[50%] flex items-center w-[30px] h-[30px] justify-center border-[2px] cursor-pointer border-primary1' onClick={handlecontinue}>
+               <IoMdClose size={25} color='black' className=" items-center justify-center flex "   />
+               </div>
+               </div>
+               <div className='flex flex-col items-center justify-center gap-[0.5rem] lg:gap-[1.3rem]'>
+               <Image 
+               src={baselogo}
+               alt='baselogo'
+               width={60}
+               height={60}
+               />
+               <h3 className='lg:text-[20px] text-[16px] text-primary1 lg:font-[700] font-[500] '>Get a base name</h3>
+               <h3 className='lg:text-[16px] text-[14px] text-primary2 lg:font-[500] font-[400] text-center '>Do you have a base name connected to<br></br> your wallet? Lets help you.</h3>
+               </div>
+              
+               <a href='https://Base.org' target='_blank'  className='flex items-center justify-center'  onClick={redirectt}>  
+               <button
+                 className='bg-black border-[2px] border-primary4 lg:w-[250px]  w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+            
+                >
+                    <h4 className=' text-white font-[500] lg:text-[17px] text-[14px]'> Get a base name </h4> 
+                </button>
+                </a> 
+               </div>
+               
+            </Modal>
       <div className=' flex flex-row justify-between items-center mt-[0rem] lg:mt-[1rem] mx-[0.5rem] lg:mx-[3rem]'>
         <div className='flex items-center justify-center  '>
           <Image
