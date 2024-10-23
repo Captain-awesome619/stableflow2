@@ -23,6 +23,7 @@ import Modal from 'react-modal'
 import baselogo from "../assests/baselogo.png"
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io"
+import { ClipLoader } from 'react-spinners';
 export default function Home() {
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [step, Setstep] = useState('');
@@ -32,6 +33,7 @@ export default function Home() {
   const [basename, setbasename] = useState('');
   const [usdcAmount, setUsdcAmount] = useState(0);
   const [conversionRate, setConversionRate] = useState(0);
+  const [loader, setloader] = useState(false);
 
   const {
     login,
@@ -189,8 +191,10 @@ if (step === 'yes') {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   function handlecontinue() {
+    setloader(true)
     fetchEthToUsdcPrice();
     fetchprofile();
+    
   }
   const fetchbase = async () => {
     try {
@@ -244,6 +248,14 @@ if (step === 'yes') {
                 },
               }}
             >
+              { loader == true ?
+               <ClipLoader
+               color='blue'
+               size={100}
+               aria-label='Loading Spinner'
+               data-testid='loader'
+             />
+             :
                <div className='grid  lg:gap-[3rem] gap-[2rem] '>
                <div className='flex flex-row items-center justify-between'>
                <div>
@@ -273,7 +285,7 @@ if (step === 'yes') {
                 </button>
                 </a> 
                </div>
-               
+               }
             </Modal>
       <div className=' flex flex-row justify-between items-center mt-[0rem] lg:mt-[1rem] mx-[0.5rem] lg:mx-[3rem]'>
         <div className='flex items-center justify-center  '>
