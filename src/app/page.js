@@ -273,7 +273,7 @@ if (step === 'yes') {
                height={60}
                />
                <h3 className='lg:text-[20px] text-[16px] text-primary1 lg:font-[700] font-[500] '>Get a base name</h3>
-               <h3 className='lg:text-[16px] text-[14px] text-primary2 lg:font-[500] font-[400] text-center '>Do you have a base name connected to<br></br> your wallet? Lets help you.</h3>
+               <h3 className='lg:text-[16px] text-[14px] text-primary2 lg:font-[500] font-[400] text-center '>Do you have a base name connected to<br></br> your external wallet? Lets help you.</h3>
                </div>
               
                <a href='https://Base.org' target='_blank'  className='flex items-center justify-center'  onClick={redirectt}>  
