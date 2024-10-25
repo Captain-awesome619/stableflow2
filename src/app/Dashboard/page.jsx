@@ -375,7 +375,7 @@ const WalletInfo = () => {
         </div>
         <div className='p-4 mt-[3rem] lg:ml-[7rem] lg:grid lg:items-center lg:justify-center'>
           {selectedOption === 'dashboard' && (
-            <div className='lg:grid   gap-[2rem] lg:gap-[4rem]'>
+            <div className='lg:grid   gap-[2rem] lg:gap-[3rem]'>
               <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>
                 Hi {bizname}{' '}
               </h2>
@@ -839,12 +839,12 @@ const WalletInfo = () => {
                   <label className='text-[#808080] text-[14px]'>
                     Deposit Link
                   </label>
-                  <div className='flex items-center justify-center'>
+                  <div className='flex gap-2 items-center justify-center'>
                     <input
                       name=''
                       value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
                       readOnly
-                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent '
                     />
                     <CopyButton text={texttocopy} />
                   </div>
