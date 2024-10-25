@@ -274,7 +274,7 @@ const WalletInfo = () => {
 
       {/* Sidebar */}
       <div
-        className={`bg-white    lg:z-50 text-primary1 grid w-64 min-h-screen lg:fixed absolute p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`bg-white z-40    lg:z-50 text-primary1 grid w-64 min-h-screen lg:fixed absolute p-4 transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? 'translate-x-0 ' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
@@ -373,7 +373,7 @@ const WalletInfo = () => {
             }
           </h1>
         </div>
-        <div className='p-4 mt-[3rem] lg:ml-[5rem] lg:grid lg:items-center lg:justify-center'>
+        <div className='p-4 mt-[3rem] lg:ml-[7rem] lg:grid lg:items-center lg:justify-center'>
           {selectedOption === 'dashboard' && (
             <div className='lg:grid   gap-[2rem] lg:gap-[4rem]'>
               <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>
