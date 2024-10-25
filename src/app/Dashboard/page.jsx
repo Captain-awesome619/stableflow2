@@ -241,10 +241,13 @@ const WalletInfo = () => {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 7000,
+    
   };
   const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`;
   const lloc = '/usdcbg.png';
   const lloc2 = '/nariabg.png';
+  const basenam = baseName
+  const wallet = myString
   return (
     <div
       className={
@@ -259,7 +262,7 @@ const WalletInfo = () => {
       {console.log(client)}
       {console.log(profileId)}
       <button
-        className='md:hidden p-2 text-white bg-gray-800 absolute top-3 left-1 z-30'
+        className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? (
@@ -271,7 +274,7 @@ const WalletInfo = () => {
 
       {/* Sidebar */}
       <div
-        className={`bg-white    z-20 text-primary1 grid w-64 min-h-screen lg:relative absolute p-4 transition-transform duration-300 ease-in-out transform ${
+        className={`bg-white    lg:z-50 text-primary1 grid w-64 min-h-screen lg:fixed absolute p-4 transition-transform duration-300 ease-in-out transform ${
           isSidebarOpen ? 'translate-x-0 ' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
@@ -356,15 +359,24 @@ const WalletInfo = () => {
 
       {/* Main Content */}
       <div className='lg:flex-1 p-4 '>
-        <div className='border-b  border-gray-300 mb-4'>
-          <h1 className='lg:left-[60%] left-[20%] relative text-[14px] lg:text-[14px] font-[400] mt-[0.5rem] text-primary3'>
-            {baseName ? baseName : myString}
+        <div className='border-b flex items-center justify-end top-0 z-40  bg-white  fixed w-screen  border-gray-300 mb-4'>
+          <h1 className="text-[12px] lg:text-[18px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+            {baseName ? <div className='flex items-center justify-center gap-[0.5rem]'> 
+              <CopyButton text={baseName} />
+              {baseName}
+              </div>  
+            : 
+            <div className='flex items-center justify-center gap-[0.5rem]'> 
+              <CopyButton text={myString} />
+              {myString}
+              </div>  
+            }
           </h1>
         </div>
-        <div className='p-4 lg:grid'>
+        <div className='p-4 mt-[3rem] lg:ml-[5rem] lg:grid lg:items-center lg:justify-center'>
           {selectedOption === 'dashboard' && (
-            <div className='lg:grid    gap-[2rem] lg:gap-[4rem]'>
-              <h2 className='text-xl lg:pb-[0rem] pb-[1.5rem] '>
+            <div className='lg:grid   gap-[2rem] lg:gap-[4rem]'>
+              <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>
                 Hi {bizname}{' '}
               </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
@@ -430,7 +442,7 @@ const WalletInfo = () => {
                   </button>
                 </div>
               </div>
-              <div className='lg:hidden pb-[3rem]'>
+              <div className='lg:hidden w-full  pb-[3rem]'>
                 <Slider {...settings}>
                   <div className='flex flex-col  gap-[1rem] items-center justify-center'>
                     <div
@@ -659,7 +671,7 @@ const WalletInfo = () => {
               </Formik>
             </div>
           )}
-        </div>
+       
         {selectedOption === 'confirm' && (
           <div className='grid gap-4'>
             <FaLongArrowAltLeft
@@ -864,6 +876,7 @@ const WalletInfo = () => {
           </div>
         )}
         {/* The end of the invoice section */}
+        </div>
       </div>
     </div>
   );

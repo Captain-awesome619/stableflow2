@@ -9,7 +9,7 @@ const CopyButton = ({ text }) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+      setTimeout(() => setCopied(false), 1500); // Reset copied state after 2 seconds
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -20,7 +20,7 @@ const CopyButton = ({ text }) => {
       onClick={handleCopy}
       className="cursor-pointer"
     >
-      {copied ? <FaCopy size={20}  /> : <FaRegCopy size={20} /> }
+      {copied ? <FaCopy color='black' className='lg:text-[20px] text-[15px]'  /> : <FaRegCopy  className='text-primary4 lg:text-[20px] text-[15px]'  /> }
     </button>
   );
 };
