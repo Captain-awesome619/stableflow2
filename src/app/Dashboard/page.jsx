@@ -278,7 +278,7 @@ const WalletInfo = () => {
           isSidebarOpen ? 'translate-x-0 ' : '-translate-x-full'
         } md:translate-x-0 md:block md:w-64`}
       >
-        <ul className='flex flex-col mt-[3rem] gap-[2rem]   lg:gap-[6rem] lg:mt-[1rem]'>
+        <ul className='flex flex-col mt-[3rem] gap-[2rem]   lg:gap-[3rem] lg:mt-[1rem]'>
           <Image
             src={logo}
             width={120}
@@ -360,7 +360,7 @@ const WalletInfo = () => {
       {/* Main Content */}
       <div className='lg:flex-1 p-4 '>
         <div className='border-b flex items-center justify-end top-0 z-40  bg-white  fixed w-screen  border-gray-300 mb-4'>
-          <h1 className="text-[12px] lg:text-[18px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+          <h1 className="text-[12px] lg:text-[16px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
             {baseName ? <div className='flex items-center justify-center gap-[0.5rem]'> 
               <CopyButton text={baseName} />
               {baseName}
