@@ -168,7 +168,7 @@ export default function Home() {
         user.wallet.chainId === 'eip155:8453'
       ) {
        fetchbase()
-if (step === 'yes') {
+if (step === 'yes' || user.wallet.walletClientType === 'privy') {
   fetchEthToUsdcPrice();
   fetchprofile();
 }else if(step==='no')  {
