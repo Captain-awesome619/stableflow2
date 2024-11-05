@@ -14,6 +14,7 @@ const initialState = {
   businessname: '',
   value: '',
   profileId: '',
+  accesstoken: ''
 };
 
 const mySlice = createSlice({
@@ -33,7 +34,7 @@ const mySlice = createSlice({
       state.value = action.payload;
     },
     setProfileId(state, action) {
-      state.profileId = action.payload;
+      state.value = action.payload;
     },
   },
 });
@@ -45,6 +46,7 @@ export const {
   setMybuisnessname,
   setvalue,
   setProfileId,
+  setaccesstoken
 } = mySlice.actions;
 const rootReducer = mySlice.reducer;
 

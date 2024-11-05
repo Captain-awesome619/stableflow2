@@ -1,15 +1,7 @@
-"use client"
-import React from 'react';
+import React from 'react'
 import { useTable } from 'react-table';
-import { useEffect } from 'react';
 import { CiWallet } from "react-icons/ci";
-const DataTable = ({transacthistory,viewall}) => {
-
-  useEffect(() => {
-    console.log("Transaction history in ChildComponent:", transacthistory);
-  }, [transacthistory]);
-  const lastSevenTransactions = transacthistory.slice(-7);
- const last5transactions = transacthistory.slice(-5)
+const Transactionhistory = ({transacthistory}) => {
   const columns = React.useMemo(
     () => [
       {
@@ -47,13 +39,12 @@ const DataTable = ({transacthistory,viewall}) => {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data : lastSevenTransactions });
+  } = useTable({ columns, data : transacthistory });
 
   return (
     <>
-
-    { transacthistory ? 
-    <table {...getTableProps()} className="w-full hidden lg:table  border-collapse border  ">
+      { transacthistory ? 
+    <table {...getTableProps()} className="w-[full] hidden lg:table  border-collapse border  ">
       <thead className="bg-gray-100 ">
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
@@ -78,7 +69,7 @@ const DataTable = ({transacthistory,viewall}) => {
                 <td
                   {...cell.getCellProps()}
                   key={cell.column.id}
-                  className={`border px-7 py-3 ${cell.column.align === 'right' ? 'text-right' : 'text-left'}`}
+                  className={`border px-10 py-3 ${cell.column.align === 'right' ? 'text-right' : 'text-left'}`}
                 >
                   {cell.render('Cell')}
                 </td>
@@ -88,14 +79,14 @@ const DataTable = ({transacthistory,viewall}) => {
         })}
       </tbody>
     </table>
-  :  <h3 className='lg:flex hidden items-center justify-center text-[16px] text-primary1 '>You have no Transactions yet</h3> }
+ :  <h3 className='lg:flex hidden items-center justify-center text-[16px] text-primary1 '>You have no Transactions yet</h3> }
 
     <div className='grid gap-[0.5rem] lg:hidden '>
     <div className='flex items-center justify-between'>
-    <h3 className='text-primary1 font-[600] text-[17px] '>Transaction</h3>
-    <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer ' onClick={viewall}>View all</h3>
+    <h3 className='text-primary1 font-[600] text-[17px] '>Transactions</h3>
+    <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer '></h3>
     </div>
-{transacthistory ? last5transactions.map((transaction) => (
+{transacthistory ?  transacthistory.map((transaction) => (
     <div className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
     <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
@@ -108,10 +99,9 @@ const DataTable = ({transacthistory,viewall}) => {
     </div>
     <h3 className='text-primary1 font-[500] text-[16px] '>+{""} N{transaction.amountInNGN}</h3>
     </div>
-  )) : <h3 className='flex lg:hidden items-center justify-center text-[16px] text-primary1 '>You have no Transactions yet</h3>} 
+  ))  : <h3 className='flex lg:hidden items-center justify-center text-[16px] text-primary1 '>You have no Transactions yet</h3>} 
     </div>
     </>
   );
 };
-
-export default DataTable;
+export default Transactionhistory

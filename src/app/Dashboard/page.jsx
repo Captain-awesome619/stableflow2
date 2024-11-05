@@ -11,7 +11,6 @@ import logo from '../../assests/logo.png';
 import { IoMdClose } from 'react-icons/io';
 import { parseEther } from 'ethers';
 import { FaNairaSign } from 'react-icons/fa6';
-
 import DataTable from '@/components/table';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
@@ -32,6 +31,8 @@ import CryptoPage from '@/components/rate';
 import CopyButton from '@/components/copy';
 import { PiHandWithdraw } from 'react-icons/pi';
 import { IoReceiptOutline } from 'react-icons/io5';
+import ClipLoader from "react-spinners/ClipLoader"
+import Transactionhistory from '@/components/transactionhistory';
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -71,6 +72,7 @@ const WalletInfo = () => {
       console.error('Error fetching ETH to USDC price:', error);
     }
   };
+  const [accessToken, setAccessToken] = useState('');
   const bizname = useSelector((state) => state.businessname);
   const profileId = useSelector((state) => state.profileId);
   const myString = useSelector((state) => state.myString);
@@ -92,6 +94,7 @@ const WalletInfo = () => {
   const [usdcconversion, setusdcconversion] = useState(0.0);
   const [depositPaymentNetwork, setDepositPaymentNetwork] = useState('Base');
   const [depositCurrency, setDepositCurrency] = useState('USDC');
+  const [transacthistory, settransacthistory] = useState(null);
   const { logout } = usePrivy();
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -101,6 +104,46 @@ const WalletInfo = () => {
   const handleLogout = async () => {
     await logout();
     Navigate.push('/');
+  };
+
+ const {getAccessToken} = usePrivy()
+  const fetchAccessToken = async () => {
+    try {
+      const token = await getAccessToken();
+      setAccessToken(token);
+      console.log("Access Token:", token);
+    } catch (error) {
+      console.error("Failed to get access token:", error);
+    }
+  };
+
+  const fetchData = async () => {
+      try {
+        fetch('https://stableflow.onrender.com/payment', {
+          method: "GET", 
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+          }
+        })
+        .then((response) => {
+          if (!response) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+.then((data) => {
+  if (data) {
+    console.log("Data fetched successfully:", data);
+   const msg = data.message
+   const log = data.data
+   settransacthistory(log)
+    console.log(transacthistory)
+    console.log(log)
+  }})
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } 
   };
 
   const handleCompleteInvoice = async (event) => {
@@ -155,7 +198,21 @@ const WalletInfo = () => {
       Modal.setAppElement(appElement);
     }
     fetchbase();
+fetchAccessToken()
   }, []);
+
+  useEffect(() => {
+    if (!accessToken) {
+      return
+    }
+   fetchData()
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (transacthistory) {
+      console.log("Updated transacthistory:", transacthistory);
+    }
+  }, [transacthistory]);
   useEffect(() => {
    const withdrawconvert = amount * usdcconversion
    setequi2(withdrawconvert)
@@ -248,6 +305,10 @@ const WalletInfo = () => {
   const lloc2 = '/nariabg.png';
   const basenam = baseName
   const wallet = myString
+
+  function viewall() {
+    setSelectedOption('transactions');
+  }
   return (
     <div
       className={
@@ -261,6 +322,7 @@ const WalletInfo = () => {
       {console.log(amount)}
       {console.log(client)}
       {console.log(profileId)}
+      {console.log(accessToken)}
       <button
         className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -517,10 +579,20 @@ const WalletInfo = () => {
               </div>
 
               <CryptoPage />
-
-              <div className='  pt-[2rem]  lg:pt-[0rem] '>
-                <DataTable />
-              </div>
+  {transacthistory ? (
+         <div className='  pt-[2rem]  lg:pt-[0rem] '>
+         <DataTable transacthistory={transacthistory} viewall={viewall} />
+       </div>
+      ) : (
+        <ClipLoader
+        color="blue"
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className='absolute top-[35%] left-[45%] '
+      />
+      )}
+             
             </div>
           )}
           {selectedOption === 'invoices' && (
@@ -531,8 +603,19 @@ const WalletInfo = () => {
           )}
           {selectedOption === 'transactions' && (
             <div>
-              <h2 className='text-xl'>Transaction History </h2>
-              <p>This page is being worked on</p>
+             {transacthistory ? (
+         <div>
+         <Transactionhistory transacthistory={transacthistory} />
+       </div>
+      ) : (
+        <ClipLoader
+        color="blue"
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className='absolute top-[35%] left-[45%] '
+      />
+      )}
             </div>
           )}
           {selectedOption === 'settings' && (
