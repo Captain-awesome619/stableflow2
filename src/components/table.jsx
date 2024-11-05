@@ -95,8 +95,8 @@ const DataTable = ({transacthistory,viewall}) => {
     <h3 className='text-primary1 font-[600] text-[17px] '>Transaction</h3>
     <h3 className='text-primary2 font-[400] text-[14px] cursor-pointer ' onClick={viewall}>View all</h3>
     </div>
-{transacthistory ? last5transactions.map((transaction) => (
-    <div className='flex flex-row justify-between items-center'>
+{transacthistory ? last5transactions.map((transaction,index) => (
+    <div key={index} className='flex flex-row justify-between items-center'>
     <div className='flex items-center justify-center gap-[0.5rem] '>
     <div className=' bg-[#D2E9FF] rounded-[50%] flex items-center justify-center w-[40px] h-[40px] '>
     <CiWallet size={25} className=' ' />
