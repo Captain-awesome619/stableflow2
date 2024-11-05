@@ -254,7 +254,7 @@ if (step === 'yes' || user.wallet.walletClientType === 'privy') {
       {console.log(bal)}
       {console.log(step)}
       {
-          loader2 === true ?  <div className='flex items-center justify-center absolute left-[30%] top-[30%] ' >
+          loader2 === true ?  <div className='flex items-center justify-center absolute left-[45%] top-[30%] ' >
           <ClipLoader
           color='blue'
           size={100}
