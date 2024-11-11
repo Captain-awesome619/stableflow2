@@ -60,6 +60,7 @@ const WalletInfo = () => {
       console.log(ethToUsdcConversionRate);
       setusdcconversion(ethToUsdcConversionRate)
       const weiBalance = await getBalance(user.wallet.address);
+      console.log(weiBalance)
       const figg = weiBalance.ether;
       const num = parseFloat(figg);
       console.log(num);
@@ -72,6 +73,7 @@ const WalletInfo = () => {
       console.error('Error fetching ETH to USDC price:', error);
     }
   };
+ 
   const [accessToken, setAccessToken] = useState('');
   const bizname = useSelector((state) => state.businessname);
   const profileId = useSelector((state) => state.profileId);
@@ -233,7 +235,7 @@ fetchAccessToken()
   useEffect(() => {
     fetchEthToUsdcPrice();
     fetchConversionRate();
-    const intervalId = setInterval(fetchConversionRate, 100000);
+    const intervalId = setInterval(() =>{ fetchConversionRate(); fetchEthToUsdcPrice();}, 5 * 60 * 1000);
     // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [myNum]);
@@ -323,6 +325,7 @@ fetchAccessToken()
       {console.log(client)}
       {console.log(profileId)}
       {console.log(accessToken)}
+    
       <button
         className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -959,8 +962,17 @@ fetchAccessToken()
           </div>
         )}
         {/* The end of the invoice section */}
+        <div>
+            {user?.linkedAccounts.map((wallet, index) => (
+                <p key={index}>
+                    Wallet {index + 1} ({wallet.type}): {wallet.balance} USDC
+                </p>
+            ))}
+        </div>
         </div>
       </div>
+     
+
     </div>
   );
 };
