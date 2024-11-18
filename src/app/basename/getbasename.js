@@ -8,7 +8,7 @@ import { convertReverseNodeToBytes } from './convertnodestobytes';
 import { getAddress } from 'ethers';
 const baseClient = createPublicClient({
     chain: base,
-    transport: http(), // You can also use ws() for WebSocket transport
+    transport: http(), 
 });
 const BASENAME_L2_RESOLVER_ADDRESS = '0xC6d566A56A1aFf6508b41f6c90ff131615583BCD';
 

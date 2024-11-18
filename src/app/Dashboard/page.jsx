@@ -962,13 +962,7 @@ fetchAccessToken()
           </div>
         )}
         {/* The end of the invoice section */}
-        <div>
-            {user?.linkedAccounts.map((wallet, index) => (
-                <p key={index}>
-                    Wallet {index + 1} ({wallet.type}): {wallet.balance} USDC
-                </p>
-            ))}
-        </div>
+       
         </div>
       </div>
      
