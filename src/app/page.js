@@ -67,12 +67,14 @@ export default function Home() {
     if (ready && authenticated && user) {
       setloader2(true)
       getWalletNetworkAndChainId();  
+      Dispatch(setMybuisnessname(buiss))
+    Dispatch(setProfileId(prof));
       {
         console.log('User is logged in:', user.wallet);
         console.log(user.wallet?.chainType);
       }
     }
-  }, [ready, authenticated, user,step]);
+  }, [ready, authenticated, user,step, buiss,prof]);
 
   useEffect(() => {
     if (trackadd !== null && usdcBalance !== null) {
@@ -81,9 +83,8 @@ export default function Home() {
   }, [trackadd, usdcBalance]);
 
   useEffect(() => {
-    Dispatch(setMybuisnessname(buiss))
-    Dispatch(setProfileId(prof));
-  }, [buiss,prof]);
+    
+  }, []);
 
 
   const fetchprofile = async () => {
@@ -111,7 +112,7 @@ export default function Home() {
             const bizname = data.data.businessName;
             setbuiss(data.data.businessName)
             console.log(bizname)
-            Dispatch(setProfileId(data.data.id));
+           
             setprof(data.data._id)
             console.log(data.data);
             move();
