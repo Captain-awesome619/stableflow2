@@ -33,6 +33,8 @@ import { PiHandWithdraw } from 'react-icons/pi';
 import { IoReceiptOutline } from 'react-icons/io5';
 import ClipLoader from "react-spinners/ClipLoader"
 import Transactionhistory from '@/components/transactionhistory';
+
+
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -324,7 +326,7 @@ fetchAccessToken()
       {console.log(amount)}
       {console.log(client)}
       {console.log(profileId)}
-      {console.log(accessToken)}
+      {console.log(bizname)}
     
       <button
         className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'

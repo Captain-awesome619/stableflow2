@@ -14,7 +14,8 @@ const initialState = {
   businessname: '',
   value: '',
   profileId: '',
-  accesstoken: ''
+  accesstoken: '',
+  
 };
 
 const mySlice = createSlice({
@@ -34,7 +35,7 @@ const mySlice = createSlice({
       state.value = action.payload;
     },
     setProfileId(state, action) {
-      state.value = action.payload;
+      state.profileId = action.payload;
     },
   },
 });

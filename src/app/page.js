@@ -66,9 +66,10 @@ export default function Home() {
     }
     if (ready && authenticated && user) {
       setloader2(true)
-      getWalletNetworkAndChainId();  
       Dispatch(setMybuisnessname(buiss))
     Dispatch(setProfileId(prof));
+      getWalletNetworkAndChainId();  
+      
       {
         console.log('User is logged in:', user.wallet);
         console.log(user.wallet?.chainType);
@@ -112,8 +113,9 @@ export default function Home() {
             const bizname = data.data.businessName;
             setbuiss(data.data.businessName)
             console.log(bizname)
-           
+            Dispatch(setProfileId(data.data._id))
             setprof(data.data._id)
+            console.log(data.data._id)
             console.log(data.data);
             move();
           } else move2();
