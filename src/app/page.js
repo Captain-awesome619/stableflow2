@@ -49,15 +49,9 @@ export default function Home() {
     ready,
     authenticated,
     logout,
-    connectWallet,
-  
-  
   } = usePrivy();
   const Navigate = useRouter();
   const Dispatch = useDispatch();
-
- 
-
 
   useEffect(() => {
     const appElement = document.getElementById('__next');
@@ -69,7 +63,6 @@ export default function Home() {
       Dispatch(setMybuisnessname(buiss))
     Dispatch(setProfileId(prof));
       getWalletNetworkAndChainId();  
-      
       {
         console.log('User is logged in:', user.wallet);
         console.log(user.wallet?.chainType);
@@ -79,14 +72,8 @@ export default function Home() {
 
   useEffect(() => {
     if (trackadd !== null && usdcBalance !== null) {
-      move();
-    }
+      move();}
   }, [trackadd, usdcBalance]);
-
-  useEffect(() => {
-    
-  }, []);
-
 
   const fetchprofile = async () => {
     fetch(
@@ -112,6 +99,7 @@ export default function Home() {
             console.log(res);
             const bizname = data.data.businessName;
             setbuiss(data.data.businessName)
+            Dispatch(setMybuisnessname(buiss))
             console.log(bizname)
             Dispatch(setProfileId(data.data._id))
             setprof(data.data._id)
@@ -138,6 +126,7 @@ export default function Home() {
   function move() {
     Navigate.push('/Dashboard');
   }
+
   function back() {
     Navigate.push('/');
   }
@@ -195,7 +184,6 @@ export default function Home() {
 if (step === 'yes' || user.wallet.walletClientType === 'privy') {
   fetchEthToUsdcPrice();
   fetchprofile();
-
 }else if(step==='no')  {
   openm()
 }
@@ -280,8 +268,7 @@ if (step === 'yes' || user.wallet.walletClientType === 'privy') {
                   bottom: 'auto',
                   marginRight: '-50%',
                   transform: 'translate(-50%, -50%)',
-                },
-              }}
+                }, }}
             >
               { loader == true ?
                <ClipLoader

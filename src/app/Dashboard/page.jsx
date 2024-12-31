@@ -33,8 +33,9 @@ import { PiHandWithdraw } from 'react-icons/pi';
 import { IoReceiptOutline } from 'react-icons/io5';
 import ClipLoader from "react-spinners/ClipLoader"
 import Transactionhistory from '@/components/transactionhistory';
-
-
+import base from '../../assests/base.png'
+import usdc from '../../assests/usdc.png'
+import { TbCurrencyEthereum } from "react-icons/tb";
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -109,7 +110,6 @@ const WalletInfo = () => {
     await logout();
     Navigate.push('/');
   };
-
  const {getAccessToken} = usePrivy()
   const fetchAccessToken = async () => {
     try {
@@ -120,7 +120,6 @@ const WalletInfo = () => {
       console.error("Failed to get access token:", error);
     }
   };
-
   const fetchData = async () => {
       try {
         fetch('https://stableflow.onrender.com/payment', {
@@ -149,7 +148,6 @@ const WalletInfo = () => {
         console.error("Error fetching data:", error);
       } 
   };
-
   const handleCompleteInvoice = async (event) => {
     event.preventDefault();
     try {
@@ -170,7 +168,6 @@ const WalletInfo = () => {
         },
         body: JSON.stringify(body),
       });
-
       const data = await response.json();
       console.log(data);
       if (data.statusCode === 200) {
@@ -183,7 +180,6 @@ const WalletInfo = () => {
       console.log(error);
     }
   };
-
   const fetchbase = async () => {
     try {
       const address = myString;
@@ -233,7 +229,6 @@ fetchAccessToken()
       console.error('Error fetching conversion rate:', error);
     }
   };
-
   useEffect(() => {
     fetchEthToUsdcPrice();
     fetchConversionRate();
@@ -561,7 +556,7 @@ fetchAccessToken()
               </div>
               <div className='flex flex-row items-center justify-center gap-[1rem] pb-[3rem] lg:hidden'>
                 <button
-                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-3xl text-white'
                   onClick={() => handleOptionSelect('invoice')}
                 >
                   <IoReceiptOutline size={20} className='text-white' />
@@ -572,7 +567,7 @@ fetchAccessToken()
                 </button>
 
                 <button
-                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-3xl text-white'
                   onClick={() => handleOptionSelect('withdraw')}
                 >
                   <PiHandWithdraw size={20} className='text-white' />
@@ -684,7 +679,7 @@ fetchAccessToken()
                 {({ isSubmitting }) => (
                   <Form className='space-y-4'>
                     <div className='grid'>
-                      <label>Sender's Address</label>
+                      <label>Send from</label>
                       <input
                         type='text'
                         name='sender'
@@ -695,26 +690,30 @@ fetchAccessToken()
                     </div>
                     <div className='grid'>
                       <label>Network</label>
-                      <input
-                        type='text'
-                        name='network'
-                        value='Base'
-                        readOnly
-                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      />
+                      <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={base}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      Base
+                        </div>
                     </div>
                     <div className='grid'>
                       <label>Currency</label>
-                      <input
-                        type='text'
-                        name='currency'
-                        value='ETH for now (USDC Soon)'
-                        readOnly
-                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      />
+                      <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.2rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+          <TbCurrencyEthereum size={25} />
+                        ETH for now (USDC Soon)
+                       
+                        </div>
                     </div>
                     <div className='grid'>
-                      <label>Recipient Address</label>
+                      <label>Send to</label>
                       <input
                         type='text'
                         name='recipient'
@@ -746,8 +745,8 @@ fetchAccessToken()
                       disabled={!amount || amount == 0 || !recipient}
                       className={
                         !amount || amount == 0 || !recipient
-                          ? 'cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
-                          : 'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                          ? 'cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-[200px]'
+                          : 'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-[200px]'
                       }
                       onClick={handleSubmit}
                     >
@@ -799,7 +798,7 @@ fetchAccessToken()
             <button
               type='submit'
               className={
-                'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
               }
               onClick={sendUSDC}
             >
@@ -814,7 +813,7 @@ fetchAccessToken()
           <div className='grid lg:gap-[4rem] gap-[3rem]'>
             <div className='grid gap-[0.5rem]'>
               <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
-                #Invoice
+                Invoice #1
               </h2>
               <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
                 Fill the information below
@@ -835,23 +834,31 @@ fetchAccessToken()
 
               <div className='grid'>
                 <label>Choose your payment network</label>
-                <input
-                  type='text'
-                  name='Base'
-                  value={depositPaymentNetwork}
-                  readOnly
-                  className='block text-primary3 lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                />
+                <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={base}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      Base
+                        </div>
               </div>
               <div className='grid'>
                 <label>Invoice Currency</label>
-                <input
-                  type='text'
-                  name='USDC'
-                  value={depositCurrency}
-                  readOnly
-                  className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                />
+                <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={usdc}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      USDC
+                        </div>
               </div>
               <div className='grid'>
                 <label>Amount(IN USDC)</label>
@@ -873,7 +880,7 @@ fetchAccessToken()
                   name='name'
                   value={descript}
                   onChange={(e) => setdescript(e.target.value)}
-                  placeholder='What is the payment for'
+                  placeholder='What are they paying for'
                   className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                 />
               </div>
@@ -882,8 +889,8 @@ fetchAccessToken()
                 disabled={depoamt <= 0 || !descript || !name || !depoamt}
                 className={
                   depoamt <= 0 || !descript || !name || !depoamt
-                    ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]'
-                    : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                    ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-3xl duration-500 lg:w-[300px] w-full'
+                    : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
                 }
                 onClick={handleCompleteInvoice}
               >
