@@ -72,7 +72,7 @@ export default function CryptoPage() {
         </>
     ))}
     { filteredCryptoData.map((crypto) => (
-        <div className='lg:hidden grid gap-[1rem]'>
+        <div className='lg:hidden grid gap-[1rem]' key={crypto.id}>
         <div className='flex items-center justify-between  '>
         <div className=' bg-primary4 w-[150px]   h-[50px] rounded-2xl flex gap-[0.5rem] jus items-center '>
         <img src={crypto.image} alt={`${crypto.name} logo`} className="w-[35px] h-[30px] pl-[0.5rem]  " />
