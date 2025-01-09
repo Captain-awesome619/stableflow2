@@ -36,6 +36,7 @@ import Transactionhistory from '@/components/transactionhistory';
 import base from '../../assests/base.png'
 import usdc from '../../assests/usdc.png'
 import { TbCurrencyEthereum } from "react-icons/tb";
+
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -57,21 +58,21 @@ const WalletInfo = () => {
       const data = await response.json();
       const ethPrice = data.ethereum.usd;
       const usdcPrice = data['usd-coin'].usd;
-      console.log(ethPrice);
-      console.log(usdcPrice);
+      // console.log(ethPrice);
+      // console.log(usdcPrice);
       const ethToUsdcConversionRate = ethPrice / usdcPrice;
-      console.log(ethToUsdcConversionRate);
-      setusdcconversion(ethToUsdcConversionRate)
+      // console.log(ethToUsdcConversionRate);
+      setusdcconversion(ethToUsdcConversionRate);
       const weiBalance = await getBalance(user.wallet.address);
       console.log(weiBalance)
       const figg = weiBalance.ether;
       const num = parseFloat(figg);
-      console.log(num);
+      // console.log(num);
       const equivalentUsdc = num * ethToUsdcConversionRate;
       const fina = equivalentUsdc.toFixed(6);
       const final = parseFloat(fina);
       Dispatch(setMyNumber(final));
-      console.log(final);
+      // console.log(final);
     } catch (error) {
       console.error('Error fetching ETH to USDC price:', error);
     }
@@ -160,7 +161,7 @@ const WalletInfo = () => {
         amountInNGN: parseFloat(equi),
         description: descript,
       };
-      console.log(body);
+      // console.log(body);
       const response = await fetch('https://stableflow.onrender.com/payment', {
         method: 'POST',
         headers: {
@@ -169,7 +170,7 @@ const WalletInfo = () => {
         body: JSON.stringify(body),
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (data.statusCode === 200) {
         setpaymentid(data.data._id);
         openModal();
@@ -177,7 +178,7 @@ const WalletInfo = () => {
         alert('There was an error');
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   const fetchbase = async () => {
@@ -186,8 +187,8 @@ const WalletInfo = () => {
       const basename2 = await getBasename(address);
       const val = basename2.name;
       setBaseName(val);
-      console.log(val);
-      console.log(basename2);
+      // console.log(val);
+      // console.log(basename2);
     } catch (error) {
       console.error(error); // Handle any errors
     }
@@ -201,18 +202,6 @@ const WalletInfo = () => {
 fetchAccessToken()
   }, []);
 
-  useEffect(() => {
-    if (!accessToken) {
-      return
-    }
-   fetchData()
-  }, [accessToken]);
-
-  useEffect(() => {
-    if (transacthistory) {
-      console.log("Updated transacthistory:", transacthistory);
-    }
-  }, [transacthistory]);
   useEffect(() => {
    const withdrawconvert = amount * usdcconversion
    setequi2(withdrawconvert)
@@ -254,14 +243,14 @@ fetchAccessToken()
   }
 
   const { wallets } = useWallets();
-  const { user } = usePrivy();
+  const { user, getAccessToken } = usePrivy();
   const { sendTransaction } = useSendTransaction({
     callbacks: {
       onError: (error) => {
         console.error('Transaction failed:', error);
       },
       onSuccess: (response) => {
-        console.log('Transaction successful:', response);
+        // console.log('Transaction successful:', response);
       },
     },
   });
@@ -270,25 +259,24 @@ fetchAccessToken()
     if (client !== 'privy') {
       alert('Sorry This feature is only available on privy embedded wallets');
     }
-    
-      try {
-        const amountInWei = parseEther(amount);
-        const val = amountInWei.toString();
-        // Create the transaction object
-        const txObject = {
-          to: recipient,
-          value: amountInWei,
-        };
-       
-        const txResponse = await sendTransaction(txObject);
-        console.log('Transaction sent:', txResponse);
-        const txReceipt = await txResponse.wait();
-        console.log('Transaction confirmed:', txReceipt);
-        window.location.reload();
-      } catch (error) {
-        console.error('Transaction failed:', error);
-      }
-    
+
+    try {
+      const amountInWei = parseEther(amount);
+      const val = amountInWei.toString();
+      // Create the transaction object
+      const txObject = {
+        to: recipient,
+        value: amountInWei,
+      };
+
+      const txResponse = await sendTransaction(txObject);
+      // console.log('Transaction sent:', txResponse);
+      const txReceipt = await txResponse.wait();
+      // console.log('Transaction confirmed:', txReceipt);
+      window.location.reload();
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
   };
   const settings = {
     speed: 1000,
@@ -297,13 +285,23 @@ fetchAccessToken()
     infinite: true,
     autoplay: true,
     autoplaySpeed: 7000,
-    
   };
   const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`;
   const lloc = '/usdcbg.png';
   const lloc2 = '/nariabg.png';
-  const basenam = baseName
-  const wallet = myString
+  const basenam = baseName;
+  const wallet = myString;
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await getAccessToken();
+
+      console.log(token);
+    };
+
+    getToken();
+  }, [user]);
+
 
   function viewall() {
     setSelectedOption('transactions');
@@ -317,10 +315,10 @@ fetchAccessToken()
       }
     >
       {/* Button to toggle sidebar on small screens */}
-      {console.log(user)}
+      {/* {console.log(user)}
       {console.log(amount)}
       {console.log(client)}
-      {console.log(profileId)}
+      {console.log(profileId)} */}
       {console.log(bizname)}
     
       <button
@@ -422,25 +420,24 @@ fetchAccessToken()
       {/* Main Content */}
       <div className='lg:flex-1 p-4 '>
         <div className='border-b flex items-center justify-end top-0 z-40  bg-white  fixed w-screen  border-gray-300 mb-4'>
-          <h1 className="text-[12px] lg:text-[16px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-            {baseName ? <div className='flex items-center justify-center gap-[0.5rem]'> 
-              <CopyButton text={baseName} />
-              {baseName}
-              </div>  
-            : 
-            <div className='flex items-center justify-center gap-[0.5rem]'> 
-              <CopyButton text={myString} />
-              {myString}
-              </div>  
-            }
+          <h1 className='text-[12px] lg:text-[16px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent'>
+            {baseName ? (
+              <div className='flex items-center justify-center gap-[0.5rem]'>
+                <CopyButton text={baseName} />
+                {baseName}
+              </div>
+            ) : (
+              <div className='flex items-center justify-center gap-[0.5rem]'>
+                <CopyButton text={myString} />
+                {myString}
+              </div>
+            )}
           </h1>
         </div>
         <div className='p-4 mt-[3rem] lg:ml-[7rem] lg:grid lg:items-center lg:justify-center'>
           {selectedOption === 'dashboard' && (
             <div className='lg:grid   gap-[2rem] lg:gap-[3rem]'>
-              <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>
-                Hi {bizname}{' '}
-              </h2>
+              <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>Hi {bizname} </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
                 <div className='flex flex-col  gap-[1rem] items-center justify-center'>
                   <div
@@ -752,85 +749,85 @@ fetchAccessToken()
                     >
                       Confirm Details
                     </button>
-                    {console.log(wallets)}
+                    {/* {console.log(wallets)} */}
                   </Form>
                 )}
               </Formik>
             </div>
           )}
-       
-        {selectedOption === 'confirm' && (
-          <div className='grid gap-4'>
-            <FaLongArrowAltLeft
-              size={30}
-              onClick={recheck}
-              className='cursor-pointer'
-            />
-            <div className='grid'>
-              <label className='font-[700] text-primary1'>From</label>
-              <input
-                type='text'
-                name='recipient'
-                value={myString}
-                readOnly
-                className='block lg:w-[500px] w-[350px] p-3 border-[1px] text-primary3 border-primary3 rounded-lg'
-              />
-            </div>
-            <div className='grid'>
-              <label className='font-[700] text-primary1'>To</label>
-              <input
-                type='text'
-                name='recipient'
-                value={recipient}
-                readOnly
-                className='block  lg:w-[500px] w-[350px] text-primary3 p-3 border-[1px] border-primary3 rounded-lg'
-              />
-            </div>
-            <h4 className='text-primary2'>
-              (please ensure details are correct)
-            </h4>
-            <div className='grid'>
-              <label>Amount</label>
-              <h2 className='font-[700] text-[36px] text-primary1'>
-                {amount}ETH
-              </h2>
-            </div>
-            <button
-              type='submit'
-              className={
-                'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
-              }
-              onClick={sendUSDC}
-            >
-              Send
-            </button>
-          </div>
-        )}
 
-        {/* damilare this is the beginning of the invoice section */}
-        {/* awesome _(^-^)_ */}
-        {selectedOption === 'invoice' && (
-          <div className='grid lg:gap-[4rem] gap-[3rem]'>
-            <div className='grid gap-[0.5rem]'>
-              <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
-                Invoice #1
-              </h2>
-              <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
-                Fill the information below
-              </h3>
-            </div>
-            <div className='grid lg:gap-[2rem] gap-[1.5rem]'>
+          {selectedOption === 'confirm' && (
+            <div className='grid gap-4'>
+              <FaLongArrowAltLeft
+                size={30}
+                onClick={recheck}
+                className='cursor-pointer'
+              />
               <div className='grid'>
-                <label>Your customers name</label>
+                <label className='font-[700] text-primary1'>From</label>
                 <input
                   type='text'
-                  name='name'
-                  value={name}
-                  onChange={(e) => setname(e.target.value)}
-                  placeholder='Name here'
-                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  name='recipient'
+                  value={myString}
+                  readOnly
+                  className='block lg:w-[500px] w-[350px] p-3 border-[1px] text-primary3 border-primary3 rounded-lg'
                 />
               </div>
+              <div className='grid'>
+                <label className='font-[700] text-primary1'>To</label>
+                <input
+                  type='text'
+                  name='recipient'
+                  value={recipient}
+                  readOnly
+                  className='block  lg:w-[500px] w-[350px] text-primary3 p-3 border-[1px] border-primary3 rounded-lg'
+                />
+              </div>
+              <h4 className='text-primary2'>
+                (please ensure details are correct)
+              </h4>
+              <div className='grid'>
+                <label>Amount</label>
+                <h2 className='font-[700] text-[36px] text-primary1'>
+                  {amount}ETH
+                </h2>
+              </div>
+              <button
+                type='submit'
+                className={
+                  'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
+                }
+                onClick={sendUSDC}
+              >
+                Send
+              </button>
+            </div>
+          )}
+
+          {/* damilare this is the beginning of the invoice section */}
+          {/* awesome _(^-^)_ */}
+          {selectedOption === 'invoice' && (
+            <div className='grid lg:gap-[4rem] gap-[3rem]'>
+              <div className='grid gap-[0.5rem]'>
+                <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
+                  Invoice #1
+                </h2>
+                <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
+                  Fill the information below
+                </h3>
+              </div>
+              <div className='grid lg:gap-[2rem] gap-[1.5rem]'>
+                <div className='grid'>
+                  <label>Your customers name</label>
+                  <input
+                    type='text'
+                    name='name'
+                    value={name}
+                    onChange={(e) => setname(e.target.value)}
+                    placeholder='Name here'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  />
+                </div>
 
               <div className='grid'>
                 <label>Choose your payment network</label>
@@ -972,6 +969,137 @@ fetchAccessToken()
         )}
         {/* The end of the invoice section */}
        
+                <div className='grid'>
+                  <label>Choose your payment network</label>
+                  <input
+                    type='text'
+                    name='Base'
+                    value={depositPaymentNetwork}
+                    readOnly
+                    className='block text-primary3 lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                  />
+                </div>
+                <div className='grid'>
+                  <label>Invoice Currency</label>
+                  <input
+                    type='text'
+                    name='USDC'
+                    value={depositCurrency}
+                    readOnly
+                    className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                  />
+                </div>
+                <div className='grid'>
+                  <label>Amount(IN USDC)</label>
+                  <input
+                    type='number'
+                    name='name'
+                    value={depoamt}
+                    onChange={(e) => setdeopamt(parseFloat(e.target.value))}
+                    placeholder='0.00'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  />
+                  {/* {console.log(depoamt)} */}
+                  <h3>N{equi}</h3>
+                </div>
+                <div className='grid'>
+                  <label>Description</label>
+                  <input
+                    type='text'
+                    name='name'
+                    value={descript}
+                    onChange={(e) => setdescript(e.target.value)}
+                    placeholder='What is the payment for'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  />
+                </div>
+                <button
+                  type='submit'
+                  disabled={depoamt <= 0 || !descript || !name || !depoamt}
+                  className={
+                    depoamt <= 0 || !descript || !name || !depoamt
+                      ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-2xl duration-500 lg:w-[300px] w-[200px]'
+                      : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                  }
+                  onClick={handleCompleteInvoice}
+                >
+                  Generate Invoice
+                </button>
+              </div>
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel='Example Modal'
+                style={{
+                  content: {
+                    top: '49%',
+                    left: '50%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    marginRight: '-50%',
+                    transform: 'translate(-50%, -50%)',
+                  },
+                }}
+              >
+                <div className='grid lg:gap-[2rem] gap-[2rem]'>
+                  <div className='flex items-center gap-[5rem] justify-between'>
+                    <h2 className='lg:text-[24px] text-[16px] font-[700] text-primary1 '>
+                      Payment Link Details
+                    </h2>
+                    <button onClick={closeModal}>
+                      <IoCloseCircleOutline size={20} />
+                    </button>
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>Amount</label>
+                    <input
+                      name=''
+                      value={depoamt + 'USDC'}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] lg:text-[36px] text-[18px] font-[700] p-2 border rounded bg-gray-100 cursor-not-allowed'
+                    />
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Deposit Link
+                    </label>
+                    <div className='flex gap-2 items-center justify-center'>
+                      <input
+                        name=''
+                        value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
+                        readOnly
+                        className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent '
+                      />
+                      <CopyButton text={texttocopy} />
+                    </div>
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Customers Name
+                    </label>
+                    <input
+                      name=''
+                      value={name}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    />
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Description
+                    </label>
+                    <input
+                      name=''
+                      value={descript}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    />
+                  </div>
+                </div>
+              </Modal>
+            </div>
+          )}
+          {/* The end of the invoice section */}
         </div>
       </div>
      
