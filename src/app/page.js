@@ -19,16 +19,14 @@ import Steps from '@/components/steps';
 import Ready from '@/components/ready';
 import Footer from '@/components/footer';
 import { getBasename } from './basename/getbasename';
-import Modal from 'react-modal'
-import baselogo from "../assests/baselogo.png"
-import { IoCloseCircleOutline } from "react-icons/io5";
-import { IoMdClose } from "react-icons/io"
+import Modal from 'react-modal';
+import baselogo from '../assests/baselogo.png';
+import { IoCloseCircleOutline } from 'react-icons/io5';
+import { IoMdClose } from 'react-icons/io';
 import { ClipLoader } from 'react-spinners';
 import { useSelector } from 'react-redux';
 
 export default function Home() {
-  
- 
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [step, Setstep] = useState('');
   const [trackadd, settrackadd] = useState(null);
@@ -41,15 +39,8 @@ export default function Home() {
   const [buiss, setbuiss] = useState('');
   const [prof, setprof] = useState('');
 
-  const {
-    login,
-    isLoggedIn,
-    user,
-    privy,
-    ready,
-    authenticated,
-    logout,
-  } = usePrivy();
+  const { login, isLoggedIn, user, privy, ready, authenticated, logout } =
+    usePrivy();
   const Navigate = useRouter();
   const Dispatch = useDispatch();
 
@@ -59,20 +50,21 @@ export default function Home() {
       Modal.setAppElement(appElement);
     }
     if (ready && authenticated && user) {
-      setloader2(true)
-      Dispatch(setMybuisnessname(buiss))
-    Dispatch(setProfileId(prof));
-      getWalletNetworkAndChainId();  
+      setloader2(true);
+      Dispatch(setMybuisnessname(buiss));
+      Dispatch(setProfileId(prof));
+      getWalletNetworkAndChainId();
       {
         console.log('User is logged in:', user.wallet);
         console.log(user.wallet?.chainType);
       }
     }
-  }, [ready, authenticated, user,step, buiss,prof]);
+  }, [ready, authenticated, user, step, buiss, prof]);
 
   useEffect(() => {
     if (trackadd !== null && usdcBalance !== null) {
-      move();}
+      move();
+    }
   }, [trackadd, usdcBalance]);
 
   const fetchprofile = async () => {
@@ -98,12 +90,12 @@ export default function Home() {
             const res = data.statusCode;
             console.log(res);
             const bizname = data.data.businessName;
-            setbuiss(data.data.businessName)
-            Dispatch(setMybuisnessname(buiss))
-            console.log(bizname)
-            Dispatch(setProfileId(data.data._id))
-            setprof(data.data._id)
-            console.log(data.data._id)
+            setbuiss(data.data.businessName);
+            Dispatch(setMybuisnessname(buiss));
+            console.log(bizname);
+            Dispatch(setProfileId(data.data._id));
+            setprof(data.data._id);
+            console.log(data.data._id);
             console.log(data.data);
             move();
           } else move2();
@@ -168,7 +160,7 @@ export default function Home() {
       Dispatch(setMyNumber(final));
       Dispatch(setMyString(user.wallet.address));
       Dispatch(setvalue(user.wallet.walletClientType));
-      
+
       console.log(bal);
     } catch (error) {
       console.error('Error fetching ETH to USDC price:', error);
@@ -180,13 +172,13 @@ export default function Home() {
         user.wallet.walletClientType === 'privy' ||
         user.wallet.chainId === 'eip155:8453'
       ) {
-       fetchbase()
-if (step === 'yes' || user.wallet.walletClientType === 'privy') {
-  fetchEthToUsdcPrice();
-  fetchprofile();
-}else if(step==='no')  {
-  openm()
-}
+        fetchbase();
+        if (step === 'yes' || user.wallet.walletClientType === 'privy') {
+          fetchEthToUsdcPrice();
+          fetchprofile();
+        } else if (step === 'no') {
+          openm();
+        }
       } else {
         alert(
           'This wallet is not connected to the Base network. Please switch to it.'
@@ -204,111 +196,121 @@ if (step === 'yes' || user.wallet.walletClientType === 'privy') {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   function handlecontinue() {
-    setloader(true)
+    setloader(true);
     fetchEthToUsdcPrice();
     fetchprofile();
- 
   }
   const fetchbase = async () => {
     try {
       const basename5 = await getBasename(user.wallet.address);
-        const val = basename5.name;
-        if (val.length) {
-          setbasename(val);
-          console.log(val);
-          console.log(basename5);
-          console.log(basename)
-          Setstep('yes')
-          console.log(step)
-        } else {
-          setbasename('')
-          Setstep('no')
-          console.log(step)
-        }
-       
+      const val = basename5.name;
+      if (val.length) {
+        setbasename(val);
+        console.log(val);
+        console.log(basename5);
+        console.log(basename);
+        Setstep('yes');
+        console.log(step);
+      } else {
+        setbasename('');
+        Setstep('no');
+        console.log(step);
       }
-     catch (error) {
-      Setstep('no')
+    } catch (error) {
+      Setstep('no');
       console.error(error); // Handle any errors
     }
   };
   function openm() {
-      setModalIsOpen(true)
-   }
-   function redirectt() {
+    setModalIsOpen(true);
+  }
+  function redirectt() {
     fetchEthToUsdcPrice();
     fetchprofile();
- }
- 
+  }
+
   return (
     <div className='flex flex-col gap-[6.5rem] lg:gap-[5rem] overflow-hidden py-[1rem] px-[0.2rem]'>
       {console.log(usdcAmount)}
       {console.log(bal)}
       {console.log(step)}
-      {
-          loader2 === true ?  <div className='flex items-center justify-center absolute left-[45%] top-[30%] ' >
+      {loader2 === true ? (
+        <div className='flex items-center justify-center absolute left-[45%] top-[30%] '>
           <ClipLoader
-          color='blue'
-          size={100}
-          aria-label='Loading Spinner'
-          data-testid='loader'
-        />
-      </div>
-       : ''}
+            color='blue'
+            size={100}
+            aria-label='Loading Spinner'
+            data-testid='loader'
+          />
+        </div>
+      ) : (
+        ''
+      )}
       <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={''}
-              contentLabel='Example Modal'
-              shouldCloseOnOverlayClick={false} 
-              style={{
-                content: {
-                  top: '49%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  marginRight: '-50%',
-                  transform: 'translate(-50%, -50%)',
-                }, }}
-            >
-              { loader == true ?
-               <ClipLoader
-               color='blue'
-               size={100}
-               aria-label='Loading Spinner'
-               data-testid='loader'
-             />
-             :
-               <div className='grid  lg:gap-[3rem] gap-[2rem] '>
-               <div className='flex flex-row items-center justify-between'>
-               <div>
+        isOpen={modalIsOpen}
+        onRequestClose={''}
+        contentLabel='Example Modal'
+        shouldCloseOnOverlayClick={false}
+        style={{
+          content: {
+            top: '49%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+          },
+        }}
+      >
+        {loader == true ? (
+          <ClipLoader
+            color='blue'
+            size={100}
+            aria-label='Loading Spinner'
+            data-testid='loader'
+          />
+        ) : (
+          <div className='grid  lg:gap-[3rem] gap-[2rem] '>
+            <div className='flex flex-row items-center justify-between'>
+              <div></div>
+              <div
+                className='rounded-[50%] flex items-center w-[30px] h-[30px] justify-center border-[2px] cursor-pointer border-primary1'
+                onClick={handlecontinue}
+              >
+                <IoMdClose
+                  size={25}
+                  color='black'
+                  className=' items-center justify-center flex '
+                />
+              </div>
+            </div>
+            <div className='flex flex-col items-center justify-center gap-[0.5rem] lg:gap-[1.3rem]'>
+              <Image src={baselogo} alt='baselogo' width={60} height={60} />
+              <h3 className='lg:text-[20px] text-[16px] text-primary1 lg:font-[700] font-[500] '>
+                Get a base name
+              </h3>
+              <h3 className='lg:text-[16px] text-[14px] text-primary2 lg:font-[500] font-[400] text-center '>
+                Do you have a base name connected to<br></br> your external
+                wallet? Lets help you.
+              </h3>
+            </div>
 
-               </div>
-               <div className='rounded-[50%] flex items-center w-[30px] h-[30px] justify-center border-[2px] cursor-pointer border-primary1' onClick={handlecontinue}>
-               <IoMdClose size={25} color='black' className=" items-center justify-center flex "   />
-               </div>
-               </div>
-               <div className='flex flex-col items-center justify-center gap-[0.5rem] lg:gap-[1.3rem]'>
-               <Image 
-               src={baselogo}
-               alt='baselogo'
-               width={60}
-               height={60}
-               />
-               <h3 className='lg:text-[20px] text-[16px] text-primary1 lg:font-[700] font-[500] '>Get a base name</h3>
-               <h3 className='lg:text-[16px] text-[14px] text-primary2 lg:font-[500] font-[400] text-center '>Do you have a base name connected to<br></br> your external wallet? Lets help you.</h3>
-               </div>
-              
-               <a href='https://Base.org' target='_blank'  className='flex items-center justify-center'  onClick={redirectt}>  
-               <button
-                 className='bg-black border-[2px] border-primary4 lg:w-[250px]  w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
-            
-                >
-                    <h4 className=' text-white font-[500] lg:text-[17px] text-[14px]'> Get a base name </h4> 
-                </button>
-                </a> 
-               </div>
-               }
-            </Modal>
+            <a
+              href='https://Base.org'
+              target='_blank'
+              className='flex items-center justify-center'
+              onClick={redirectt}
+            >
+              <button className='bg-black border-[2px] border-primary4 lg:w-[250px]  w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'>
+                <h4 className=' text-white font-[500] lg:text-[17px] text-[14px]'>
+                  {' '}
+                  Get a base name{' '}
+                </h4>
+              </button>
+            </a>
+          </div>
+        )}
+      </Modal>
       <div className=' flex flex-row justify-between items-center mt-[0rem] lg:mt-[1rem] mx-[0.5rem] lg:mx-[3rem]'>
         <div className='flex items-center justify-center  '>
           <Image
@@ -319,7 +321,7 @@ if (step === 'yes' || user.wallet.walletClientType === 'privy') {
             className='lg:w-[200px] w-[130px]'
           />
         </div>
-        <button
+        {/* <button
           type='submit'
           onClick={handleAuthClick}
           className={
@@ -327,7 +329,7 @@ if (step === 'yes' || user.wallet.walletClientType === 'privy') {
           }
         >
           Get Started
-        </button>
+        </button> */}
       </div>
       <Waitlist />
       <Steps />
