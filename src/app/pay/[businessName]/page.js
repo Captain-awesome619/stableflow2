@@ -51,7 +51,6 @@ export default function PayPage() {
       chain: base,
       amount: amount,
       asset: currency,
-      
     });
   };
 
