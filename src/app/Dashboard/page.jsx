@@ -11,7 +11,6 @@ import logo from '../../assests/logo.png';
 import { IoMdClose } from 'react-icons/io';
 import { parseEther } from 'ethers';
 import { FaNairaSign } from 'react-icons/fa6';
-
 import DataTable from '@/components/table';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
@@ -32,6 +31,11 @@ import CryptoPage from '@/components/rate';
 import CopyButton from '@/components/copy';
 import { PiHandWithdraw } from 'react-icons/pi';
 import { IoReceiptOutline } from 'react-icons/io5';
+import ClipLoader from "react-spinners/ClipLoader"
+import Transactionhistory from '@/components/transactionhistory';
+import base from '../../assests/base.png'
+import usdc from '../../assests/usdc.png'
+import { TbCurrencyEthereum } from "react-icons/tb";
 
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
@@ -60,6 +64,7 @@ const WalletInfo = () => {
       // console.log(ethToUsdcConversionRate);
       setusdcconversion(ethToUsdcConversionRate);
       const weiBalance = await getBalance(user.wallet.address);
+      console.log(weiBalance)
       const figg = weiBalance.ether;
       const num = parseFloat(figg);
       // console.log(num);
@@ -72,6 +77,8 @@ const WalletInfo = () => {
       console.error('Error fetching ETH to USDC price:', error);
     }
   };
+ 
+  const [accessToken, setAccessToken] = useState('');
   const bizname = useSelector((state) => state.businessname);
   const profileId = useSelector((state) => state.profileId);
   const myString = useSelector((state) => state.myString);
@@ -93,6 +100,7 @@ const WalletInfo = () => {
   const [usdcconversion, setusdcconversion] = useState(0.0);
   const [depositPaymentNetwork, setDepositPaymentNetwork] = useState('Base');
   const [depositCurrency, setDepositCurrency] = useState('USDC');
+  const [transacthistory, settransacthistory] = useState(null);
   const { logout } = usePrivy();
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -103,7 +111,44 @@ const WalletInfo = () => {
     await logout();
     Navigate.push('/');
   };
-
+ const {getAccessToken} = usePrivy()
+  const fetchAccessToken = async () => {
+    try {
+      const token = await getAccessToken();
+      setAccessToken(token);
+      console.log("Access Token:", token);
+    } catch (error) {
+      console.error("Failed to get access token:", error);
+    }
+  };
+  const fetchData = async () => {
+      try {
+        fetch('https://stableflow.onrender.com/payment', {
+          method: "GET", 
+          headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+          }
+        })
+        .then((response) => {
+          if (!response) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+.then((data) => {
+  if (data) {
+    console.log("Data fetched successfully:", data);
+   const msg = data.message
+   const log = data.data
+   settransacthistory(log)
+    console.log(transacthistory)
+    console.log(log)
+  }})
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } 
+  };
   const handleCompleteInvoice = async (event) => {
     event.preventDefault();
     try {
@@ -124,7 +169,6 @@ const WalletInfo = () => {
         },
         body: JSON.stringify(body),
       });
-
       const data = await response.json();
       // console.log(data);
       if (data.statusCode === 200) {
@@ -137,7 +181,6 @@ const WalletInfo = () => {
       // console.log(error);
     }
   };
-
   const fetchbase = async () => {
     try {
       const address = myString;
@@ -156,10 +199,12 @@ const WalletInfo = () => {
       Modal.setAppElement(appElement);
     }
     fetchbase();
+fetchAccessToken()
   }, []);
+
   useEffect(() => {
-    const withdrawconvert = amount * usdcconversion;
-    setequi2(withdrawconvert);
+   const withdrawconvert = amount * usdcconversion
+   setequi2(withdrawconvert)
   }, [amount]);
   const fetchConversionRate = async () => {
     try {
@@ -173,11 +218,10 @@ const WalletInfo = () => {
       console.error('Error fetching conversion rate:', error);
     }
   };
-
   useEffect(() => {
     fetchEthToUsdcPrice();
     fetchConversionRate();
-    const intervalId = setInterval(fetchConversionRate, 100000);
+    const intervalId = setInterval(() =>{ fetchConversionRate(); fetchEthToUsdcPrice();}, 5 * 60 * 1000);
     // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [myNum]);
@@ -258,6 +302,10 @@ const WalletInfo = () => {
     getToken();
   }, [user]);
 
+
+  function viewall() {
+    setSelectedOption('transactions');
+  }
   return (
     <div
       className={
@@ -271,6 +319,8 @@ const WalletInfo = () => {
       {console.log(amount)}
       {console.log(client)}
       {console.log(profileId)} */}
+      {console.log(bizname)}
+    
       <button
         className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -503,7 +553,7 @@ const WalletInfo = () => {
               </div>
               <div className='flex flex-row items-center justify-center gap-[1rem] pb-[3rem] lg:hidden'>
                 <button
-                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-3xl text-white'
                   onClick={() => handleOptionSelect('invoice')}
                 >
                   <IoReceiptOutline size={20} className='text-white' />
@@ -514,7 +564,7 @@ const WalletInfo = () => {
                 </button>
 
                 <button
-                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-2xl text-white'
+                  className='bg-primary4 border-[2px] border-primary4 w-[150px]  flex  gap-[0.5rem] items-center justify-center h-[50px] cursor-pointer  py-2 rounded-3xl text-white'
                   onClick={() => handleOptionSelect('withdraw')}
                 >
                   <PiHandWithdraw size={20} className='text-white' />
@@ -526,10 +576,20 @@ const WalletInfo = () => {
               </div>
 
               <CryptoPage />
-
-              <div className='  pt-[2rem]  lg:pt-[0rem] '>
-                <DataTable />
-              </div>
+  {transacthistory ? (
+         <div className='  pt-[2rem]  lg:pt-[0rem] '>
+         <DataTable transacthistory={transacthistory} viewall={viewall} />
+       </div>
+      ) : (
+        <ClipLoader
+        color="blue"
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className='absolute top-[35%] left-[45%] '
+      />
+      )}
+             
             </div>
           )}
           {selectedOption === 'invoices' && (
@@ -540,8 +600,19 @@ const WalletInfo = () => {
           )}
           {selectedOption === 'transactions' && (
             <div>
-              <h2 className='text-xl'>Transaction History </h2>
-              <p>This page is being worked on</p>
+             {transacthistory ? (
+         <div>
+         <Transactionhistory transacthistory={transacthistory} />
+       </div>
+      ) : (
+        <ClipLoader
+        color="blue"
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        className='absolute top-[35%] left-[45%] '
+      />
+      )}
             </div>
           )}
           {selectedOption === 'settings' && (
@@ -605,7 +676,7 @@ const WalletInfo = () => {
                 {({ isSubmitting }) => (
                   <Form className='space-y-4'>
                     <div className='grid'>
-                      <label>Sender's Address</label>
+                      <label>Send from</label>
                       <input
                         type='text'
                         name='sender'
@@ -616,26 +687,30 @@ const WalletInfo = () => {
                     </div>
                     <div className='grid'>
                       <label>Network</label>
-                      <input
-                        type='text'
-                        name='network'
-                        value='Base'
-                        readOnly
-                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      />
+                      <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={base}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      Base
+                        </div>
                     </div>
                     <div className='grid'>
                       <label>Currency</label>
-                      <input
-                        type='text'
-                        name='currency'
-                        value='ETH for now (USDC Soon)'
-                        readOnly
-                        className='text-primary3 block lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      />
+                      <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.2rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+          <TbCurrencyEthereum size={25} />
+                        ETH for now (USDC Soon)
+                       
+                        </div>
                     </div>
                     <div className='grid'>
-                      <label>Recipient Address</label>
+                      <label>Send to</label>
                       <input
                         type='text'
                         name='recipient'
@@ -667,8 +742,8 @@ const WalletInfo = () => {
                       disabled={!amount || amount == 0 || !recipient}
                       className={
                         !amount || amount == 0 || !recipient
-                          ? 'cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
-                          : 'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                          ? 'cursor-not-allowed opacity-[0.4] px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-[200px]'
+                          : 'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-[200px]'
                       }
                       onClick={handleSubmit}
                     >
@@ -720,7 +795,7 @@ const WalletInfo = () => {
               <button
                 type='submit'
                 className={
-                  'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-2xl lg:w-[300px] w-[200px]'
+                  'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
                 }
                 onClick={sendUSDC}
               >
@@ -735,7 +810,7 @@ const WalletInfo = () => {
             <div className='grid lg:gap-[4rem] gap-[3rem]'>
               <div className='grid gap-[0.5rem]'>
                 <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
-                  #Invoice
+                  Invoice #1
                 </h2>
                 <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
                   Fill the information below
@@ -754,6 +829,146 @@ const WalletInfo = () => {
                   />
                 </div>
 
+              <div className='grid'>
+                <label>Choose your payment network</label>
+                <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={base}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      Base
+                        </div>
+              </div>
+              <div className='grid'>
+                <label>Invoice Currency</label>
+                <div
+                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
+                      >
+                       <Image
+                       src={usdc}
+                       alt = 'logo'
+                       width={22}
+                       height={20}
+                       /> 
+                      USDC
+                        </div>
+              </div>
+              <div className='grid'>
+                <label>Amount(IN USDC)</label>
+                <input
+                  type='number'
+                  name='name'
+                  value={depoamt}
+                  onChange={(e) => setdeopamt(parseFloat(e.target.value))}
+                  placeholder='0.00'
+                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                />
+                {console.log(depoamt)}
+                <h3>N{equi}</h3>
+              </div>
+              <div className='grid'>
+                <label>Description</label>
+                <input
+                  type='text'
+                  name='name'
+                  value={descript}
+                  onChange={(e) => setdescript(e.target.value)}
+                  placeholder='What are they paying for'
+                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                />
+              </div>
+              <button
+                type='submit'
+                disabled={depoamt <= 0 || !descript || !name || !depoamt}
+                className={
+                  depoamt <= 0 || !descript || !name || !depoamt
+                    ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-3xl duration-500 lg:w-[300px] w-full'
+                    : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
+                }
+                onClick={handleCompleteInvoice}
+              >
+                Generate Invoice
+              </button>
+            </div>
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel='Example Modal'
+              style={{
+                content: {
+                  top: '49%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  marginRight: '-50%',
+                  transform: 'translate(-50%, -50%)',
+                },
+              }}
+            >
+              <div className='grid lg:gap-[2rem] gap-[2rem]'>
+                <div className='flex items-center gap-[5rem] justify-between'>
+                  <h2 className='lg:text-[24px] text-[16px] font-[700] text-primary1 '>
+                    Payment Link Details
+                  </h2>
+                  <button onClick={closeModal}>
+                    <IoCloseCircleOutline size={20} />
+                  </button>
+                </div>
+                <div className='grid'>
+                  <label className='text-[#808080] text-[14px]'>Amount</label>
+                  <input
+                    name=''
+                    value={depoamt + 'USDC'}
+                    readOnly
+                    className='block lg:w-[500px] w-[350px] lg:text-[36px] text-[18px] font-[700] p-2 border rounded bg-gray-100 cursor-not-allowed'
+                  />
+                </div>
+                <div className='grid'>
+                  <label className='text-[#808080] text-[14px]'>
+                    Deposit Link
+                  </label>
+                  <div className='flex gap-2 items-center justify-center'>
+                    <input
+                      name=''
+                      value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent '
+                    />
+                    <CopyButton text={texttocopy} />
+                  </div>
+                </div>
+                <div className='grid'>
+                  <label className='text-[#808080] text-[14px]'>
+                    Customers Name
+                  </label>
+                  <input
+                    name=''
+                    value={name}
+                    readOnly
+                    className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                  />
+                </div>
+                <div className='grid'>
+                  <label className='text-[#808080] text-[14px]'>
+                    Description
+                  </label>
+                  <input
+                    name=''
+                    value={descript}
+                    readOnly
+                    className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                  />
+                </div>
+              </div>
+            </Modal>
+          </div>
+        )}
+        {/* The end of the invoice section */}
+       
                 <div className='grid'>
                   <label>Choose your payment network</label>
                   <input
@@ -887,6 +1102,8 @@ const WalletInfo = () => {
           {/* The end of the invoice section */}
         </div>
       </div>
+     
+
     </div>
   );
 };

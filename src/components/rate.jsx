@@ -20,6 +20,7 @@ export default function CryptoPage() {
         const data = await response.json();
         setCryptoData(data);
         setLoading(false);
+        
       } catch (error) {
         console.error('Error fetching crypto data:', error);
         setLoading(false);
@@ -38,16 +39,20 @@ export default function CryptoPage() {
     className='absolute top-[35%] left-[45%] '
   /></div>;
   }
-
+  const filteredCryptoData = cryptoData.filter((crypto) =>
+    ['bitcoin', 'ethereum', 'tether'].includes(crypto.id)
+  );
   return (
     <div className="lg:p-6 grid grid-cols-1 lg:items-center lg:justify-center sm:grid-cols-2 lg:grid-cols-3 gap-4">
        <h2 className='primary lg:hidden block font-[700] text-[17px] '>Market Rates</h2>
       {cryptoData.map((coin) => (
          <>
         <div
+        
           key={coin.id}
           className="bg-white border hidden lg:block   border-gray-200 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300"
         >
+        {console.log(coin)}
           <div className="flex items-center mb-4">
             <img src={coin.image} alt={`${coin.name} logo`} className="w-10 h-10 mr-3" />
             <h2 className="lg:text-lg text-[16px] font-semibold">{coin.name}</h2>
@@ -64,28 +69,28 @@ export default function CryptoPage() {
             {coin.price_change_percentage_24h.toFixed(2)}%
           </p>
         </div>
-        <div className='lg:hidden grid gap-[1rem]'>
-       
+        </>
+    ))}
+    { filteredCryptoData.map((crypto) => (
+        <div className='lg:hidden grid gap-[1rem]' key={crypto.id}>
         <div className='flex items-center justify-between  '>
         <div className=' bg-primary4 w-[150px]   h-[50px] rounded-2xl flex gap-[0.5rem] jus items-center '>
-        <img src={coin.image} alt={`${coin.name} logo`} className="w-[35px] h-[30px] pl-[0.5rem]  " />
-        <h2 className='text-[13px] text-white font-[700] ' > {coin.symbol.toUpperCase()}</h2>
-        <p className="flex items-center justify-center text-[13px] font-bold text-white ">${coin.current_price.toFixed(1)}</p>
+        <img src={crypto.image} alt={`${crypto.name} logo`} className="w-[35px] h-[30px] pl-[0.5rem]  " />
+        <h2 className='text-[13px] text-white font-[700] ' > {crypto.symbol.toUpperCase()}</h2>
+        <p className="flex items-center justify-center text-[13px] font-bold text-white ">${crypto.current_price.toFixed(1)}</p>
         </div>
         <p
             className={`text-sm font-medium ${
-              coin.price_change_percentage_24h > 0
+              crypto.price_change_percentage_24h > 0
                 ? 'text-green-500'
                 : 'text-red-500'
             }`}
           >
-            {coin.price_change_percentage_24h.toFixed(2)}%
+            {crypto.price_change_percentage_24h.toFixed(2)}%
           </p>
         </div>
         </div>
-        </>
-      
-      ))}
+))}
     </div>
   );
 }

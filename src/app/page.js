@@ -24,16 +24,22 @@ import baselogo from "../assests/baselogo.png"
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io"
 import { ClipLoader } from 'react-spinners';
+import { useSelector } from 'react-redux';
+
 export default function Home() {
+  
+ 
   const [usdcBalance, setUsdcBalance] = useState(null);
   const [step, Setstep] = useState('');
- 
   const [trackadd, settrackadd] = useState(null);
   const [bal, setbal] = useState(0);
   const [basename, setbasename] = useState('');
   const [usdcAmount, setUsdcAmount] = useState(0);
   const [conversionRate, setConversionRate] = useState(0);
   const [loader, setloader] = useState(false);
+  const [loader2, setloader2] = useState(false);
+  const [buiss, setbuiss] = useState('');
+  const [prof, setprof] = useState('');
 
   const {
     login,
@@ -43,7 +49,6 @@ export default function Home() {
     ready,
     authenticated,
     logout,
-    connectWallet,
   } = usePrivy();
   const Navigate = useRouter();
   const Dispatch = useDispatch();
@@ -54,18 +59,20 @@ export default function Home() {
       Modal.setAppElement(appElement);
     }
     if (ready && authenticated && user) {
-      getWalletNetworkAndChainId();
+      setloader2(true)
+      Dispatch(setMybuisnessname(buiss))
+    Dispatch(setProfileId(prof));
+      getWalletNetworkAndChainId();  
       {
         console.log('User is logged in:', user.wallet);
         console.log(user.wallet?.chainType);
       }
     }
-  }, [ready, authenticated, user,step]);
+  }, [ready, authenticated, user,step, buiss,prof]);
 
   useEffect(() => {
     if (trackadd !== null && usdcBalance !== null) {
-      move();
-    }
+      move();}
   }, [trackadd, usdcBalance]);
 
   const fetchprofile = async () => {
@@ -91,9 +98,13 @@ export default function Home() {
             const res = data.statusCode;
             console.log(res);
             const bizname = data.data.businessName;
-            Dispatch(setProfileId(data.data._id));
+            setbuiss(data.data.businessName)
+            Dispatch(setMybuisnessname(buiss))
+            console.log(bizname)
+            Dispatch(setProfileId(data.data._id))
+            setprof(data.data._id)
+            console.log(data.data._id)
             console.log(data.data);
-            Dispatch(setMybuisnessname(bizname));
             move();
           } else move2();
         } else {
@@ -115,6 +126,7 @@ export default function Home() {
   function move() {
     Navigate.push('/Dashboard');
   }
+
   function back() {
     Navigate.push('/');
   }
@@ -156,6 +168,7 @@ export default function Home() {
       Dispatch(setMyNumber(final));
       Dispatch(setMyString(user.wallet.address));
       Dispatch(setvalue(user.wallet.walletClientType));
+      
       console.log(bal);
     } catch (error) {
       console.error('Error fetching ETH to USDC price:', error);
@@ -168,7 +181,7 @@ export default function Home() {
         user.wallet.chainId === 'eip155:8453'
       ) {
        fetchbase()
-if (step === 'yes') {
+if (step === 'yes' || user.wallet.walletClientType === 'privy') {
   fetchEthToUsdcPrice();
   fetchprofile();
 }else if(step==='no')  {
@@ -194,7 +207,7 @@ if (step === 'yes') {
     setloader(true)
     fetchEthToUsdcPrice();
     fetchprofile();
-    
+ 
   }
   const fetchbase = async () => {
     try {
@@ -223,15 +236,25 @@ if (step === 'yes') {
       setModalIsOpen(true)
    }
    function redirectt() {
-  
     fetchEthToUsdcPrice();
     fetchprofile();
  }
+ 
   return (
     <div className='flex flex-col gap-[6.5rem] lg:gap-[5rem] overflow-hidden py-[1rem] px-[0.2rem]'>
       {console.log(usdcAmount)}
       {console.log(bal)}
       {console.log(step)}
+      {
+          loader2 === true ?  <div className='flex items-center justify-center absolute left-[45%] top-[30%] ' >
+          <ClipLoader
+          color='blue'
+          size={100}
+          aria-label='Loading Spinner'
+          data-testid='loader'
+        />
+      </div>
+       : ''}
       <Modal
               isOpen={modalIsOpen}
               onRequestClose={''}
@@ -245,8 +268,7 @@ if (step === 'yes') {
                   bottom: 'auto',
                   marginRight: '-50%',
                   transform: 'translate(-50%, -50%)',
-                },
-              }}
+                }, }}
             >
               { loader == true ?
                <ClipLoader

@@ -8,10 +8,9 @@ import { convertReverseNodeToBytes } from './convertnodestobytes';
 import { getAddress } from 'ethers';
 const baseClient = createPublicClient({
     chain: base,
-    transport: http(), // You can also use ws() for WebSocket transport
+    transport: http(), 
 });
 const BASENAME_L2_RESOLVER_ADDRESS = '0xC6d566A56A1aFf6508b41f6c90ff131615583BCD';
-
 export async function getBasename(address) {
     const validAddress = getAddress(address);
     try {
@@ -23,15 +22,11 @@ export async function getBasename(address) {
             args: [addressReverseNode],
         });
         if (basename) {
-            return { name: basename }; // Adjust based on actual data returned
+            return { name: basename }; 
         }
     } catch (error) {
-        // Handle the error accordingly
         console.error('Error resolving Basename:', error);
-    }
-}
-
-
+    }}
 export async function getBasenameAvatar(basename) {
     const avatar = await baseClient.getEnsAvatar({
       name: basename,

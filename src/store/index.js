@@ -14,6 +14,7 @@ const initialState = {
   businessname: '',
   value: '',
   profileId: '',
+  accesstoken: '',
 };
 
 const mySlice = createSlice({
@@ -38,26 +39,25 @@ const mySlice = createSlice({
   },
 });
 
-// Extract actions and reducer
 export const {
   setMyString,
   setMyNumber,
   setMybuisnessname,
   setvalue,
   setProfileId,
+  setaccesstoken
 } = mySlice.actions;
 const rootReducer = mySlice.reducer;
 
-// Persist configuration
+
 const persistConfig = {
   key: 'root',
   storage,
 };
 
-// Create a persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Configure store
+
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>

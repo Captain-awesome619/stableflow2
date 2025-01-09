@@ -1,10 +1,10 @@
 "use client"
 import Moralis from './moralisss'
 let initialized = false;
-export const getBalance = async (address) => {  
+export const getBalance = async (walletaddress) => {  
   try {
     const balance = await Moralis.EvmApi.balance.getNativeBalance({
-      address,
+      address: walletaddress,
       chain:  "8453", // Set this to the chain you are using (e.g., 'eth' for Ethereum)
     });
 
