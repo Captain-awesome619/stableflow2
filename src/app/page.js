@@ -321,7 +321,7 @@ export default function Home() {
             className='lg:w-[200px] w-[130px]'
           />
         </div>
-        {/* <button
+        <button
           type='submit'
           onClick={handleAuthClick}
           className={
@@ -329,7 +329,7 @@ export default function Home() {
           }
         >
           Get Started
-        </button> */}
+        </button>
       </div>
       <Waitlist />
       <Steps />

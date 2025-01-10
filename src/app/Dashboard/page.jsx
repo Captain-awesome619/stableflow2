@@ -31,11 +31,12 @@ import CryptoPage from '@/components/rate';
 import CopyButton from '@/components/copy';
 import { PiHandWithdraw } from 'react-icons/pi';
 import { IoReceiptOutline } from 'react-icons/io5';
-import ClipLoader from "react-spinners/ClipLoader"
+import ClipLoader from 'react-spinners/ClipLoader';
 import Transactionhistory from '@/components/transactionhistory';
-import base from '../../assests/base.png'
-import usdc from '../../assests/usdc.png'
-import { TbCurrencyEthereum } from "react-icons/tb";
+import base from '../../assests/base.png';
+import usdc from '../../assests/usdc.png';
+import { TbCurrencyEthereum } from 'react-icons/tb';
+
 const WalletInfo = () => {
   const validationSchema = Yup.object().shape({
     recipient: Yup.string().required('Recipient address is required'),
@@ -61,9 +62,9 @@ const WalletInfo = () => {
       console.log(usdcPrice);
       const ethToUsdcConversionRate = ethPrice / usdcPrice;
       console.log(ethToUsdcConversionRate);
-      setusdcconversion(ethToUsdcConversionRate)
+      setusdcconversion(ethToUsdcConversionRate);
       const weiBalance = await getBalance(user.wallet.address);
-      console.log(weiBalance)
+      console.log(weiBalance);
       const figg = weiBalance.ether;
       const num = parseFloat(figg);
       console.log(num);
@@ -76,7 +77,7 @@ const WalletInfo = () => {
       console.error('Error fetching ETH to USDC price:', error);
     }
   };
- 
+
   const [accessToken, setAccessToken] = useState('');
   const bizname = useSelector((state) => state.businessname);
   const profileId = useSelector((state) => state.profileId);
@@ -92,6 +93,7 @@ const WalletInfo = () => {
   const [nairaAmount, setNairaAmount] = useState(0);
   const [paymentid, setpaymentid] = useState('');
   const [name, setname] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
   const [depoamt, setdeopamt] = useState(0.0);
   const [descript, setdescript] = useState('');
   const [equi, setequi] = useState(0.0);
@@ -110,43 +112,44 @@ const WalletInfo = () => {
     await logout();
     Navigate.push('/');
   };
- const {getAccessToken} = usePrivy()
+  const { getAccessToken } = usePrivy();
   const fetchAccessToken = async () => {
     try {
       const token = await getAccessToken();
       setAccessToken(token);
-      console.log("Access Token:", token);
+      console.log('Access Token:', token);
     } catch (error) {
-      console.error("Failed to get access token:", error);
+      console.error('Failed to get access token:', error);
     }
   };
   const fetchData = async () => {
-      try {
-        fetch('https://stableflow.onrender.com/payment', {
-          method: "GET", 
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-          }
-        })
+    try {
+      fetch('https://stableflow.onrender.com/payment', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
         .then((response) => {
           if (!response) {
             throw new Error('Network response was not ok');
           }
           return response.json();
         })
-.then((data) => {
-  if (data) {
-    console.log("Data fetched successfully:", data);
-   const msg = data.message
-   const log = data.data
-   settransacthistory(log)
-    console.log(transacthistory)
-    console.log(log)
-  }})
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } 
+        .then((data) => {
+          if (data) {
+            console.log('Data fetched successfully:', data);
+            const msg = data.message;
+            const log = data.data;
+            settransacthistory(log);
+            console.log(transacthistory);
+            console.log(log);
+          }
+        });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
   const handleCompleteInvoice = async (event) => {
     event.preventDefault();
@@ -154,6 +157,7 @@ const WalletInfo = () => {
       const body = {
         profileId,
         customerName: name,
+        customerEmail: email,
         paymentNetwork: depositPaymentNetwork,
         currency: depositCurrency,
         amountInUsdc: depoamt,
@@ -165,6 +169,7 @@ const WalletInfo = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(body),
       });
@@ -198,24 +203,24 @@ const WalletInfo = () => {
       Modal.setAppElement(appElement);
     }
     fetchbase();
-fetchAccessToken()
+    fetchAccessToken();
   }, []);
 
   useEffect(() => {
     if (!accessToken) {
-      return
+      return;
     }
-   fetchData()
+    fetchData();
   }, [accessToken]);
 
   useEffect(() => {
     if (transacthistory) {
-      console.log("Updated transacthistory:", transacthistory);
+      console.log('Updated transacthistory:', transacthistory);
     }
   }, [transacthistory]);
   useEffect(() => {
-   const withdrawconvert = amount * usdcconversion
-   setequi2(withdrawconvert)
+    const withdrawconvert = amount * usdcconversion;
+    setequi2(withdrawconvert);
   }, [amount]);
   const fetchConversionRate = async () => {
     try {
@@ -232,7 +237,10 @@ fetchAccessToken()
   useEffect(() => {
     fetchEthToUsdcPrice();
     fetchConversionRate();
-    const intervalId = setInterval(() =>{ fetchConversionRate(); fetchEthToUsdcPrice();}, 5 * 60 * 1000);
+    const intervalId = setInterval(() => {
+      fetchConversionRate();
+      fetchEthToUsdcPrice();
+    }, 5 * 60 * 1000);
     // Fetch rate every minute
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [myNum]);
@@ -270,25 +278,24 @@ fetchAccessToken()
     if (client !== 'privy') {
       alert('Sorry This feature is only available on privy embedded wallets');
     }
-    
-      try {
-        const amountInWei = parseEther(amount);
-        const val = amountInWei.toString();
-        // Create the transaction object
-        const txObject = {
-          to: recipient,
-          value: amountInWei,
-        };
-       
-        const txResponse = await sendTransaction(txObject);
-        console.log('Transaction sent:', txResponse);
-        const txReceipt = await txResponse.wait();
-        console.log('Transaction confirmed:', txReceipt);
-        window.location.reload();
-      } catch (error) {
-        console.error('Transaction failed:', error);
-      }
-    
+
+    try {
+      const amountInWei = parseEther(amount);
+      const val = amountInWei.toString();
+      // Create the transaction object
+      const txObject = {
+        to: recipient,
+        value: amountInWei,
+      };
+
+      const txResponse = await sendTransaction(txObject);
+      console.log('Transaction sent:', txResponse);
+      const txReceipt = await txResponse.wait();
+      console.log('Transaction confirmed:', txReceipt);
+      window.location.reload();
+    } catch (error) {
+      console.error('Transaction failed:', error);
+    }
   };
   const settings = {
     speed: 1000,
@@ -297,13 +304,12 @@ fetchAccessToken()
     infinite: true,
     autoplay: true,
     autoplaySpeed: 7000,
-    
   };
   const texttocopy = `https://stableflow2.vercel.app/pay/${bizname}?paymentid=${paymentid}`;
   const lloc = '/usdcbg.png';
   const lloc2 = '/nariabg.png';
-  const basenam = baseName
-  const wallet = myString
+  const basenam = baseName;
+  const wallet = myString;
 
   function viewall() {
     setSelectedOption('transactions');
@@ -322,7 +328,7 @@ fetchAccessToken()
       {console.log(client)}
       {console.log(profileId)}
       {console.log(bizname)}
-    
+
       <button
         className='md:hidden p-2 text-white   bg-gray-800 fixed top-2 left-1 z-50'
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -422,25 +428,24 @@ fetchAccessToken()
       {/* Main Content */}
       <div className='lg:flex-1 p-4 '>
         <div className='border-b flex items-center justify-end top-0 z-40  bg-white  fixed w-screen  border-gray-300 mb-4'>
-          <h1 className="text-[12px] lg:text-[16px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-            {baseName ? <div className='flex items-center justify-center gap-[0.5rem]'> 
-              <CopyButton text={baseName} />
-              {baseName}
-              </div>  
-            : 
-            <div className='flex items-center justify-center gap-[0.5rem]'> 
-              <CopyButton text={myString} />
-              {myString}
-              </div>  
-            }
+          <h1 className='text-[12px] lg:text-[16px] lg:mr-[3rem] mr-[2rem] bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent'>
+            {baseName ? (
+              <div className='flex items-center justify-center gap-[0.5rem]'>
+                <CopyButton text={baseName} />
+                {baseName}
+              </div>
+            ) : (
+              <div className='flex items-center justify-center gap-[0.5rem]'>
+                <CopyButton text={myString} />
+                {myString}
+              </div>
+            )}
           </h1>
         </div>
         <div className='p-4 mt-[3rem] lg:ml-[7rem] lg:grid lg:items-center lg:justify-center'>
           {selectedOption === 'dashboard' && (
             <div className='lg:grid   gap-[2rem] lg:gap-[3rem]'>
-              <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>
-                Hi {bizname}{' '}
-              </h2>
+              <h2 className='text-xl lg:pb-[0rem] pb-[1rem] '>Hi {bizname} </h2>
               <div className='lg:flex hidden lg:flex-row flex-col gap-[1rem]'>
                 <div className='flex flex-col  gap-[1rem] items-center justify-center'>
                   <div
@@ -579,20 +584,22 @@ fetchAccessToken()
               </div>
 
               <CryptoPage />
-  {transacthistory ? (
-         <div className='  pt-[2rem]  lg:pt-[0rem] '>
-         <DataTable transacthistory={transacthistory} viewall={viewall} />
-       </div>
-      ) : (
-        <ClipLoader
-        color="blue"
-        size={150}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-        className='absolute top-[35%] left-[45%] '
-      />
-      )}
-             
+              {transacthistory ? (
+                <div className='  pt-[2rem]  lg:pt-[0rem] '>
+                  <DataTable
+                    transacthistory={transacthistory}
+                    viewall={viewall}
+                  />
+                </div>
+              ) : (
+                <ClipLoader
+                  color='blue'
+                  size={150}
+                  aria-label='Loading Spinner'
+                  data-testid='loader'
+                  className='absolute top-[35%] left-[45%] '
+                />
+              )}
             </div>
           )}
           {selectedOption === 'invoices' && (
@@ -603,19 +610,19 @@ fetchAccessToken()
           )}
           {selectedOption === 'transactions' && (
             <div>
-             {transacthistory ? (
-         <div>
-         <Transactionhistory transacthistory={transacthistory} />
-       </div>
-      ) : (
-        <ClipLoader
-        color="blue"
-        size={150}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-        className='absolute top-[35%] left-[45%] '
-      />
-      )}
+              {transacthistory ? (
+                <div>
+                  <Transactionhistory transacthistory={transacthistory} />
+                </div>
+              ) : (
+                <ClipLoader
+                  color='blue'
+                  size={150}
+                  aria-label='Loading Spinner'
+                  data-testid='loader'
+                  className='absolute top-[35%] left-[45%] '
+                />
+              )}
             </div>
           )}
           {selectedOption === 'settings' && (
@@ -690,27 +697,17 @@ fetchAccessToken()
                     </div>
                     <div className='grid'>
                       <label>Network</label>
-                      <div
-                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      >
-                       <Image
-                       src={base}
-                       alt = 'logo'
-                       width={22}
-                       height={20}
-                       /> 
-                      Base
-                        </div>
+                      <div className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'>
+                        <Image src={base} alt='logo' width={22} height={20} />
+                        Base
+                      </div>
                     </div>
                     <div className='grid'>
                       <label>Currency</label>
-                      <div
-                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.2rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      >
-          <TbCurrencyEthereum size={25} />
+                      <div className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.2rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'>
+                        <TbCurrencyEthereum size={25} />
                         ETH for now (USDC Soon)
-                       
-                        </div>
+                      </div>
                     </div>
                     <div className='grid'>
                       <label>Send to</label>
@@ -758,224 +755,229 @@ fetchAccessToken()
               </Formik>
             </div>
           )}
-       
-        {selectedOption === 'confirm' && (
-          <div className='grid gap-4'>
-            <FaLongArrowAltLeft
-              size={30}
-              onClick={recheck}
-              className='cursor-pointer'
-            />
-            <div className='grid'>
-              <label className='font-[700] text-primary1'>From</label>
-              <input
-                type='text'
-                name='recipient'
-                value={myString}
-                readOnly
-                className='block lg:w-[500px] w-[350px] p-3 border-[1px] text-primary3 border-primary3 rounded-lg'
-              />
-            </div>
-            <div className='grid'>
-              <label className='font-[700] text-primary1'>To</label>
-              <input
-                type='text'
-                name='recipient'
-                value={recipient}
-                readOnly
-                className='block  lg:w-[500px] w-[350px] text-primary3 p-3 border-[1px] border-primary3 rounded-lg'
-              />
-            </div>
-            <h4 className='text-primary2'>
-              (please ensure details are correct)
-            </h4>
-            <div className='grid'>
-              <label>Amount</label>
-              <h2 className='font-[700] text-[36px] text-primary1'>
-                {amount}ETH
-              </h2>
-            </div>
-            <button
-              type='submit'
-              className={
-                'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
-              }
-              onClick={sendUSDC}
-            >
-              Send
-            </button>
-          </div>
-        )}
 
-        {/* damilare this is the beginning of the invoice section */}
-        {/* awesome _(^-^)_ */}
-        {selectedOption === 'invoice' && (
-          <div className='grid lg:gap-[4rem] gap-[3rem]'>
-            <div className='grid gap-[0.5rem]'>
-              <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
-                Invoice #1
-              </h2>
-              <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
-                Fill the information below
-              </h3>
-            </div>
-            <div className='grid lg:gap-[2rem] gap-[1.5rem]'>
+          {selectedOption === 'confirm' && (
+            <div className='grid gap-4'>
+              <FaLongArrowAltLeft
+                size={30}
+                onClick={recheck}
+                className='cursor-pointer'
+              />
               <div className='grid'>
-                <label>Your customers name</label>
+                <label className='font-[700] text-primary1'>From</label>
                 <input
                   type='text'
-                  name='name'
-                  value={name}
-                  onChange={(e) => setname(e.target.value)}
-                  placeholder='Name here'
-                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  name='recipient'
+                  value={myString}
+                  readOnly
+                  className='block lg:w-[500px] w-[350px] p-3 border-[1px] text-primary3 border-primary3 rounded-lg'
                 />
               </div>
-
               <div className='grid'>
-                <label>Choose your payment network</label>
-                <div
-                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      >
-                       <Image
-                       src={base}
-                       alt = 'logo'
-                       width={22}
-                       height={20}
-                       /> 
-                      Base
-                        </div>
-              </div>
-              <div className='grid'>
-                <label>Invoice Currency</label>
-                <div
-                      className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'
-                      >
-                       <Image
-                       src={usdc}
-                       alt = 'logo'
-                       width={22}
-                       height={20}
-                       /> 
-                      USDC
-                        </div>
-              </div>
-              <div className='grid'>
-                <label>Amount(IN USDC)</label>
-                <input
-                  type='number'
-                  name='name'
-                  value={depoamt}
-                  onChange={(e) => setdeopamt(parseFloat(e.target.value))}
-                  placeholder='0.00'
-                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
-                />
-                {console.log(depoamt)}
-                <h3>N{equi}</h3>
-              </div>
-              <div className='grid'>
-                <label>Description</label>
+                <label className='font-[700] text-primary1'>To</label>
                 <input
                   type='text'
-                  name='name'
-                  value={descript}
-                  onChange={(e) => setdescript(e.target.value)}
-                  placeholder='What are they paying for'
-                  className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  name='recipient'
+                  value={recipient}
+                  readOnly
+                  className='block  lg:w-[500px] w-[350px] text-primary3 p-3 border-[1px] border-primary3 rounded-lg'
                 />
+              </div>
+              <h4 className='text-primary2'>
+                (please ensure details are correct)
+              </h4>
+              <div className='grid'>
+                <label>Amount</label>
+                <h2 className='font-[700] text-[36px] text-primary1'>
+                  {amount}ETH
+                </h2>
               </div>
               <button
                 type='submit'
-                disabled={depoamt <= 0 || !descript || !name || !depoamt}
                 className={
-                  depoamt <= 0 || !descript || !name || !depoamt
-                    ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-3xl duration-500 lg:w-[300px] w-full'
-                    : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
+                  'cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
                 }
-                onClick={handleCompleteInvoice}
+                onClick={sendUSDC}
               >
-                Generate Invoice
+                Send
               </button>
             </div>
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              contentLabel='Example Modal'
-              style={{
-                content: {
-                  top: '49%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  marginRight: '-50%',
-                  transform: 'translate(-50%, -50%)',
-                },
-              }}
-            >
-              <div className='grid lg:gap-[2rem] gap-[2rem]'>
-                <div className='flex items-center gap-[5rem] justify-between'>
-                  <h2 className='lg:text-[24px] text-[16px] font-[700] text-primary1 '>
-                    Payment Link Details
-                  </h2>
-                  <button onClick={closeModal}>
-                    <IoCloseCircleOutline size={20} />
-                  </button>
-                </div>
+          )}
+
+          {/* damilare this is the beginning of the invoice section */}
+          {/* awesome _(^-^)_ */}
+          {selectedOption === 'invoice' && (
+            <div className='grid lg:gap-[4rem] gap-[3rem]'>
+              <div className='grid gap-[0.5rem]'>
+                <h2 className='lg:text-[28px] text-[18px] font-[700] text-primary1'>
+                  Invoice #1
+                </h2>
+                <h3 className='lg:text-[18px] text-[15px] font-[400] text-primary3'>
+                  Fill the information below
+                </h3>
+              </div>
+              <div className='grid lg:gap-[2rem] gap-[1.5rem]'>
                 <div className='grid'>
-                  <label className='text-[#808080] text-[14px]'>Amount</label>
+                  <label>Your customers name</label>
                   <input
-                    name=''
-                    value={depoamt + 'USDC'}
-                    readOnly
-                    className='block lg:w-[500px] w-[350px] lg:text-[36px] text-[18px] font-[700] p-2 border rounded bg-gray-100 cursor-not-allowed'
+                    type='text'
+                    name='name'
+                    value={name}
+                    onChange={(e) => setname(e.target.value)}
+                    placeholder='Name here'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                   />
                 </div>
+
                 <div className='grid'>
-                  <label className='text-[#808080] text-[14px]'>
-                    Deposit Link
-                  </label>
-                  <div className='flex gap-2 items-center justify-center'>
-                    <input
-                      name=''
-                      value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
-                      readOnly
-                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent '
-                    />
-                    <CopyButton text={texttocopy} />
+                  <label>Customer Email</label>
+                  <input
+                    type='text'
+                    name='name'
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    placeholder='Email here'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  />
+                </div>
+
+                <div className='grid'>
+                  <label>Choose your payment network</label>
+                  <div className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'>
+                    <Image src={base} alt='logo' width={22} height={20} />
+                    Base
                   </div>
                 </div>
                 <div className='grid'>
-                  <label className='text-[#808080] text-[14px]'>
-                    Customers Name
-                  </label>
-                  <input
-                    name=''
-                    value={name}
-                    readOnly
-                    className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
-                  />
+                  <label>Invoice Currency</label>
+                  <div className='text-primary3 text-[18px] items-center  flex flex-row gap-[0.5rem]  lg:w-[500px] w-[350px] p-3 border-[1px] border-primary2 focus:outline-none rounded-lg cursor-not-allowed'>
+                    <Image src={usdc} alt='logo' width={22} height={20} />
+                    USDC
+                  </div>
                 </div>
                 <div className='grid'>
-                  <label className='text-[#808080] text-[14px]'>
-                    Description
-                  </label>
+                  <label>Amount(IN USDC)</label>
                   <input
-                    name=''
+                    type='number'
+                    name='name'
+                    value={depoamt}
+                    onChange={(e) => setdeopamt(parseFloat(e.target.value))}
+                    placeholder='0.00'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
+                  />
+                  {console.log(depoamt)}
+                  <h3>N{equi}</h3>
+                </div>
+                <div className='grid'>
+                  <label>Description</label>
+                  <input
+                    type='text'
+                    name='name'
                     value={descript}
-                    readOnly
-                    className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    onChange={(e) => setdescript(e.target.value)}
+                    placeholder='What are they paying for'
+                    className='block lg:w-[500px] placeholder:text-primary1 text-primary1 w-[350px] p-3 border-[2px] border-primary3 rounded-lg'
                   />
                 </div>
+                <button
+                  type='submit'
+                  disabled={
+                    depoamt <= 0 ||
+                    !descript ||
+                    !name ||
+                    !depoamt ||
+                    !customerEmail
+                  }
+                  className={
+                    depoamt <= 0 ||
+                    !descript ||
+                    !name ||
+                    !depoamt ||
+                    !customerEmail
+                      ? 'opacity-[0.3] cursor-not-allowed px-4 py-3 bg-primary5 text-white rounded-3xl duration-500 lg:w-[300px] w-full'
+                      : 'duration-500 cursor-pointer px-4 py-3 bg-primary5 text-white rounded-3xl lg:w-[300px] w-full'
+                  }
+                  onClick={handleCompleteInvoice}
+                >
+                  Generate Invoice
+                </button>
               </div>
-            </Modal>
-          </div>
-        )}
-        {/* The end of the invoice section */}
-       
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel='Example Modal'
+                style={{
+                  content: {
+                    top: '49%',
+                    left: '50%',
+                    right: 'auto',
+                    bottom: 'auto',
+                    marginRight: '-50%',
+                    transform: 'translate(-50%, -50%)',
+                  },
+                }}
+              >
+                <div className='grid lg:gap-[2rem] gap-[2rem]'>
+                  <div className='flex items-center gap-[5rem] justify-between'>
+                    <h2 className='lg:text-[24px] text-[16px] font-[700] text-primary1 '>
+                      Payment Link Details
+                    </h2>
+                    <button onClick={closeModal}>
+                      <IoCloseCircleOutline size={20} />
+                    </button>
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>Amount</label>
+                    <input
+                      name=''
+                      value={depoamt + 'USDC'}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] lg:text-[36px] text-[18px] font-[700] p-2 border rounded bg-gray-100 cursor-not-allowed'
+                    />
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Deposit Link
+                    </label>
+                    <div className='flex gap-2 items-center justify-center'>
+                      <input
+                        name=''
+                        value={`https://www.stableflow.online/pay/${bizname}?paymentid=${paymentid}`}
+                        readOnly
+                        className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 bg-gradient-to-r py-[0.7rem] from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent '
+                      />
+                      <CopyButton text={texttocopy} />
+                    </div>
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Customers Name
+                    </label>
+                    <input
+                      name=''
+                      value={name}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    />
+                  </div>
+                  <div className='grid'>
+                    <label className='text-[#808080] text-[14px]'>
+                      Description
+                    </label>
+                    <input
+                      name=''
+                      value={descript}
+                      readOnly
+                      className='block lg:w-[500px] w-[350px] focus:outline-none lg:text-[20px] text-[16px] font-[400] p-2 border rounded bg-gray-100 '
+                    />
+                  </div>
+                </div>
+              </Modal>
+            </div>
+          )}
+          {/* The end of the invoice section */}
         </div>
       </div>
-     
-
     </div>
   );
 };
